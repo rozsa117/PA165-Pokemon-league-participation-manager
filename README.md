@@ -1,5 +1,7 @@
 # Pokemon league participation manager
 
+For detailed information visit the wiki page of the project.
+
 ## Authors
 
 * Jiří Medveď - 
