@@ -1,6 +1,6 @@
-# Pokemon-league-participation-manager
+# Pokemon league participation manager
 
-The team
+## Authors
 
 * Jiří Medveď - 
 * Michal Mokros - 456442
