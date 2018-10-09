@@ -5,20 +5,21 @@ import java.util.Objects;
 
 /**
  * Entity class for object PokemonSpecies.
- * 
+ *
  * @author Jiří Medveď 38451
  */
-public class PokemonSpecies {
-    
-    private Long id;
-    private String specieName;
-    private PokemonType primaryType;
-    private PokemonType secondaryType;
-    private PokemonSpecies evolverFrom;
+public final class PokemonSpecies {
 
-    public PokemonSpecies(Long id, String specieName, PokemonType primaryType, PokemonType secondaryType, PokemonSpecies evolverFrom) {
+    private final Long id;
+    private final String speciesName;
+    private final PokemonType primaryType;
+    private final PokemonType secondaryType;
+    private final PokemonSpecies evolverFrom;
+
+    public PokemonSpecies(Long id, String speciesName, PokemonType primaryType,
+            PokemonType secondaryType, PokemonSpecies evolverFrom) {
         this.id = id;
-        this.specieName = specieName;
+        this.speciesName = speciesName;
         this.primaryType = primaryType;
         this.secondaryType = secondaryType;
         this.evolverFrom = evolverFrom;
@@ -28,45 +29,26 @@ public class PokemonSpecies {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getSpecieName() {
-        return specieName;
-    }
-
-    public void setSpecieName(String specieName) {
-        this.specieName = specieName;
+        return speciesName;
     }
 
     public PokemonType getPrimaryType() {
         return primaryType;
     }
 
-    public void setPrimaryType(PokemonType primaryType) {
-        this.primaryType = primaryType;
-    }
-
     public PokemonType getSecondaryType() {
         return secondaryType;
-    }
-
-    public void setSecondaryType(PokemonType secondaryType) {
-        this.secondaryType = secondaryType;
     }
 
     public PokemonSpecies getEvolverFrom() {
         return evolverFrom;
     }
 
-    public void setEvolverFrom(PokemonSpecies evolverFrom) {
-        this.evolverFrom = evolverFrom;
-    }
-
     @Override
     public String toString() {
-        return "PokemonSpecies{" + "id=" + id + ", specieName=" + specieName + ", primaryType=" + primaryType + ", secondaryType=" + secondaryType + ", evolverFrom=" + evolverFrom + '}';
+        return "PokemonSpecies{" + "id=" + id
+                + ", speciesName=" + speciesName + '}';
     }
 
     @Override
@@ -78,22 +60,6 @@ public class PokemonSpecies {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final PokemonSpecies other = (PokemonSpecies) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
+        return this == obj;
     }
-
-
-
 }
