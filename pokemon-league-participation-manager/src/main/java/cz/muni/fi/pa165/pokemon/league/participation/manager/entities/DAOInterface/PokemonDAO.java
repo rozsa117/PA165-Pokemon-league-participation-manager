@@ -18,7 +18,9 @@ public interface PokemonDAO {
      * Store a new Pokemon.
      *
      * @param pokemon Pokemon to store.
-     * @throws IDException when pokemon's ID is not null.
+     * @throws IDException when pokemon's ID is not null, its trainer's id is null
+     *      or no such trainer exists in the database or its species' id is null
+     *      or no such species exists in the database..
      * @throws ValidationException when level is outside the closed range [1, 100],
      *      species or trainer is null or nickname is null or empty.
      * @throws ServiceFailureException when a database operation fails.
