@@ -5,11 +5,11 @@ import java.util.Objects;
 
 /**
  * Entity class representing a Pokemon caught by a trainer.
- * 
+ *
  * @author Tibor Zauko 433531
  */
 public class Pokemon {
-    
+
     private Long id;
     private PokemonSpecies species;
     private String nickname;
@@ -89,7 +89,5 @@ public class Pokemon {
         final Pokemon other = (Pokemon) obj;
         return Objects.equals(this.id, other.id);
     }
-    
-    
-    
+
 }

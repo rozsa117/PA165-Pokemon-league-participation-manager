@@ -44,7 +44,7 @@ public interface PokemonDAO {
 
     /**
      * Remove a Pokemon.
-     * 
+     *
      * @param pokemon Pokemon to remove.
      * @throws IDException when pokemon's id is null or no such Pokemon exists in the database.
      * @throws ServiceFailureException when a database operation fails.
@@ -55,8 +55,8 @@ public interface PokemonDAO {
 
     /**
      * Find a Pokemon based on its id.
-     * 
-     * @param id primary key of the requested Pokemon. 
+     *
+     * @param id primary key of the requested Pokemon.
      * @return the requested Pokemon, null if no such Pokemon exists.
      * @throws ServiceFailureException when a database operation fails.
      * @throws IllegalArgumentException when id is null.
@@ -66,7 +66,7 @@ public interface PokemonDAO {
 
     /**
      * Return a list of all Pokemon.
-     * 
+     *
      * @return list of all Pokemon. An empty list will be returned if no Pokemon exist.
      * @throws ServiceFailureException when a database operation fails.
      */
