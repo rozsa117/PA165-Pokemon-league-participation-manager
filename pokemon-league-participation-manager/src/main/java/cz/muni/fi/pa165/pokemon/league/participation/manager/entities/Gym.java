@@ -5,7 +5,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import java.util.Objects;
 
 /**
- * Entity class for object badge.
+ * Entity class for object gym.
  *
  * @author Michal Mokros 456442
  */
