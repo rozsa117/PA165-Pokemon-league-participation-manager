@@ -2,34 +2,52 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.entities;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  * Entity class for object PokemonSpecies.
- * 
+ *
  * @author Jiří Medveď 38451
  */
+@Entity
 public class PokemonSpecies {
-    
-    private Long id;
-    private String specieName;
-    private PokemonType primaryType;
-    private PokemonType secondaryType;
-    private PokemonSpecies evolverFrom;
 
-    public PokemonSpecies(Long id, String specieName, PokemonType primaryType, PokemonType secondaryType, PokemonSpecies evolverFrom) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotNull
+    @Column(nullable = false, unique = true)
+    private String specieName;
+
+    @NotNull
+    @Enumerated
+    private PokemonType primaryType;
+
+    @Enumerated
+    private PokemonType secondaryType;
+
+    @OneToOne(optional = true)
+    @JoinColumn(name = "evolvesFromId")
+    private PokemonSpecies evolvesFrom;
+
+    public PokemonSpecies() {
+    }
+
+    public PokemonSpecies(Long id) {
         this.id = id;
-        this.specieName = specieName;
-        this.primaryType = primaryType;
-        this.secondaryType = secondaryType;
-        this.evolverFrom = evolverFrom;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getSpecieName() {
@@ -56,18 +74,19 @@ public class PokemonSpecies {
         this.secondaryType = secondaryType;
     }
 
-    public PokemonSpecies getEvolverFrom() {
-        return evolverFrom;
+    public PokemonSpecies getEvolvesFrom() {
+        return evolvesFrom;
     }
 
-    public void setEvolverFrom(PokemonSpecies evolverFrom) {
-        this.evolverFrom = evolverFrom;
+    public void setEvolvesFrom(PokemonSpecies evolvesFrom) {
+        this.evolvesFrom = evolvesFrom;
     }
 
     @Override
     public String toString() {
-        return "PokemonSpecies{" + "id=" + id + ", specieName=" + specieName + ", primaryType=" + primaryType + ", secondaryType=" + secondaryType + ", evolverFrom=" + evolverFrom + '}';
+        return "PokemonSpecies{" + "id=" + id + ", specieName=" + specieName + '}';
     }
+
 
     @Override
     public int hashCode() {
@@ -93,7 +112,5 @@ public class PokemonSpecies {
         }
         return true;
     }
-
-
 
 }
