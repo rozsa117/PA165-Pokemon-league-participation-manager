@@ -17,33 +17,28 @@ public interface PokemonSpeciesDAO {
      * @param pokemonSpecies pokemonSpecies to be created.
      * @throws IllegalArgumentException when pokemonSpecies is null.
      * @throws ServiceFailureException when db operation fails.
-     * @throws ValidationException in case pokemonSpecies is not valid
-     * @throws IDException if pokemonSpecies has its id already set.
      */
-    void createPokemonSpecies(PokemonSpecies pokemonSpecies) throws ServiceFailureException, ValidationException, IDException;
+    void createPokemonSpecies(PokemonSpecies pokemonSpecies) throws ServiceFailureException;
 
     /**
      * Updates pokemonSpecies in database.
      *
      * @param pokemonSpecies treiner to be updated.
-     * @throws IllegalArgumentException when pokemonSpecies is null.
+     * @throws IllegalArgumentException when pokemonSpecies is not an entity or
+     * is a detached entity.
      * @throws ServiceFailureException when db operation fails.
-     * @throws ValidationException in case pokemonSpecies is not valid 
-     * @throws IDException if the pokemonSpecies has null id or no such id
-     * exists in the database.
      */
-    void updatePokemonSpecies(PokemonSpecies pokemonSpecies) throws ServiceFailureException, ValidationException, IDException;
+    void updatePokemonSpecies(PokemonSpecies pokemonSpecies) throws ServiceFailureException;
 
     /**
      * Deletes a pokemonSpecies from database
      *
      * @param pokemonSpecies pokemonSpecies to be deleted
      * @throws IllegalArgumentException when pokemonSpecies is null.
-     * @throws ServiceFailureException when db operation fails.
-     * @throws IDException if the pokemonSpecies has null id or no such id
-     * exists in the database.
+     * @throws ServiceFailureException when db operation fails. exists in the
+     * database.
      */
-    void deletePokemonSpecies(PokemonSpecies pokemonSpecies) throws ServiceFailureException, IDException;
+    void deletePokemonSpecies(PokemonSpecies pokemonSpecies) throws ServiceFailureException;
 
     /**
      * Returns the pokemonSpecies with given id.
@@ -54,7 +49,7 @@ public interface PokemonSpeciesDAO {
      * @throws IllegalArgumentException when id is null.
      * @throws ServiceFailureException when db operation fails.
      */
-    PokemonSpecies findPokemonSpecies(Long id) throws ServiceFailureException;
+    PokemonSpecies getPokemonSpeciesById(Long id) throws ServiceFailureException;
 
     /**
      * Returns list of all pokemonSpeciess.
@@ -62,6 +57,6 @@ public interface PokemonSpeciesDAO {
      * @return lsit of all pokemonSpeciess.
      * @throws ServiceFailureException when db operation fails.
      */
-    List<PokemonSpecies> getAllPokemonSpeciess() throws ServiceFailureException;
+    List<PokemonSpecies> getAllPokemonSpecies() throws ServiceFailureException;
 
 }
