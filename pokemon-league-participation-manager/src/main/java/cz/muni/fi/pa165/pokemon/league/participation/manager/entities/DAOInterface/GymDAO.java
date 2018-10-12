@@ -1,8 +1,6 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.entities.DAOInterface;
 
-import cz.muni.fi.pa165.pokemon.league.participation.manager.common.IDException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.common.ServiceFailureException;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.common.ValidationException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 
 import java.util.List;
@@ -20,10 +18,8 @@ public interface GymDAO {
      * @param gym to be created.
      * @throws IllegalArgumentException when gym is null.
      * @throws ServiceFailureException when db operation fails.
-     * @throws ValidationException in case gym is not valid (ex. Trainer doesn't exist).
-     * @throws IDException if gym has it's Id already set.
      */
-    void createGym(Gym gym) throws ServiceFailureException, ValidationException, IDException;
+    void createGym(Gym gym) throws ServiceFailureException;
 
     /**
      * Updates gym in database.
@@ -31,10 +27,8 @@ public interface GymDAO {
      * @param gym to be updated.
      * @throws IllegalArgumentException when gym is null.
      * @throws ServiceFailureException when db operation fails.
-     * @throws ValidationException in case gym is not valid.
-     * @throws IDException if gym has no Id set or Id doesn't exist.
      */
-    void updateGym(Gym gym) throws ServiceFailureException, ValidationException, IDException;
+    void updateGym(Gym gym) throws ServiceFailureException;
 
     /**
      * Deletes gym from the database.
@@ -42,9 +36,8 @@ public interface GymDAO {
      * @param gym to be deleted.
      * @throws IllegalArgumentException when gym is null.
      * @throws ServiceFailureException when db operation fails.
-     * @throws IDException if gym has no Id set or such Id doesn't exist.
      */
-    void deleteGym(Gym gym) throws ServiceFailureException, IDException;
+    void deleteGym(Gym gym) throws ServiceFailureException;
 
     /**
      * Returns the gym with given Id.

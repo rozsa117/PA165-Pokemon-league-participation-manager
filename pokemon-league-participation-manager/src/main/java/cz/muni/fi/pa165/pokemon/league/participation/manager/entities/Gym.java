@@ -2,6 +2,8 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.entities;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
@@ -9,11 +11,24 @@ import java.util.Objects;
  *
  * @author Michal Mokros 456442
  */
+@Entity(name = "Gym")
+@Table(name = "GYM")
 public class Gym {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
     private String location;
+
+    @NotNull
+    @Enumerated
     private PokemonType type;
+
+    @NotNull
+    @OneToOne
+    @JoinColumn(name = "trainerId")
     private Trainer gymLeader;
 
     public Gym() {
