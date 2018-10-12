@@ -1,12 +1,12 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.entities.DAOInterface;
 
+import cz.muni.fi.pa165.pokemon.league.participation.manager.common.ServiceFailureException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.common.*;
 import java.util.List;
 
 /**
  *
- * @author Tamás Rózsa 445653
+ * @author Jiří Medveď 38451
  */
 public interface PokemonSpeciesDAO {
 

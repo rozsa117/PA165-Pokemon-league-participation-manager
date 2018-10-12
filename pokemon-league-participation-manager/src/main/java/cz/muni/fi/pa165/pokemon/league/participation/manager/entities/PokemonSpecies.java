@@ -26,7 +26,7 @@ public class PokemonSpecies {
 
     @NotNull
     @Column(nullable = false, unique = true)
-    private String specieName;
+    private String speciesName;
 
     @NotNull
     @Enumerated
@@ -50,20 +50,12 @@ public class PokemonSpecies {
         return id;
     }
 
-    public String getSpecieName() {
-        return specieName;
-    }
-
-    public void setSpecieName(String specieName) {
-        this.specieName = specieName;
+    public String getSpeciesName() {
+        return speciesName;
     }
 
     public PokemonType getPrimaryType() {
         return primaryType;
-    }
-
-    public void setPrimaryType(PokemonType primaryType) {
-        this.primaryType = primaryType;
     }
 
     public PokemonType getSecondaryType() {
@@ -84,9 +76,8 @@ public class PokemonSpecies {
 
     @Override
     public String toString() {
-        return "PokemonSpecies{" + "id=" + id + ", specieName=" + specieName + '}';
+        return "PokemonSpecies{" + "id=" + id + ", speciesName=" + speciesName + '}';
     }
-
 
     @Override
     public int hashCode() {
@@ -107,10 +98,7 @@ public class PokemonSpecies {
             return false;
         }
         final PokemonSpecies other = (PokemonSpecies) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 
 }
