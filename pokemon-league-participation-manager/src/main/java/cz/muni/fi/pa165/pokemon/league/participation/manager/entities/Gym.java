@@ -2,7 +2,14 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.entities;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 
-import javax.persistence.*;
+import javax.persistence.GenerationType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
@@ -28,7 +35,7 @@ public class Gym {
 
     @NotNull
     @OneToOne
-    @JoinColumn(name = "trainerId")
+    @JoinColumn(name = "trainer_id")
     private Trainer gymLeader;
 
     public Gym() {

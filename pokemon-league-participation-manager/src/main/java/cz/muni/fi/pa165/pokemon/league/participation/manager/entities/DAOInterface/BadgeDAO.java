@@ -3,7 +3,6 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.entities.DAOInterf
 import cz.muni.fi.pa165.pokemon.league.participation.manager.common.ServiceFailureException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
 
-import javax.xml.ws.Service;
 import java.util.List;
 
 /**
