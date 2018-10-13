@@ -10,7 +10,8 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.common.*;
 import java.util.List;
 
 /**
- *
+ * Interface for data access object fot trainer entity class.
+ * 
  * @author Tamás Rózsa 445653
  */
 public interface TrainerDAO {
@@ -21,11 +22,8 @@ public interface TrainerDAO {
      * @param trainer trainer to be created.
      * @throws IllegalArgumentException when triner is null.
      * @throws ServiceFailureException when db operation fails.
-     * @throws ValidationException in case trainer is not valid (ex. date of 
-     * birth is in the future).
-     * @throws IDException if trainer has its id already set.
      */
-    void createTrainer(Trainer trainer) throws ServiceFailureException, ValidationException, IDException;
+    void createTrainer(Trainer trainer) throws ServiceFailureException;
 
     /**
      * Updates trainer in database.
@@ -33,12 +31,8 @@ public interface TrainerDAO {
      * @param trainer treiner to be updated.
      * @throws IllegalArgumentException when triner is null.
      * @throws ServiceFailureException when db operation fails.
-     * @throws ValidationException in case trainer is not valid (ex. date of 
-     * birth is in the future).
-     * @throws IDException if the trainer has null id or no such id exists 
-     * in the database.
      */
-    void updateTrainer(Trainer trainer) throws ServiceFailureException, ValidationException, IDException;
+    void updateTrainer(Trainer trainer) throws ServiceFailureException;
 
     /**
      * Deletes a trainer from database
@@ -46,10 +40,8 @@ public interface TrainerDAO {
      * @param trainer trainer to be deleted
      * @throws IllegalArgumentException when triner is null.
      * @throws ServiceFailureException when db operation fails.
-     * @throws IDException if the trainer has null id or no such id exists 
-     * in the database.
      */
-    void deleteTrainer(Trainer trainer) throws ServiceFailureException, IDException;
+    void deleteTrainer(Trainer trainer) throws ServiceFailureException;
     
     /**
      * Returns the trainer with given id.
@@ -59,7 +51,7 @@ public interface TrainerDAO {
      * @throws IllegalArgumentException when id is null.
      * @throws ServiceFailureException when db operation fails.
      */
-    Trainer findTrainer(Long id) throws ServiceFailureException;
+    Trainer findTrainerById(Long id) throws ServiceFailureException;
     
     /**
      * Returns list of all trainers.
