@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -18,6 +19,7 @@ import javax.validation.constraints.NotNull;
  * @author Jiří Medveď 38451
  */
 @Entity
+@Table(name = "POKEMON_SPECIES")
 public class PokemonSpecies {
 
     @Id
