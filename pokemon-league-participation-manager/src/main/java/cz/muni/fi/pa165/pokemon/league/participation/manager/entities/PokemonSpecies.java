@@ -108,11 +108,12 @@ public class PokemonSpecies {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+
+        if (!(obj instanceof PokemonSpecies)) {
             return false;
         }
         final PokemonSpecies other = (PokemonSpecies) obj;
-        return Objects.equals(this.id, other.id);
+        return Objects.equals(this.speciesName, other.getSpeciesName());
     }
 
 }
