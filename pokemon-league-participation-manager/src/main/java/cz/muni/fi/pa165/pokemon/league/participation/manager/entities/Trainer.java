@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
- * Entity class for ovject trainer.
+ * Entity class for object trainer.
  * 
  * @author Tamás Rózsa 445653
  */
