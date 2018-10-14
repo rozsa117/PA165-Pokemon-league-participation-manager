@@ -7,27 +7,43 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.entities;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 /**
- * Entity class for ovject trainer.
+ * Entity class for object trainer.
  * 
  * @author Tamás Rózsa 445653
  */
+@Entity(name = "Trainer")
+@Table(name = "TRAINER")
 public class Trainer {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @NotNull
     private String name;
+    
+    @NotNull
     private String surname;
+    
+    @NotNull
+    @Temporal(TemporalType.DATE)
     private LocalDate born;
 
     public Trainer() {
     }
 
-    public Trainer(Long id, String name, String surname, LocalDate born) {
+    public Trainer(Long id) {
         this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.born = born;
     }
 
     public Long getId() {
