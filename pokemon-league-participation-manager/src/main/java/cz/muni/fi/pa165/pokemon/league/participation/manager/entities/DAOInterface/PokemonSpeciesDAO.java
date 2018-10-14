@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpe
 import java.util.List;
 
 /**
+ * Interface of data access objects for PokemonSpecies entity class.
  *
  * @author Jiří Medveď 38451
  */
@@ -49,7 +50,7 @@ public interface PokemonSpeciesDAO {
      * @throws IllegalArgumentException when id is null.
      * @throws ServiceFailureException when db operation fails.
      */
-    PokemonSpecies getPokemonSpeciesById(Long id) throws ServiceFailureException;
+    PokemonSpecies findPokemonSpeciesById(Long id) throws ServiceFailureException;
 
     /**
      * Returns list of all pokemonSpeciess.
