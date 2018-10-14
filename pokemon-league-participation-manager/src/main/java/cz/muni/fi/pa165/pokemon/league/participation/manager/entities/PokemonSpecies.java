@@ -52,6 +52,10 @@ public class PokemonSpecies {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getSpeciesName() {
         return speciesName;
     }
@@ -74,6 +78,14 @@ public class PokemonSpecies {
 
     public void setEvolvesFrom(PokemonSpecies evolvesFrom) {
         this.evolvesFrom = evolvesFrom;
+    }
+
+    public void setSpeciesName(String speciesName) {
+        this.speciesName = speciesName;
+    }
+
+    public void setPrimaryType(PokemonType primaryType) {
+        this.primaryType = primaryType;
     }
 
     @Override
