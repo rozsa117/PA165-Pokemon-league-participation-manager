@@ -2,16 +2,11 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.entities;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 
-import javax.persistence.GenerationType;
-import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Entity class for object gym.
@@ -37,6 +32,9 @@ public class Gym {
     @OneToOne
     @JoinColumn(name = "trainer_id")
     private Trainer gymLeader;
+
+    @OneToMany
+    private Set<Badge> badges = new HashSet<>();
 
     public Gym() {
         this(null, null, null, null);

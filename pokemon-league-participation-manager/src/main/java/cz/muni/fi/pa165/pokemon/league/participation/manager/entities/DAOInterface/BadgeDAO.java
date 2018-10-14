@@ -47,7 +47,7 @@ public interface BadgeDAO {
      * @throws IllegalArgumentException when Id is null.
      * @throws ServiceFailureException when db operation fails.
      */
-    Badge findBadge(Long id) throws ServiceFailureException;
+    Badge findBadgeById(Long id) throws ServiceFailureException;
 
     /**
      * Returns list of all Badges.

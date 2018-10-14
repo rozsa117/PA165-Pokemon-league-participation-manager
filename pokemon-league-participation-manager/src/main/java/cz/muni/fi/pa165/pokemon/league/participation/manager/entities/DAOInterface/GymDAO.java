@@ -47,7 +47,7 @@ public interface GymDAO {
      * @throws IllegalArgumentException when Id is null.
      * @throws ServiceFailureException when db operation fails.
      */
-    Gym findGym(Long id) throws ServiceFailureException;
+    Gym findGymById(Long id) throws ServiceFailureException;
 
     /**
      * Returns list of all gyms.
