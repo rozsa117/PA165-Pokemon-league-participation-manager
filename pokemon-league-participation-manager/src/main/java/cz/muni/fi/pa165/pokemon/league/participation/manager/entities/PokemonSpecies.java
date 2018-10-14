@@ -52,6 +52,10 @@ public class PokemonSpecies {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getSpeciesName() {
         return speciesName;
     }
@@ -76,6 +80,14 @@ public class PokemonSpecies {
         this.evolvesFrom = evolvesFrom;
     }
 
+    public void setSpeciesName(String speciesName) {
+        this.speciesName = speciesName;
+    }
+
+    public void setPrimaryType(PokemonType primaryType) {
+        this.primaryType = primaryType;
+    }
+
     @Override
     public String toString() {
         return "PokemonSpecies{" + "id=" + id + ", speciesName=" + speciesName + '}';
@@ -96,11 +108,12 @@ public class PokemonSpecies {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+
+        if (!(obj instanceof PokemonSpecies)) {
             return false;
         }
         final PokemonSpecies other = (PokemonSpecies) obj;
-        return Objects.equals(this.id, other.id);
+        return Objects.equals(this.speciesName, other.getSpeciesName());
     }
 
 }
