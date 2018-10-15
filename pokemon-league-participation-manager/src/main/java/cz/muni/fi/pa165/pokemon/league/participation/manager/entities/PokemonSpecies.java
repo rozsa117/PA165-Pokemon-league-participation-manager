@@ -95,8 +95,8 @@ public class PokemonSpecies {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 79 * hash + Objects.hashCode(this.id);
+        int hash = 5;
+        hash = 71 * hash + Objects.hashCode(this.speciesName);
         return hash;
     }
 
