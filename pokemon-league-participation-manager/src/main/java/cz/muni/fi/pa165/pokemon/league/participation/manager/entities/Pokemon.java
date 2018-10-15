@@ -1,8 +1,7 @@
 
 package cz.muni.fi.pa165.pokemon.league.participation.manager.entities;
 
-import java.io.Serializable;
-import java.util.Objects;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +14,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Entity class representing a Pokemon caught by a trainer.
@@ -27,6 +29,7 @@ public class Pokemon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false, nullable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,6 +38,7 @@ public class Pokemon {
     private PokemonSpecies species;
 
     @NotNull
+    @Column(nullable = false)
     private String nickname;
 
     // level is a reserved keyword in SQL-99
@@ -47,6 +51,11 @@ public class Pokemon {
     @NotNull
     @JoinColumn(name = "trainer_id", nullable = false)
     private Trainer trainer;
+
+    @NotNull
+    @PastOrPresent
+    @Column(name = "time_of_capture", updatable = false, nullable = false, unique = true)
+    private LocalDateTime dateTimeOfCapture;
 
     public Pokemon() {
         this(null);
@@ -96,11 +105,19 @@ public class Pokemon {
         this.trainer = trainer;
     }
 
+    public LocalDateTime getDateTimeOfCapture() {
+        return dateTimeOfCapture;
+    }
+
+    public void setDateTimeOfCapture(LocalDateTime dateTimeOfCapture) {
+        this.dateTimeOfCapture = dateTimeOfCapture;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 73 * hash + Objects.hashCode(this.id);
-        return hash;
+        return new HashCodeBuilder(3,73)
+                .append(dateTimeOfCapture)
+                .toHashCode();
     }
 
     @Override
@@ -111,11 +128,13 @@ public class Pokemon {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (!(obj instanceof Pokemon)) {
             return false;
         }
         final Pokemon other = (Pokemon) obj;
-        return Objects.equals(this.id, other.id);
+        return new EqualsBuilder()
+                .append(dateTimeOfCapture, other.getDateTimeOfCapture())
+                .isEquals();
     }
 
     @Override
@@ -131,6 +150,8 @@ public class Pokemon {
                 .append(level)
                 .append(", trainer=")
                 .append(trainer)
+                .append(", dateTimeOfCapture=")
+                .append(dateTimeOfCapture)
                 .append('}')
                 .toString();
     }
