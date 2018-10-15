@@ -16,6 +16,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
 /**
  * Entity class for object trainer.
@@ -31,16 +32,26 @@ public class Trainer {
     private Long id;
     
     @NotNull
+    private String passwordHash;
+    
+    @NotNull
+    @Column(nullable = false, unique = true)
+    private String userName;
+
+    @NotNull
+    @Column(nullable = false)
     private String name;
     
     @NotNull
+    @Column(nullable = false)
     private String surname;
     
     @NotNull
-    @Temporal(TemporalType.DATE)
+    @Past
+    @Column(nullable = false)
     private LocalDate born;
 
-    @Column(name = "trnr_admin")
+    @Column(name = "trnr_admin", nullable = false)
     private boolean admin;
     
     public Trainer() {
@@ -58,6 +69,22 @@ public class Trainer {
         this.id = id;
     }
 
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+    
     public String getName() {
         return name;
     }
@@ -97,8 +124,8 @@ public class Trainer {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 17 * hash + (int) (this.id ^ (this.id >>> 32));
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.userName);
         return hash;
     }
 
@@ -110,10 +137,10 @@ public class Trainer {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (!(obj instanceof Trainer)) {
             return false;
         }
         final Trainer other = (Trainer) obj;
-        return Objects.equals(this.id, other.id);
+        return Objects.equals(this.userName, other.getUserName());
     }
 }
