@@ -1,13 +1,16 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.entities;
 
+import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GenerationType;
-import javax.persistence.ManyToOne;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -41,6 +44,9 @@ public class Badge {
     @Temporal(TemporalType.DATE)
     private LocalDate date;
 
+    @Enumerated
+    private ChallengeStatus status;
+
     public Badge() {
         this(null, null, null, null);
     }
@@ -70,7 +76,10 @@ public class Badge {
 
     @Override
     public String toString() {
-        return "Badge{ " + "id = " + id + "trainer = " + trainer + ", gym = " + gym + ", date = " + date + " }";
+        return "Badge{ " + "id = " + getId() +
+                "trainer = " + getTrainer() +
+                ", gym = " + getGym() +
+                ", date = " + getDate() + " }";
     }
 
     @Override
@@ -83,8 +92,9 @@ public class Badge {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || !(o instanceof Badge)) return false;
         Badge badge = (Badge) o;
-        return Objects.equals(id, badge.id);
+        return Objects.equals(getTrainer(), badge.getTrainer())
+                && Objects.equals(getGym(), badge.getGym());
     }
 }
