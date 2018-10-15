@@ -39,6 +39,8 @@ public class Trainer {
     @Temporal(TemporalType.DATE)
     private LocalDate born;
 
+    private boolean admin;
+    
     public Trainer() {
     }
 
@@ -78,6 +80,14 @@ public class Trainer {
         this.born = born;
     }
 
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+    
     @Override
     public String toString() {
         return "Trainer{ " + "id = " + id + ", name = " + name + ", surname = " + surname + ", born = " + born + " }";

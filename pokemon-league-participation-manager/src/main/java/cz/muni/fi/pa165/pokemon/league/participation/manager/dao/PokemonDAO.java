@@ -1,5 +1,5 @@
 
-package cz.muni.fi.pa165.pokemon.league.participation.manager.entities.DAOInterface;
+package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.common.ServiceFailureException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;

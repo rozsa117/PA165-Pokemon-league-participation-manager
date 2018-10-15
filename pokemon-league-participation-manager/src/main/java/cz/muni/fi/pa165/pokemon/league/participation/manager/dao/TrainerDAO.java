@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.muni.fi.pa165.pokemon.league.participation.manager.entities.DAOInterface;
+package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.common.*;
