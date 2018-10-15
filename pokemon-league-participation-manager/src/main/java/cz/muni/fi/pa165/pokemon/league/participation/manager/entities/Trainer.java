@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -39,6 +40,7 @@ public class Trainer {
     @Temporal(TemporalType.DATE)
     private LocalDate born;
 
+    @Column(name = "trnr_admin")
     private boolean admin;
     
     public Trainer() {
