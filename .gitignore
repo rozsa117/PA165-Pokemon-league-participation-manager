@@ -30,3 +30,4 @@ test-output
 *.iml
 *~
 target
+*nbproject*
