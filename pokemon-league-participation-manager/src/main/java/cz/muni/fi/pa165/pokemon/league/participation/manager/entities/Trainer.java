@@ -141,6 +141,6 @@ public class Trainer {
             return false;
         }
         final Trainer other = (Trainer) obj;
-        return Objects.equals(this.userName, other.getUserName());
+        return Objects.equals(this.getUserName(), other.getUserName());
     }
 }
