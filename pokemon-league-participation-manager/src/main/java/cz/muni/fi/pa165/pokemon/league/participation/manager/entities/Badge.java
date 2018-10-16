@@ -2,7 +2,19 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.entities;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -13,23 +25,21 @@ import java.util.Objects;
  * @author Michal Mokros 456442
  */
 @Entity(name = "Badge")
-@Table(name = "BADGE")
+@Table(name = "BADGE", uniqueConstraints = @UniqueConstraint(columnNames = {"trainer_id", "gym_id"}))
 public class Badge {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    @Column(nullable = false)
-    @JoinColumn(name = "trainer_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trainer_id", nullable = false)
     private Trainer trainer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    @Column(nullable = false, unique = true)
-    @JoinColumn(name = "gym_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gym_id", nullable = false)
     private Gym gym;
 
     @NotNull
@@ -38,8 +48,8 @@ public class Badge {
     private LocalDate date;
 
     @NotNull
-    @Column(nullable = false)
     @Enumerated
+    @Column(nullable = false)
     private ChallengeStatus status;
 
     public Badge() {
@@ -47,10 +57,6 @@ public class Badge {
 
     public Badge(Long id) {
         this.id = id;
-        this.trainer = null;
-        this.gym = null;
-        this.date = null;
-        this.status = null;
     }
 
     public Long getId() { return this.id; }

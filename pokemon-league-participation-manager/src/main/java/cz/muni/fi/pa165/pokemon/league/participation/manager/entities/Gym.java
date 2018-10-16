@@ -36,14 +36,13 @@ public class Gym {
     private String location;
 
     @NotNull
-    @Column(nullable = false)
     @Enumerated
+    @Column(nullable = false)
     private PokemonType type;
 
     @NotNull
-    @Column(nullable = false)
     @OneToOne
-    @JoinColumn(name = "trainer_id")
+    @JoinColumn(name = "trainer_id", nullable = false)
     private Trainer gymLeader;
 
     @OneToMany(cascade=CascadeType.PERSIST, mappedBy = "trainer")
@@ -54,9 +53,6 @@ public class Gym {
 
     public Gym(Long id) {
         this.id = id;
-        this.location = null;
-        this.type = null;
-        this.gymLeader = null;
     }
 
     public Long getId() {
