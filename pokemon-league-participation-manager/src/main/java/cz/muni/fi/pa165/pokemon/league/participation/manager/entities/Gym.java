@@ -32,7 +32,7 @@ public class Gym {
     private Long id;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String location;
 
     @NotNull
