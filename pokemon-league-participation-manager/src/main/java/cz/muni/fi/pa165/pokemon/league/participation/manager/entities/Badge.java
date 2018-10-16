@@ -2,17 +2,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.entities;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
 
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -32,30 +22,35 @@ public class Badge {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
+    @Column(nullable = false)
     @JoinColumn(name = "trainer_id")
     private Trainer trainer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
+    @Column(nullable = false, unique = true)
     @JoinColumn(name = "gym_id")
     private Gym gym;
 
     @NotNull
+    @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private LocalDate date;
 
+    @NotNull
+    @Column(nullable = false)
     @Enumerated
     private ChallengeStatus status;
 
     public Badge() {
-        this(null, null, null, null);
     }
 
-    public Badge(Long id, Trainer trainer, Gym gym, LocalDate date) {
+    public Badge(Long id) {
         this.id = id;
-        this.trainer = trainer;
-        this.gym = gym;
-        this.date = date;
+        this.trainer = null;
+        this.gym = null;
+        this.date = null;
+        this.status = null;
     }
 
     public Long getId() { return this.id; }
@@ -73,6 +68,10 @@ public class Badge {
     public LocalDate getDate() { return this.date; }
 
     public void setDate(LocalDate date) { this.date = date; }
+
+    public ChallengeStatus getStatus() { return status; }
+
+    public void setStatus(ChallengeStatus status) { this.status = status; }
 
     @Override
     public String toString() {

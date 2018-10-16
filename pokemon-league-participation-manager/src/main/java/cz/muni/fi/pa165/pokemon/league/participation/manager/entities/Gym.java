@@ -3,6 +3,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.entities;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -31,13 +32,16 @@ public class Gym {
     private Long id;
 
     @NotNull
+    @Column(nullable = false)
     private String location;
 
     @NotNull
+    @Column(nullable = false)
     @Enumerated
     private PokemonType type;
 
     @NotNull
+    @Column(nullable = false)
     @OneToOne
     @JoinColumn(name = "trainer_id")
     private Trainer gymLeader;
@@ -46,14 +50,13 @@ public class Gym {
     private Set<Badge> badges = new HashSet<>();
 
     public Gym() {
-        this(null, null, null, null);
     }
 
-    public Gym(Long id, String location, PokemonType type, Trainer gymLeader) {
+    public Gym(Long id) {
         this.id = id;
-        this.location = location;
-        this.type = type;
-        this.gymLeader = gymLeader;
+        this.location = null;
+        this.type = null;
+        this.gymLeader = null;
     }
 
     public Long getId() {
