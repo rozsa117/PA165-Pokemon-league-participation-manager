@@ -131,4 +131,8 @@ public class GymDAOTest {
         assertThat(em.find(Gym.class, mockedGym.getId())).isEqualToComparingFieldByField(mockedGym);
     }
     
+    @Test
+    public void getAllGyms() {
+        assertThat(gymDao.getAllGyms()).usingFieldByFieldElementComparator().containsOnly(gym, mockedGym);
+    }
 }
