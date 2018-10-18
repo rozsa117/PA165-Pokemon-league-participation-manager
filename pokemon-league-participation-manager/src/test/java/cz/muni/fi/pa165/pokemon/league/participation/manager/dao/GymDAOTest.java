@@ -7,18 +7,19 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.common.PersistenceApplicationContext;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import org.assertj.core.api.Assertions;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.BeforeMethod;
 
@@ -29,6 +30,7 @@ import org.testng.annotations.BeforeMethod;
  */
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
 @Transactional
+@RunWith(MockitoJUnitRunner.class)
 public class GymDAOTest {
     
     @PersistenceContext
@@ -37,56 +39,58 @@ public class GymDAOTest {
     @Inject
     private GymDAO gymDao;
     
-    private Gym gym;
-    private Gym mockedGym;
+    @Mock
+    private Gym gymInBrno;
+    private Gym finalGym;
     
-    private Trainer mockedTrainer;
     
     @BeforeMethod
     public void setUpMethod() {
-        mockedTrainer = mock(Trainer.class);
         
-        gym = new Gym();
-        gym.setGymLeader(mockedTrainer);
-        gym.setLocation("Brno");
-        gym.setType(PokemonType.FIRE);
-        
-        mockedGym = mock(Gym.class);
+        gymInBrno.setLocation("Brno");
         
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        em.persist(mockedTrainer);
-        em.persist(gym);
-        em.persist(mockedGym);
+        em.persist(gymInBrno.getGymLeader());
+        em.persist(finalGym.getGymLeader());
+        em.persist(gymInBrno);
+        em.persist(finalGym);
         em.getTransaction().commit();
     }
     
     @Test
     public void createNullGym() {
-        Assertions.assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> gymDao.createGym(null));
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> gymDao.createGym(null));
     }
     
     @Test
     public void updateNullGym() {
-        Assertions.assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> gymDao.updateGym(null));
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> gymDao.updateGym(null));
     }
     
     @Test
     public void deleteNullGym() {
-        Assertions.assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> gymDao.deleteGym(null));
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> gymDao.deleteGym(null));
     }
     
     @Test
     public void findGymWithNullID() {
-        Assertions.assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> gymDao.findGymById(null));
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> gymDao.findGymById(null));
+    }
+    
+    @Test
+    public void createGym() {
+        Gym gym = mock(Gym.class);
+        gymDao.createGym(gym);
+        assertThat(emf.createEntityManager().find(Gym.class, gym)).isEqualToComparingFieldByField(gym);
     }
     
     @Test
     public void testMultipleCreation() {
-        assertThat(gym.getId()).isNotNull();
-        assertThat(emf.createEntityManager().find(Gym.class, gym)).isEqualToComparingFieldByField(gym);
+        assertThat(gymInBrno.getId()).isNotNull();
+        assertThat(emf.createEntityManager().find(Gym.class, gymInBrno)).isEqualToComparingFieldByField(gymInBrno);
         try{
-            gymDao.createGym(gym);
+            gymDao.createGym(gymInBrno);
             Assert.fail("Created the same gym twice.");
         }
         catch(Exception ex) {
@@ -95,44 +99,46 @@ public class GymDAOTest {
     
     @Test
     public void findByIDExistingGym() {
-        assertThat(gymDao.findGymById(gym.getId())).isEqualToComparingFieldByField(gym);
+        assertThat(gymDao.findGymById(gymInBrno.getId())).isEqualToComparingFieldByField(gymInBrno);
     }
     
     @Test
     public void findByIDNotExistingGym() {
-        assertThat(gymDao.findGymById(Long.MAX_VALUE)).isNull();
+        assertThat(gymDao.findGymById(Long.MIN_VALUE)).isNull();
     }
     
     @Test
     public void updateGym() {
         EntityManager em = emf.createEntityManager();
         
-        Gym foundGym = em.find(Gym.class, gym.getId());
-        assertThat(foundGym).isEqualToComparingFieldByField(gym);
+        Gym foundGym = em.find(Gym.class, gymInBrno.getId());
+        assertThat(foundGym).isEqualToComparingFieldByField(gymInBrno);
+        assertThat(em.find(Gym.class, finalGym)).isEqualToComparingFieldByField(finalGym);
         
-        gym.setLocation("London");
-        gymDao.updateGym(gym);
-        assertThat(foundGym).isNotSameAs(gym);
+        gymInBrno.setLocation("London");
+        gymDao.updateGym(gymInBrno);
+        assertThat(foundGym).isNotSameAs(gymInBrno);
         
-        foundGym = em.find(Gym.class, gym.getId());
-        assertThat(foundGym).isEqualToComparingFieldByField(gym);
+        foundGym = em.find(Gym.class, gymInBrno.getId());
+        assertThat(foundGym).isEqualToComparingFieldByField(gymInBrno);
+        assertThat(em.find(Gym.class, finalGym)).isEqualToComparingFieldByField(finalGym);
     }
     
     @Test
     public void deleteGym() {
         EntityManager em = emf.createEntityManager();
         
-        assertThat(em.find(Gym.class, gym.getId())).isEqualToComparingFieldByField(gym);
-        assertThat(em.find(Gym.class, mockedGym.getId())).isEqualToComparingFieldByField(mockedGym);
+        assertThat(em.find(Gym.class, gymInBrno.getId())).isEqualToComparingFieldByField(gymInBrno);
+        assertThat(em.find(Gym.class, finalGym.getId())).isEqualToComparingFieldByField(finalGym);
         
-        gymDao.deleteGym(gym);
+        gymDao.deleteGym(gymInBrno);
         
-        assertThat(em.find(Gym.class, gym.getId())).isNull();
-        assertThat(em.find(Gym.class, mockedGym.getId())).isEqualToComparingFieldByField(mockedGym);
+        assertThat(em.find(Gym.class, gymInBrno.getId())).isNull();
+        assertThat(em.find(Gym.class, finalGym.getId())).isEqualToComparingFieldByField(finalGym);
     }
     
     @Test
     public void getAllGyms() {
-        assertThat(gymDao.getAllGyms()).usingFieldByFieldElementComparator().containsOnly(gym, mockedGym);
+        assertThat(gymDao.getAllGyms()).usingFieldByFieldElementComparator().containsOnly(gymInBrno, finalGym);
     }
 }
