@@ -20,27 +20,27 @@ public class PokemonDAOImpl implements PokemonDAO {
 
     @Override
     public void createPokemon(Pokemon pokemon) throws ServiceFailureException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        em.persist(pokemon);
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void updatePokemon(Pokemon pokemon) throws ServiceFailureException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void deletePokemon(Pokemon pokemon) throws ServiceFailureException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        em.remove(pokemon);
     }
 
     @Override
     public Pokemon findPokemonById(Long id) throws ServiceFailureException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.find(Pokemon.class, id);
     }
 
     @Override
     public List<Pokemon> getAllPokemon() throws ServiceFailureException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.createQuery("Select p from Pokemon p", Pokemon.class).getResultList();
     }
 
 }
