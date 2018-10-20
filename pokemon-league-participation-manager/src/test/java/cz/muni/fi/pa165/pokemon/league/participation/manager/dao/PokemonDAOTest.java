@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.common.PersistenceApplicationContext;
@@ -15,29 +10,21 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import org.junit.Assert;
-import org.mockito.Mock;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import static org.testng.Assert.fail;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
  *
- * @author jiri21
+ * @author Jiří Medveď 38451
  */
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
@@ -91,12 +78,8 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
 
     }
 
-    @AfterMethod
-    public void tearDown() {
-    }
-
     /**
-     * Test of createPokemon method, of class PokemonDAOImpl.
+     * Test of createPokemon method with valid imput.
      */
     @Test
     public void testCreateValidPokemon() {
@@ -112,6 +95,9 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
         Assert.assertTrue(pokemons.contains(newPokemon));
     }
 
+    /**
+     * Test of createPokemon method with missing mandatory name.
+     */
     @Test
     public void testCreatePokemonWithoutName() {
         Pokemon newPokemon = new Pokemon();
@@ -120,9 +106,12 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
 
     }
 
+    /**
+     * Test of createPokemon method with null as imput.
+     */
     @Test
     public void testCreateNullPokemon() {
-        
+
         Pokemon newPokemon = new Pokemon();
 
         assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> pokemonDao.createPokemon(null));
@@ -130,7 +119,7 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
     }
 
     /**
-     * Test of updatePokemon method, of class PokemonDAOImpl.
+     * Test of updatePokemon method
      */
     @Test
     public void testUpdatePokemon() {
@@ -138,25 +127,25 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
         pokemonToUpdate.setNickname("Changed NickName");
 
         pokemonDao.updatePokemon(pokemonToUpdate);
-        
+
         Pokemon found = pokemonDao.findPokemonById(pokemon1.getId());
         Assert.assertEquals(found, pokemonToUpdate);
-        Assert.assertEquals("Changed NickName", found.getNickname() );
+        Assert.assertEquals("Changed NickName", found.getNickname());
     }
 
     /**
-     * Test of deletePokemon method, of class PokemonDAOImpl.
+     * Test of deletePokemon method
      */
     @Test
     public void testDeletePokemon() {
         pokemonDao.deletePokemon(pokemon1);
-        
+
         List<Pokemon> pokemons = pokemonDao.getAllPokemon();
         Assert.assertEquals(1, pokemons.size());
     }
 
     /**
-     * Test of findPokemonById method, of class PokemonDAOImpl.
+     * Test of findPokemonById method
      */
     @Test
     public void testFindPokemonById() {
@@ -165,7 +154,7 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
     }
 
     /**
-     * Test of getAllPokemon method, of class PokemonDAOImpl.
+     * Test of getAllPokemon method
      */
     @Test
     public void testGetAllPokemon() {
