@@ -11,7 +11,6 @@
             <artifactId>hibernate-jpa-2.1-api</artifactId>
             <version>1.0.2.Final</version>
             <type>jar</type>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>javax.validation</groupId>
