@@ -20,7 +20,7 @@ public interface TrainerDAO {
      * Stores a trainer to database. Id is automatically generated and stored.
      * 
      * @param trainer trainer to be created.
-     * @throws IllegalArgumentException when triner is null.
+     * @throws IllegalArgumentException when trainer is null.
      * @throws ServiceFailureException when db operation fails.
      */
     void createTrainer(Trainer trainer) throws ServiceFailureException;
