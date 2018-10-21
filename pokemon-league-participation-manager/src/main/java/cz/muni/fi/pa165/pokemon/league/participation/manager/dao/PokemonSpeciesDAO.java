@@ -1,7 +1,8 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
-import cz.muni.fi.pa165.pokemon.league.participation.manager.common.ServiceFailureException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
+
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -17,9 +18,8 @@ public interface PokemonSpeciesDAO {
      *
      * @param pokemonSpecies pokemonSpecies to be created.
      * @throws IllegalArgumentException when pokemonSpecies is null.
-     * @throws ServiceFailureException when db operation fails.
      */
-    void createPokemonSpecies(PokemonSpecies pokemonSpecies) throws ServiceFailureException;
+    void createPokemonSpecies(@Valid PokemonSpecies pokemonSpecies);
 
     /**
      * Updates pokemonSpecies in database.
@@ -27,19 +27,17 @@ public interface PokemonSpeciesDAO {
      * @param pokemonSpecies treiner to be updated.
      * @throws IllegalArgumentException when pokemonSpecies is not an entity or
      * is a detached entity.
-     * @throws ServiceFailureException when db operation fails.
      */
-    void updatePokemonSpecies(PokemonSpecies pokemonSpecies) throws ServiceFailureException;
+    void updatePokemonSpecies(@Valid PokemonSpecies pokemonSpecies);
 
     /**
      * Deletes a pokemonSpecies from database
      *
      * @param pokemonSpecies pokemonSpecies to be deleted
      * @throws IllegalArgumentException when pokemonSpecies is null.
-     * @throws ServiceFailureException when db operation fails. exists in the
      * database.
      */
-    void deletePokemonSpecies(PokemonSpecies pokemonSpecies) throws ServiceFailureException;
+    void deletePokemonSpecies(@Valid PokemonSpecies pokemonSpecies);
 
     /**
      * Returns the pokemonSpecies with given id.
@@ -48,16 +46,14 @@ public interface PokemonSpeciesDAO {
      * @return requested pokemonSpecies, null in case no such pokemonSpecies
      * exists.
      * @throws IllegalArgumentException when id is null.
-     * @throws ServiceFailureException when db operation fails.
      */
-    PokemonSpecies findPokemonSpeciesById(Long id) throws ServiceFailureException;
+    PokemonSpecies findPokemonSpeciesById(Long id);
 
     /**
      * Returns list of all pokemonSpeciess.
      *
-     * @return lsit of all pokemonSpeciess.
-     * @throws ServiceFailureException when db operation fails.
+     * @return list of all pokemonSpeciess.
      */
-    List<PokemonSpecies> getAllPokemonSpecies() throws ServiceFailureException;
+    List<PokemonSpecies> getAllPokemonSpecies();
 
 }
