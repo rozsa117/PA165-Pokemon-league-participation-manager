@@ -5,48 +5,37 @@
  */
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
-import cz.muni.fi.pa165.pokemon.league.participation.manager.common.ServiceFailureException;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author User
  */
-@Repository
-@Transactional
-public class GymDAOImpl implements GymDAO {
-
-    @PersistenceContext
-    private EntityManager em;
-    
-    @Override
-    public void createGym(Gym gym) throws ServiceFailureException {
-            em.persist(gym);
-            em.flush();
-    }
+public class PokemonSpeciesDAOImpl implements PokemonSpeciesDAO{
 
     @Override
-    public void updateGym(Gym gym) throws ServiceFailureException {
+    public void createPokemonSpecies(PokemonSpecies pokemonSpecies) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void deleteGym(Gym gym) throws ServiceFailureException {
+    public void updatePokemonSpecies(PokemonSpecies pokemonSpecies) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Gym findGymById(Long id) throws ServiceFailureException {
+    public void deletePokemonSpecies(PokemonSpecies pokemonSpecies) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Gym> getAllGyms() throws ServiceFailureException {
+    public PokemonSpecies findPokemonSpeciesById(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<PokemonSpecies> getAllPokemonSpecies() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

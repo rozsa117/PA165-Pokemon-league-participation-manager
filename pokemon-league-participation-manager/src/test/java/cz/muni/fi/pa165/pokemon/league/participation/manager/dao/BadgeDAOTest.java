@@ -13,18 +13,23 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import org.testng.annotations.BeforeMethod;
 
 /**
  * Unit test to badge data access object.
@@ -34,11 +39,11 @@ import org.testng.annotations.BeforeMethod;
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
 @TestExecutionListeners({TransactionalTestExecutionListener.class, DependencyInjectionTestExecutionListener.class})
 @Transactional
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class BadgeDAOTest {
-
+    
     @PersistenceContext
-    private EntityManagerFactory emf;
+    private EntityManager em;
     
     @Inject
     private BadgeDAO badgeDao;
@@ -47,11 +52,21 @@ public class BadgeDAOTest {
     private Badge todaysBadge;
     private Badge finalBadge;
     
-    @BeforeMethod
-    private void setUpMethod() {
+    public BadgeDAOTest() {
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
         todaysBadge.setDate(LocalDate.now());
         
-        EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.persist(todaysBadge.getTrainer());
         em.persist(finalBadge.getTrainer());
@@ -62,6 +77,11 @@ public class BadgeDAOTest {
         em.getTransaction().commit();
     }
     
+    @After
+    public void tearDown() {
+    }
+
+ 
     @Test
     public void createNullBadge() {
         assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> badgeDao.createBadge(null));
@@ -86,13 +106,13 @@ public class BadgeDAOTest {
     public void createBadge() {
         Badge badge = mock(Badge.class);
         badgeDao.createBadge(badge);
-        assertThat(emf.createEntityManager().find(Badge.class, badge)).isEqualToComparingFieldByField(badge);
+        assertThat(em.find(Badge.class, badge)).isEqualToComparingFieldByField(badge);
     }
     
     @Test
     public void testMultipleCreation() {
         assertThat(todaysBadge.getId()).isNotNull();
-        assertThat(emf.createEntityManager().find(Badge.class, todaysBadge)).isEqualToComparingFieldByField(todaysBadge);
+        assertThat(em.find(Badge.class, todaysBadge)).isEqualToComparingFieldByField(todaysBadge);
         try {
             badgeDao.createBadge(finalBadge);
             Assert.fail("Created the same gym twice.");
@@ -113,8 +133,6 @@ public class BadgeDAOTest {
     
     @Test
     public void updateBadge() {
-        EntityManager em = emf.createEntityManager();
-        
         Badge badge = em.find(Badge.class, todaysBadge);
         assertThat(badge).isEqualToComparingFieldByField(todaysBadge);
         assertThat(em.find(Badge.class, finalBadge)).isEqualToComparingFieldByField(finalBadge);
@@ -130,8 +148,6 @@ public class BadgeDAOTest {
     
     @Test
     public void deleteBadge() {
-        EntityManager em = emf.createEntityManager();
-        
         assertThat(em.find(Badge.class, todaysBadge)).isEqualToComparingFieldByField(todaysBadge);
         assertThat(em.find(Badge.class, finalBadge)).isEqualToComparingFieldByField(finalBadge);
         

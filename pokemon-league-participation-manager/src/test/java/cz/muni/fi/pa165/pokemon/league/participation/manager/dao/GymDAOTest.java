@@ -12,18 +12,23 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import org.testng.annotations.BeforeMethod;
 
 /**
  * Unit test to gym data access object.
@@ -33,11 +38,11 @@ import org.testng.annotations.BeforeMethod;
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
 @TestExecutionListeners({TransactionalTestExecutionListener.class, DependencyInjectionTestExecutionListener.class})
 @Transactional
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class GymDAOTest {
-    
+        
     @PersistenceContext
-    private EntityManagerFactory emf;
+    private EntityManager em;
     
     @Inject
     private GymDAO gymDao;
@@ -47,18 +52,32 @@ public class GymDAOTest {
     private Gym finalGym;
     
     
-    @BeforeMethod
-    public void setUpMethod() {
+    public GymDAOTest() {
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
         
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
         gymInBrno.setLocation("Brno");
         
-        EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.persist(gymInBrno.getGymLeader());
         em.persist(finalGym.getGymLeader());
         em.persist(gymInBrno);
         em.persist(finalGym);
         em.getTransaction().commit();
+    }
+    
+    @After
+    public void tearDown() {
     }
     
     @Test
@@ -85,15 +104,15 @@ public class GymDAOTest {
     public void createGym() {
         Gym gym = mock(Gym.class);
         gymDao.createGym(gym);
-        assertThat(emf.createEntityManager().find(Gym.class, gym)).isEqualToComparingFieldByField(gym);
+        assertThat(em.find(Gym.class, gym)).isEqualToComparingFieldByField(gym);
     }
     
     @Test
     public void testMultipleCreation() {
         GymDAO dao = gymDao;
-        EntityManagerFactory emf2 = emf;
+        
         assertThat(gymInBrno.getId()).isNotNull();
-        assertThat(emf.createEntityManager().find(Gym.class, gymInBrno)).isEqualToComparingFieldByField(gymInBrno);
+        assertThat(em.find(Gym.class, gymInBrno)).isEqualToComparingFieldByField(gymInBrno);
         try{
             gymDao.createGym(gymInBrno);
             Assert.fail("Created the same gym twice.");
@@ -114,8 +133,6 @@ public class GymDAOTest {
     
     @Test
     public void updateGym() {
-        EntityManager em = emf.createEntityManager();
-        
         Gym foundGym = em.find(Gym.class, gymInBrno.getId());
         assertThat(foundGym).isEqualToComparingFieldByField(gymInBrno);
         assertThat(em.find(Gym.class, finalGym)).isEqualToComparingFieldByField(finalGym);
@@ -131,8 +148,6 @@ public class GymDAOTest {
     
     @Test
     public void deleteGym() {
-        EntityManager em = emf.createEntityManager();
-        
         assertThat(em.find(Gym.class, gymInBrno.getId())).isEqualToComparingFieldByField(gymInBrno);
         assertThat(em.find(Gym.class, finalGym.getId())).isEqualToComparingFieldByField(finalGym);
         

@@ -5,12 +5,14 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -27,18 +29,20 @@ public class PokemonSpecies {
     private Long id;
 
     @NotNull
+    @NotEmpty
     @Column(nullable = false, unique = true)
     private String speciesName;
 
     @NotNull
     @Enumerated
+    @Column(nullable = false)
     private PokemonType primaryType;
 
     @Enumerated
     private PokemonType secondaryType;
 
-    @OneToOne(optional = true)
-    @JoinColumn(name = "evolvesFromId")
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "evolves_from_id")
     private PokemonSpecies evolvesFrom;
 
     public PokemonSpecies() {

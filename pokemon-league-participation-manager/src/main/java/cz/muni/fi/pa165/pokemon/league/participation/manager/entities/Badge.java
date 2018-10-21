@@ -12,8 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -44,7 +42,6 @@ public class Badge {
 
     @NotNull
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
     private LocalDate date;
 
     @NotNull
