@@ -223,6 +223,7 @@ public class PokemonSpeciesDAOTest {
     @Test(expected = IllegalArgumentException.class)
     public void testUpdateNullPokemonSpecies() {
         dao.updatePokemonSpecies(null);
+        em.flush();
     }
 
     /**
@@ -243,6 +244,7 @@ public class PokemonSpeciesDAOTest {
         marshtomp.setSpeciesName(null);
 
         dao.updatePokemonSpecies(marshtomp);
+        em.flush();
     }
 
     /**

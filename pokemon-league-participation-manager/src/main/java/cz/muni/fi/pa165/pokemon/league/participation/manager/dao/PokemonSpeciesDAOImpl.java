@@ -7,7 +7,8 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 /**
- * Interface of data access objects for PokemonSpecies entity class implementation.
+ * Interface of data access objects for PokemonSpecies entity class
+ * implementation.
  *
  * @author Jiří Medveď 38451
  */
@@ -24,6 +25,7 @@ public class PokemonSpeciesDAOImpl implements PokemonSpeciesDAO {
 
     @Override
     public void deletePokemonSpecies(PokemonSpecies pokemonSpecies) {
+        pokemonSpecies = em.merge(pokemonSpecies);
         em.remove(pokemonSpecies);
     }
 
@@ -34,7 +36,7 @@ public class PokemonSpeciesDAOImpl implements PokemonSpeciesDAO {
 
     @Override
     public List<PokemonSpecies> getAllPokemonSpecies() {
-        return em.createQuery("select ps from PokemonSpecies ps",PokemonSpecies.class).getResultList();
+        return em.createQuery("select ps from PokemonSpecies ps", PokemonSpecies.class).getResultList();
     }
 
     @Override
