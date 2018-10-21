@@ -12,8 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +20,9 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.testng.annotations.BeforeMethod;
 
 /**
@@ -29,6 +31,7 @@ import org.testng.annotations.BeforeMethod;
  * @author Tamás Rózsa 445653
  */
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
+@TestExecutionListeners({TransactionalTestExecutionListener.class, DependencyInjectionTestExecutionListener.class})
 @Transactional
 @RunWith(MockitoJUnitRunner.class)
 public class GymDAOTest {
@@ -87,6 +90,8 @@ public class GymDAOTest {
     
     @Test
     public void testMultipleCreation() {
+        GymDAO dao = gymDao;
+        EntityManagerFactory emf2 = emf;
         assertThat(gymInBrno.getId()).isNotNull();
         assertThat(emf.createEntityManager().find(Gym.class, gymInBrno)).isEqualToComparingFieldByField(gymInBrno);
         try{
