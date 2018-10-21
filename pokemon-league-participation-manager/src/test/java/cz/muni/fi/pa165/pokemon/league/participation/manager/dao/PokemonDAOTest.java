@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import org.junit.Assert;
 import org.springframework.test.context.ContextConfiguration;
@@ -23,6 +24,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
+ * Unit tests for PokemonDAO implementations.
  *
  * @author Jiří Medveď 38451
  */
@@ -30,8 +32,6 @@ import org.testng.annotations.Test;
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
 @Transactional
 public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
-
-    private static EntityManagerFactory emf;
 
     @Inject
     private PokemonDAO pokemonDao;
@@ -112,8 +112,6 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
     @Test
     public void testCreateNullPokemon() {
 
-        Pokemon newPokemon = new Pokemon();
-
         assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> pokemonDao.createPokemon(null));
 
     }
@@ -134,6 +132,16 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
     }
 
     /**
+     * Test of updatePokemon method with null as imput.
+     */
+    @Test
+    public void testUpdateNullPokemon() {
+
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> pokemonDao.updatePokemon(null));
+
+    }
+
+    /**
      * Test of deletePokemon method
      */
     @Test
@@ -142,6 +150,16 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
 
         List<Pokemon> pokemons = pokemonDao.getAllPokemon();
         Assert.assertEquals(1, pokemons.size());
+    }
+
+    /**
+     * Test of deletePokemon method with null as imput.
+     */
+    @Test
+    public void testDeleteNullPokemon() {
+
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> pokemonDao.deletePokemon(null));
+
     }
 
     /**
@@ -154,15 +172,22 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
     }
 
     /**
-     * Test of getAllPokemon method
+     * Test of findPokemonById method - non existence
+     */
+    @Test
+    public void testFindNonExistentPokemonById() {
+        Pokemon found = pokemonDao.findPokemonById(Long.MAX_VALUE);
+        Assert.assertNull(found);
+    }
+
+    /**
+     * Test of getAllPokemon method - non existing Pokemon
      */
     @Test
     public void testGetAllPokemon() {
-        List<Pokemon> pokemons = pokemonDao.getAllPokemon();
-
-        Assert.assertEquals(2, pokemons.size());
-        Assert.assertTrue(pokemons.contains(pokemon1));
-        Assert.assertTrue(pokemons.contains(pokemon2));
+        assertThat(pokemonDao.getAllPokemon())
+                .usingFieldByFieldElementComparator()
+                .containsOnly(pokemon1, pokemon2);
     }
 
 }
