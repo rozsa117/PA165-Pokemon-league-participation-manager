@@ -1,13 +1,16 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
+import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.TrainerBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.common.PersistenceApplicationContext;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -18,16 +21,16 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.Mockito.mock;
 
 /**
  * Unit tests to Trainer data access object
  *
  * @author Michal Mokros 456442
  */
-@ContextConfiguration(classes = PersistenceApplicationContext.class)
 @Transactional
-@RunWith(MockitoJUnitRunner.class)
+@ContextConfiguration(classes  = PersistenceApplicationContext.class)
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, TransactionalTestExecutionListener.class})
+@RunWith(SpringRunner.class)
 public class TrainerDAOTest {
 
     @PersistenceContext
@@ -36,30 +39,28 @@ public class TrainerDAOTest {
     @Inject
     private TrainerDAO trainerDAO;
 
-    @Mock
     private Trainer ashTrainer;
-
-    @Mock
     private Trainer brockTrainer;
 
     @Before
     public void setUp() {
-        ashTrainer.setBorn(LocalDate.of(1997, 9, 21));
-        ashTrainer.setName("Ash");
-        ashTrainer.setSurname("Ketchup");
-        ashTrainer.setUserName("Ash1997");
-        ashTrainer.setPasswordHash("12345678");
-        ashTrainer.setAdmin(false);
+        ashTrainer = new TrainerBuilder()
+                .born(LocalDate.of(1997, 8, 13))
+                .isAdmin(false)
+                .name("Ash")
+                .surname("Ketchup")
+                .userName("Ash1997")
+                .passwordHash("ash123")
+                .build();
 
-        brockTrainer.setBorn(LocalDate.of(1996, 10, 28));
-        brockTrainer.setName("Brock");
-        brockTrainer.setSurname("Sleepyeye");
-        brockTrainer.setUserName("Brock-_-");
-        brockTrainer.setPasswordHash("00001111");
-        brockTrainer.setAdmin(false);
-
-        trainerDAO.createTrainer(ashTrainer);
-        trainerDAO.createTrainer(brockTrainer);
+        brockTrainer = new TrainerBuilder()
+                .born(LocalDate.of(1996, 1, 12))
+                .isAdmin(false)
+                .name("Brock")
+                .surname("Sleepyeye")
+                .userName("BrockRock")
+                .passwordHash("brockpswd")
+                .build();
     }
 
     @Test
@@ -69,19 +70,16 @@ public class TrainerDAOTest {
 
     @Test
     public void createTrainerWithNonNullIdTest() {
-        Trainer trainer = mock(Trainer.class);
-        trainer.setId(10L);
+        ashTrainer.setId(10L);
         assertThatExceptionOfType(PersistenceException.class)
-                .isThrownBy(() -> trainerDAO.createTrainer(trainer));
+                .isThrownBy(() -> trainerDAO.createTrainer(ashTrainer));
     }
 
     @Test
     public void createTrainerTest() {
-        Trainer trainer = mock(Trainer.class);
-        trainerDAO.createTrainer(trainer);
-        assertThat(trainerDAO.findTrainerById(trainer.getId()))
-                .isEqualToComparingFieldByField(trainer);
-        assertThat(em.contains(trainer)).isTrue();
+        trainerDAO.createTrainer(ashTrainer);
+        assertThat(trainerDAO.findTrainerById(ashTrainer.getId()))
+                .isEqualToComparingFieldByField(ashTrainer);
     }
 
     @Test
@@ -91,20 +89,21 @@ public class TrainerDAOTest {
 
     @Test
     public void updateTrainerWithNullIdTest() {
-        Trainer trainer = trainerDAO.findTrainerById(ashTrainer.getId());
-        trainer.setId(null);
+        trainerDAO.createTrainer(brockTrainer);
+        em.detach(brockTrainer);
+        brockTrainer.setId(null);
         assertThatExceptionOfType(PersistenceException.class)
-                .isThrownBy(() -> trainerDAO.updateTrainer(trainer));
+                .isThrownBy(() -> trainerDAO.updateTrainer(brockTrainer));
     }
 
     @Test
     public void updateTrainerTest() {
-        Trainer trainer = trainerDAO.findTrainerById(ashTrainer.getId());
-        trainer.setUserName("AshKetchup1997");
-        trainerDAO.updateTrainer(trainer);
-        assertThat(trainerDAO.findTrainerById(trainer.getId()))
-                .isEqualToComparingFieldByField(trainer);
-        assertThat(em.contains(trainer));
+        trainerDAO.createTrainer(ashTrainer);
+        em.detach(ashTrainer);
+        ashTrainer.setName("Ashito");
+        trainerDAO.updateTrainer(ashTrainer);
+        assertThat(trainerDAO.findTrainerById(ashTrainer.getId()))
+                .isEqualToComparingFieldByField(ashTrainer);
     }
 
     @Test
@@ -113,19 +112,12 @@ public class TrainerDAOTest {
     }
 
     @Test
-    public void deleteTrainerWithNullIdTest() {
-        Trainer trainer = trainerDAO.findTrainerById(ashTrainer.getId());
-        trainer.setId(null);
-        assertThatExceptionOfType(PersistenceException.class)
-                .isThrownBy(() -> trainerDAO.deleteTrainer(trainer));
-    }
-
-    @Test
     public void deleteTrainerTest() {
-        Trainer trainer = trainerDAO.findTrainerById(ashTrainer.getId());
-        trainerDAO.deleteTrainer(trainer);
-        assertThat(trainerDAO.findTrainerById(trainer.getId())).isNull();
-        assertThat(em.contains(trainer)).isFalse();
+        trainerDAO.createTrainer(ashTrainer);
+        assertThat(trainerDAO.findTrainerById(ashTrainer.getId()))
+                .isEqualToComparingFieldByField(ashTrainer);
+        trainerDAO.deleteTrainer(ashTrainer);
+        assertThat(trainerDAO.findTrainerById(ashTrainer.getId())).isNull();
     }
 
     @Test
@@ -135,12 +127,15 @@ public class TrainerDAOTest {
 
     @Test
     public void findTrainerByIdTest() {
+        trainerDAO.createTrainer(ashTrainer);
         assertThat(trainerDAO.findTrainerById(ashTrainer.getId()))
                 .isEqualToComparingFieldByField(ashTrainer);
     }
 
     @Test
     public void getAllTrainersTest() {
+        trainerDAO.createTrainer(ashTrainer);
+        trainerDAO.createTrainer(brockTrainer);
         assertThat(trainerDAO.getAllTrainers()).usingFieldByFieldElementComparator()
                 .containsOnly(ashTrainer, brockTrainer);
     }
