@@ -15,7 +15,6 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 
@@ -69,13 +68,6 @@ public class TrainerDAOTest {
     }
 
     @Test
-    public void createTrainerWithNonNullIdTest() {
-        ashTrainer.setId(10L);
-        assertThatExceptionOfType(PersistenceException.class)
-                .isThrownBy(() -> trainerDAO.createTrainer(ashTrainer));
-    }
-
-    @Test
     public void createTrainerTest() {
         trainerDAO.createTrainer(ashTrainer);
         assertThat(trainerDAO.findTrainerById(ashTrainer.getId()))
@@ -85,15 +77,6 @@ public class TrainerDAOTest {
     @Test
     public void updateNullTrainerTest() {
         assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> trainerDAO.updateTrainer(null));
-    }
-
-    @Test
-    public void updateTrainerWithNullIdTest() {
-        trainerDAO.createTrainer(brockTrainer);
-        em.detach(brockTrainer);
-        brockTrainer.setId(null);
-        assertThatExceptionOfType(PersistenceException.class)
-                .isThrownBy(() -> trainerDAO.updateTrainer(brockTrainer));
     }
 
     @Test
