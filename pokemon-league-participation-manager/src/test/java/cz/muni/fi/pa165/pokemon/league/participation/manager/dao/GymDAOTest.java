@@ -14,10 +14,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import java.time.LocalDate;
 import java.time.Month;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceException;
-import javax.persistence.PersistenceUnit;
 import javax.transaction.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -44,9 +41,6 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @Transactional
 @RunWith(SpringRunner.class)
 public class GymDAOTest {
-    
-    @PersistenceUnit
-    private EntityManagerFactory emf;
     
     @Inject
     private GymDAO gymDao;
@@ -125,13 +119,13 @@ public class GymDAOTest {
     public void createGym() {
         Gym gym = mock(Gym.class);
         gymDao.createGym(gym);
-        assertThat(emf.createEntityManager().find(Gym.class, gym)).isEqualToComparingFieldByField(gym);
+        assertThat(gymDao.findGymById(gymInBrno.getId())).isEqualToComparingFieldByField(gym);
     }
     
     @Test
     public void testMultipleCreation() {
         assertThat(gymInBrno.getId()).isNotNull();
-        assertThat(emf.createEntityManager().find(Gym.class, gymInBrno)).isEqualToComparingFieldByField(gymInBrno);
+        assertThat(gymDao.findGymById(gymInBrno.getId())).isEqualToComparingFieldByField(gymInBrno);
         assertThatExceptionOfType(PersistenceException.class).isThrownBy(() -> gymDao.createGym(gymInBrno));
     }
     
@@ -147,30 +141,28 @@ public class GymDAOTest {
     
     @Test
     public void updateGym() {
-        EntityManager em = emf.createEntityManager();
-        Gym foundGym = em.find(Gym.class, gymInBrno.getId());
+        Gym foundGym = gymDao.findGymById(gymInBrno.getId());
         assertThat(foundGym).isEqualToComparingFieldByField(gymInBrno);
-        assertThat(em.find(Gym.class, finalGym)).isEqualToComparingFieldByField(finalGym);
+        assertThat(gymDao.findGymById(finalGym.getId())).isEqualToComparingFieldByField(finalGym);
         
         gymInBrno.setLocation("London");
         gymDao.updateGym(gymInBrno);
         assertThat(foundGym).isNotSameAs(gymInBrno);
         
-        foundGym = em.find(Gym.class, gymInBrno.getId());
+        foundGym = gymDao.findGymById(gymInBrno.getId());
         assertThat(foundGym).isEqualToComparingFieldByField(gymInBrno);
-        assertThat(em.find(Gym.class, finalGym)).isEqualToComparingFieldByField(finalGym);
+        assertThat(gymDao.findGymById(finalGym.getId())).isEqualToComparingFieldByField(finalGym);
     }
     
     @Test
     public void deleteGym() {
-        EntityManager em = emf.createEntityManager();
-        assertThat(em.find(Gym.class, gymInBrno.getId())).isEqualToComparingFieldByField(gymInBrno);
-        assertThat(em.find(Gym.class, finalGym.getId())).isEqualToComparingFieldByField(finalGym);
+        assertThat(gymDao.findGymById(gymInBrno.getId())).isEqualToComparingFieldByField(gymInBrno);
+        assertThat(gymDao.findGymById(finalGym.getId())).isEqualToComparingFieldByField(finalGym);
         
         gymDao.deleteGym(gymInBrno);
         
-        assertThat(em.find(Gym.class, gymInBrno.getId())).isNull();
-        assertThat(em.find(Gym.class, finalGym.getId())).isEqualToComparingFieldByField(finalGym);
+        assertThat(gymDao.findGymById(gymInBrno.getId())).isNull();
+        assertThat(gymDao.findGymById(finalGym.getId())).isEqualToComparingFieldByField(finalGym);
     }
     
     @Test
