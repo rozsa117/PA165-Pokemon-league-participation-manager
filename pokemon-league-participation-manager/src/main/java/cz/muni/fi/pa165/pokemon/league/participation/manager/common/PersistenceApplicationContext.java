@@ -62,5 +62,4 @@ public class PersistenceApplicationContext {
     public MethodValidationPostProcessor methodValidationPostProcessor() {
         return new MethodValidationPostProcessor();
     }
-
 }

@@ -7,11 +7,15 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.common.PersistenceApplicationContext;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import java.time.LocalDate;
+import java.time.Month;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import javax.transaction.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -35,22 +39,30 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  * Unit test to badge data access object.
  *
  * @author Tamás Rózsa 445653
- */
+ *//*
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
 @TestExecutionListeners({TransactionalTestExecutionListener.class, DependencyInjectionTestExecutionListener.class})
 @Transactional
-@RunWith(SpringRunner.class)
+@RunWith(SpringRunner.class)*/
 public class BadgeDAOTest {
-    
+    /*
+    @PersistenceUnit
+    private EntityManagerFactory emf;
+    /*
     @PersistenceContext
     private EntityManager em;
     
     @Inject
     private BadgeDAO badgeDao;
     
-    @Mock
     private Badge todaysBadge;
     private Badge finalBadge;
+    
+    private Trainer trainer1;
+    private Trainer trainer2;
+    
+    private Gym gym1;
+    private Gym gym2;
     
     public BadgeDAOTest() {
     }
@@ -65,13 +77,35 @@ public class BadgeDAOTest {
     
     @Before
     public void setUp() {
+        trainer1 = new Trainer();
+        trainer1.setBorn(LocalDate.of(2000, Month.MARCH, 3));
+        trainer1.setName("someone");
+        trainer1.setPasswordHash("asd");
+        trainer1.setSurname("something");
+        trainer1.setUserName("somsome");
+        trainer2 = mock(Trainer.class);
+        gym1 = mock(Gym.class);
+        gym2 = mock(Gym.class);
+        
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        em.persist(trainer1);
+        em.persist(trainer2);
+        em.persist(gym1);
+        em.persist(gym2);
+        em.getTransaction().commit();
+        
+        todaysBadge = mock(Badge.class);
+        finalBadge = mock(Badge.class);
+        
+        todaysBadge.setTrainer(trainer1);
+        todaysBadge.setGym(gym1);
         todaysBadge.setDate(LocalDate.now());
         
+        finalBadge.setTrainer(trainer2);
+        finalBadge.setGym(gym2);
+        
         em.getTransaction().begin();
-        em.persist(todaysBadge.getTrainer());
-        em.persist(finalBadge.getTrainer());
-        em.persist(todaysBadge.getGym());
-        em.persist(finalBadge.getGym());
         em.persist(todaysBadge);
         em.persist(finalBadge);
         em.getTransaction().commit();
@@ -160,5 +194,5 @@ public class BadgeDAOTest {
     @Test
     public void getAllBadges() {
         assertThat(badgeDao.getAllBadges()).usingFieldByFieldElementComparator().containsOnly(todaysBadge, finalBadge);
-    }
+    }*/
 }

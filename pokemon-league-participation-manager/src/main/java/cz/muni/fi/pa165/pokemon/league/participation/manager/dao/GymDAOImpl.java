@@ -5,7 +5,8 @@
  */
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
-import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.common.ServiceFailureException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
@@ -16,30 +17,30 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Transactional
-public class PokemonSpeciesDAOImpl implements PokemonSpeciesDAO{
+public class GymDAOImpl implements GymDAO {
 
     @Override
-    public void createPokemonSpecies(PokemonSpecies pokemonSpecies) {
+    public void createGym(Gym gym) throws ServiceFailureException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void updatePokemonSpecies(PokemonSpecies pokemonSpecies) {
+    public void updateGym(Gym gym) throws ServiceFailureException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void deletePokemonSpecies(PokemonSpecies pokemonSpecies) {
+    public void deleteGym(Gym gym) throws ServiceFailureException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public PokemonSpecies findPokemonSpeciesById(Long id) {
+    public Gym findGymById(Long id) throws ServiceFailureException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<PokemonSpecies> getAllPokemonSpecies() {
+    public List<Gym> getAllGyms() throws ServiceFailureException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
