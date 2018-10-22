@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -86,6 +87,12 @@ public class Gym {
     public void setGymLeader(Trainer gymLeader) {
         this.gymLeader = gymLeader;
     }
+
+    public Set<Badge> getBadges() { return Collections.unmodifiableSet(this.badges); }
+
+    public void addBadge(Badge badge) { this.badges.add(badge); }
+
+    public void removeBadge(Badge badge) { this.badges.remove(badge); }
 
     @Override
     public String toString() {
