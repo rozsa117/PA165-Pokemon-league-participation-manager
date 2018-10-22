@@ -5,6 +5,8 @@
  */
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
+import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.GymBuilder;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.TrainerBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.common.PersistenceApplicationContext;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
@@ -14,20 +16,17 @@ import java.time.Month;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.PersistenceUnit;
 import javax.transaction.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -49,21 +48,14 @@ public class GymDAOTest {
     @PersistenceUnit
     private EntityManagerFactory emf;
     
-        /*
-    @PersistenceContext
-    private EntityManager em;*/
-    
     @Inject
     private GymDAO gymDao;
     @Inject
     private TrainerDAO trainerDAO;
-    /*
-    @Mock*/
+
     private Gym gymInBrno;
     private Gym finalGym;
-    
-    private Trainer trainer;
-    private Trainer trainer2;
+    private Trainer trainerAsh;
     
     public GymDAOTest() {
     }
@@ -79,77 +71,30 @@ public class GymDAOTest {
     
     @Before
     public void setUp() {
-
-        trainer = new Trainer();
-        trainer.setName("Ash");
-        trainer.setSurname("Hash");
-        trainer.setBorn(LocalDate.of(2000, Month.MARCH, 2));
-        trainer.setPasswordHash("asd123");
-        trainer.setUserName("Ashh");
+        trainerAsh = new TrainerBuilder()
+                .born(LocalDate.of(2000, Month.APRIL, 8))
+                .isAdmin(false)
+                .name("Ash")
+                .surname("Ketchum")
+                .userName("ketchup")
+                .passwordHash("pswda")
+                .build();
         
-        gymInBrno = new Gym();
-        gymInBrno.setType(PokemonType.DRAGON);
-        gymInBrno.setLocation("Brno");
-        gymInBrno.setGymLeader(trainer);
-
-        trainer2 = new Trainer();
-        trainer2.setName("Hek");
-        trainer2.setSurname("Lek");
-        trainer2.setBorn(LocalDate.of(1998, Month.APRIL, 3));
-        trainer2.setPasswordHash("qwe789");
-        trainer.setUserName("Hekl");
-
-        finalGym = new Gym();
-        finalGym.setType(PokemonType.ICE);
-        finalGym.setLocation("Praha");
-        finalGym.setGymLeader(trainer2);
-
-        trainerDAO.createTrainer(trainer);
-        trainerDAO.createTrainer(trainer2);
+        gymInBrno = new GymBuilder()
+                .type(PokemonType.DRAGON)
+                .location("Brno")
+                .gymLeader(trainerAsh)
+                .build();
+        
+        finalGym = new GymBuilder()
+                .type(PokemonType.ICE)
+                .location("Praha")
+                .gymLeader(trainerAsh)
+                .build();
+        
+        trainerDAO.createTrainer(trainerAsh);
         gymDao.createGym(gymInBrno);
         gymDao.createGym(finalGym);
-        
-        /*
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(trainer);
-        em.persist(trainer2);
-        em.persist(gymInBrno);
-        em.persist(finalGym);
-        em.getTransaction().commit()
-                
-        /*
-        trainer1 = new Trainer();
-        trainer1.setBorn(LocalDate.of(2000, Month.MARCH, 3));
-        trainer1.setName("someone");
-        trainer1.setPasswordHash("asd");
-        trainer1.setSurname("something");
-        trainer1.setUserName("somsome");
-        trainer1.setAdmin(false);
-        /*
-        trainer1 = mock(Trainer.class);
-        trainer2 = mock(Trainer.class);
-        
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(trainer1);
-       // em.persist(trainer2);
-        em.getTransaction().commit();
-        
-        gymInBrno = new Gym();
-        gymInBrno.setType(PokemonType.FIRE);
-        gymInBrno.setLocation("Brno");
-        gymInBrno.setGymLeader(trainer1);
-        
-        finalGym = new Gym();
-        finalGym.setType(PokemonType.BUG);
-        finalGym.setLocation("Praha");
-        gymInBrno.setGymLeader(trainer1);
-        
-        em.getTransaction().begin();
-        em.persist(gymInBrno);
-        em.persist(finalGym);
-        em.getTransaction().commit();*/
     }
     
     @After
@@ -185,16 +130,9 @@ public class GymDAOTest {
     
     @Test
     public void testMultipleCreation() {
-        //GymDAO dao = gymDao;
-        
         assertThat(gymInBrno.getId()).isNotNull();
         assertThat(emf.createEntityManager().find(Gym.class, gymInBrno)).isEqualToComparingFieldByField(gymInBrno);
-        try{
-            gymDao.createGym(gymInBrno);
-            Assert.fail("Created the same gym twice.");
-        }
-        catch(Exception ex) {
-        }
+        assertThatExceptionOfType(PersistenceException.class).isThrownBy(() -> gymDao.createGym(gymInBrno));
     }
     
     @Test
