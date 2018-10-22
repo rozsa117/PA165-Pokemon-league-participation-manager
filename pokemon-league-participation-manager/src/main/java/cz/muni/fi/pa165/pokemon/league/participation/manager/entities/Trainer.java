@@ -12,8 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -32,6 +30,7 @@ public class Trainer {
     private Long id;
     
     @NotNull
+    @Column(nullable = false)
     private String passwordHash;
     
     @NotNull
@@ -52,7 +51,7 @@ public class Trainer {
     private LocalDate born;
 
     @Column(name = "trnr_admin", nullable = false)
-    private boolean admin;
+    private boolean admin = false;
     
     public Trainer() {
     }

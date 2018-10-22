@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
+package cz.muni.fi.pa165.pokemon.league.participation.manager.builders;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
