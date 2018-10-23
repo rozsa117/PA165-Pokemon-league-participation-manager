@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
 /**
- * Configures all beans necessary to provide persistance context.
+ * Configures all beans necessary to provide persistence context.
  *
  * @author Tamás Rósza 445653
  */
@@ -49,7 +49,7 @@ public class PersistenceApplicationContext {
     }
 
     /**
-     * Creates object for an embeded(DERBY) database.
+     * Creates object for an embedded(DERBY) database.
      *
      * @return Datasource for database.
      */

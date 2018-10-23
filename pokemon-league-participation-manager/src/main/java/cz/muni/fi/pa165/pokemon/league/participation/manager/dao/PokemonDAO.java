@@ -2,6 +2,8 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
+
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -17,7 +19,7 @@ public interface PokemonDAO {
      * @param pokemon Pokemon to store.
      * @throws IllegalArgumentException when pokemon is null.
      */
-    void createPokemon(Pokemon pokemon);
+    void createPokemon(@Valid Pokemon pokemon);
 
     /**
      * Update an existing Pokemon.
@@ -25,7 +27,7 @@ public interface PokemonDAO {
      * @param pokemon Pokemon to update.
      * @throws IllegalArgumentException when pokemon is null.
      */
-    void updatePokemon(Pokemon pokemon);
+    void updatePokemon(@Valid Pokemon pokemon);
 
     /**
      * Remove a Pokemon.
@@ -33,7 +35,7 @@ public interface PokemonDAO {
      * @param pokemon Pokemon to remove.
      * @throws IllegalArgumentException when pokemon is null.
      */
-    void deletePokemon(Pokemon pokemon);
+    void deletePokemon(@Valid Pokemon pokemon);
 
     /**
      * Find a Pokemon based on its id.
