@@ -5,24 +5,33 @@
  */
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
+import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.BadgeBuilder;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.GymBuilder;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.TrainerBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.common.PersistenceApplicationContext;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import java.time.LocalDate;
+import java.time.Month;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import org.junit.Assert;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import static org.mockito.Mockito.mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.context.ContextConfiguration;
-import org.testng.annotations.BeforeMethod;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
  * Unit test to badge data access object.
@@ -30,35 +39,98 @@ import org.testng.annotations.BeforeMethod;
  * @author Tamás Rózsa 445653
  */
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
+@TestExecutionListeners({TransactionalTestExecutionListener.class, DependencyInjectionTestExecutionListener.class})
 @Transactional
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class BadgeDAOTest {
-
-    @PersistenceContext
-    private EntityManagerFactory emf;
+    
+    @Inject
+    private GymDAO gymDao;
+    
+    @Inject
+    private TrainerDAO trainerDao;
     
     @Inject
     private BadgeDAO badgeDao;
     
-    @Mock
     private Badge todaysBadge;
     private Badge finalBadge;
     
-    @BeforeMethod
-    private void setUpMethod() {
-        todaysBadge.setDate(LocalDate.now());
-        
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(todaysBadge.getTrainer());
-        em.persist(finalBadge.getTrainer());
-        em.persist(todaysBadge.getGym());
-        em.persist(finalBadge.getGym());
-        em.persist(todaysBadge);
-        em.persist(finalBadge);
-        em.getTransaction().commit();
+    private Trainer trainerAsh;
+    private Trainer trainerBrock;
+    
+    private Gym gymInBrno;
+    private Gym finalGym;
+    
+    public BadgeDAOTest() {
     }
     
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+        trainerAsh = new TrainerBuilder()
+                .born(LocalDate.of(2000, Month.APRIL, 8))
+                .isAdmin(false)
+                .name("Ash")
+                .surname("Ketchum")
+                .userName("ketchup")
+                .passwordHash("pswda")
+                .build();
+        
+        trainerBrock = new TrainerBuilder()
+                .born(LocalDate.of(1995, Month.JANUARY, 18))
+                .isAdmin(false)
+                .name("Brock")
+                .surname("Sleepyeye")
+                .userName("rock")
+                .passwordHash("pswdb")
+                .build();
+        
+        gymInBrno = new GymBuilder()
+                .type(PokemonType.DRAGON)
+                .location("Brno")
+                .gymLeader(trainerAsh)
+                .build();
+        
+        finalGym = new GymBuilder()
+                .type(PokemonType.ICE)
+                .location("Praha")
+                .gymLeader(trainerAsh)
+                .build();
+
+        todaysBadge = new BadgeBuilder()
+                .date(LocalDate.now())
+                .trainer(trainerBrock)
+                .gym(gymInBrno)
+                .status(ChallengeStatus.WON)
+                .build();
+        
+        todaysBadge = new BadgeBuilder()
+                .date(LocalDate.of(20015, Month.MARCH, 7))
+                .trainer(trainerBrock)
+                .gym(finalGym)
+                .status(ChallengeStatus.LOST)
+                .build();
+        
+        trainerDao.createTrainer(trainerAsh);
+        trainerDao.createTrainer(trainerBrock);
+        gymDao.createGym(gymInBrno);
+        gymDao.createGym(finalGym);
+        badgeDao.createBadge(todaysBadge);
+        badgeDao.createBadge(finalBadge);
+    }
+    
+    @After
+    public void tearDown() {
+    }
+ 
     @Test
     public void createNullBadge() {
         assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> badgeDao.createBadge(null));
@@ -81,21 +153,21 @@ public class BadgeDAOTest {
     
     @Test
     public void createBadge() {
-        Badge badge = mock(Badge.class);
+        Badge badge = new BadgeBuilder()
+                .date(LocalDate.now())
+                .trainer(trainerBrock)
+                .gym(finalGym)
+                .status(ChallengeStatus.WAITING_TO_ACCEPT)
+                .build();
         badgeDao.createBadge(badge);
-        assertThat(emf.createEntityManager().find(Badge.class, badge)).isEqualToComparingFieldByField(badge);
+        assertThat(badgeDao.findBadgeById(badge.getId())).isEqualToComparingFieldByField(badge);
     }
     
     @Test
     public void testMultipleCreation() {
         assertThat(todaysBadge.getId()).isNotNull();
-        assertThat(emf.createEntityManager().find(Badge.class, todaysBadge)).isEqualToComparingFieldByField(todaysBadge);
-        try {
-            badgeDao.createBadge(finalBadge);
-            Assert.fail("Created the same gym twice.");
-        }
-        catch(Exception ex){
-        }
+        assertThat(badgeDao.findBadgeById(todaysBadge.getId())).isEqualToComparingFieldByField(todaysBadge);
+        assertThatExceptionOfType(PersistenceException.class).isThrownBy(() -> badgeDao.createBadge(finalBadge));
     }
     
     @Test
@@ -110,32 +182,28 @@ public class BadgeDAOTest {
     
     @Test
     public void updateBadge() {
-        EntityManager em = emf.createEntityManager();
-        
-        Badge badge = em.find(Badge.class, todaysBadge);
+        Badge badge = badgeDao.findBadgeById(todaysBadge.getId());
         assertThat(badge).isEqualToComparingFieldByField(todaysBadge);
-        assertThat(em.find(Badge.class, finalBadge)).isEqualToComparingFieldByField(finalBadge);
+        assertThat(badgeDao.findBadgeById(finalBadge.getId())).isEqualToComparingFieldByField(finalBadge);
     
         badge.setDate(LocalDate.MIN);
         badgeDao.updateBadge(badge);
         assertThat(badge).isNotSameAs(todaysBadge);
         
-        badge = em.find(Badge.class, todaysBadge);
+        badge = badgeDao.findBadgeById(todaysBadge.getId());
         assertThat(badge).isEqualToComparingFieldByField(todaysBadge);
-        assertThat(em.find(Badge.class, finalBadge)).isEqualToComparingFieldByField(finalBadge);
+        assertThat(badgeDao.findBadgeById(finalBadge.getId())).isEqualToComparingFieldByField(finalBadge);
     }
     
     @Test
     public void deleteBadge() {
-        EntityManager em = emf.createEntityManager();
-        
-        assertThat(em.find(Badge.class, todaysBadge)).isEqualToComparingFieldByField(todaysBadge);
-        assertThat(em.find(Badge.class, finalBadge)).isEqualToComparingFieldByField(finalBadge);
+        assertThat(badgeDao.findBadgeById(todaysBadge.getId())).isEqualToComparingFieldByField(todaysBadge);
+        assertThat(badgeDao.findBadgeById(finalBadge.getId())).isEqualToComparingFieldByField(finalBadge);
         
         badgeDao.deleteBadge(todaysBadge);
         
-        assertThat(em.find(Badge.class, todaysBadge)).isNull();
-        assertThat(em.find(Badge.class, finalBadge)).isEqualToComparingFieldByField(finalBadge);
+        assertThat(badgeDao.findBadgeById(todaysBadge.getId())).isNull();
+        assertThat(badgeDao.findBadgeById(finalBadge.getId())).isEqualToComparingFieldByField(finalBadge);
     }
     
     @Test
