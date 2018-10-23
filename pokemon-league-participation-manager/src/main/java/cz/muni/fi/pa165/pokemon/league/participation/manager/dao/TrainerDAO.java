@@ -7,6 +7,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import java.util.List;
+import javax.validation.Valid;
 
 /**
  * Interface for data access object fot trainer entity class.
@@ -21,7 +22,7 @@ public interface TrainerDAO {
      * @param trainer trainer to be created.
      * @throws IllegalArgumentException when trainer is null.
      */
-    void createTrainer(Trainer trainer);
+    void createTrainer(@Valid Trainer trainer);
 
     /**
      * Updates trainer in database.
@@ -29,7 +30,7 @@ public interface TrainerDAO {
      * @param trainer treiner to be updated.
      * @throws IllegalArgumentException when triner is null.
      */
-    void updateTrainer(Trainer trainer);
+    void updateTrainer(@Valid Trainer trainer);
 
     /**
      * Deletes a trainer from database
@@ -37,7 +38,7 @@ public interface TrainerDAO {
      * @param trainer trainer to be deleted
      * @throws IllegalArgumentException when triner is null.
      */
-    void deleteTrainer(Trainer trainer);
+    void deleteTrainer(@Valid Trainer trainer);
     
     /**
      * Returns the trainer with given id.
