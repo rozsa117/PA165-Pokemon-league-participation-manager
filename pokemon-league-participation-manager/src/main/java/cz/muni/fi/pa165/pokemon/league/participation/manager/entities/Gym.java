@@ -88,11 +88,17 @@ public class Gym {
         this.gymLeader = gymLeader;
     }
 
-    public Set<Badge> getBadges() { return Collections.unmodifiableSet(this.badges); }
+    public Set<Badge> getBadges() {
+        return Collections.unmodifiableSet(this.badges);
+    }
 
-    public void addBadge(Badge badge) { this.badges.add(badge); }
+    public void addBadge(Badge badge) {
+        this.badges.add(badge);
+    }
 
-    public void removeBadge(Badge badge) { this.badges.remove(badge); }
+    public void removeBadge(Badge badge) {
+        this.badges.remove(badge);
+    }
 
     @Override
     public String toString() {
