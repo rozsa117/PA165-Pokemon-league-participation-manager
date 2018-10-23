@@ -6,7 +6,6 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.common.*;
 import java.util.List;
 
 /**
@@ -21,27 +20,24 @@ public interface TrainerDAO {
      * 
      * @param trainer trainer to be created.
      * @throws IllegalArgumentException when trainer is null.
-     * @throws ServiceFailureException when db operation fails.
      */
-    void createTrainer(Trainer trainer) throws ServiceFailureException;
+    void createTrainer(Trainer trainer);
 
     /**
      * Updates trainer in database.
      * 
      * @param trainer treiner to be updated.
      * @throws IllegalArgumentException when triner is null.
-     * @throws ServiceFailureException when db operation fails.
      */
-    void updateTrainer(Trainer trainer) throws ServiceFailureException;
+    void updateTrainer(Trainer trainer);
 
     /**
      * Deletes a trainer from database
      * 
      * @param trainer trainer to be deleted
      * @throws IllegalArgumentException when triner is null.
-     * @throws ServiceFailureException when db operation fails.
      */
-    void deleteTrainer(Trainer trainer) throws ServiceFailureException;
+    void deleteTrainer(Trainer trainer);
     
     /**
      * Returns the trainer with given id.
@@ -49,16 +45,14 @@ public interface TrainerDAO {
      * @param id primary key of the requested trainer.
      * @return requested trainer, null in case no such trainer exists.
      * @throws IllegalArgumentException when id is null.
-     * @throws ServiceFailureException when db operation fails.
      */
-    Trainer findTrainerById(Long id) throws ServiceFailureException;
+    Trainer findTrainerById(Long id);
     
     /**
      * Returns list of all trainers.
      * 
      * @return lsit of all trainers.
-     * @throws ServiceFailureException when db operation fails. 
      */
-    List<Trainer> getAllTrainers() throws ServiceFailureException;
+    List<Trainer> getAllTrainers();
     
 }

@@ -1,6 +1,5 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
-import cz.muni.fi.pa165.pokemon.league.participation.manager.common.ServiceFailureException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
 
 import java.util.List;
@@ -17,27 +16,24 @@ public interface BadgeDAO {
      *
      * @param badge to be created.
      * @throws IllegalArgumentException when badge is null.
-     * @throws ServiceFailureException when db operation fails.
      */
-    void createBadge(Badge badge) throws ServiceFailureException;
+    void createBadge(Badge badge);
 
     /**
      * Updates badge in database.
      *
      * @param badge to be updated.
      * @throws IllegalArgumentException when badge is null.
-     * @throws ServiceFailureException when db operation fails.
      */
-    void updateBadge(Badge badge) throws ServiceFailureException;
+    void updateBadge(Badge badge);
 
     /**
      * Deleted badge from database.
      *
      * @param badge to be deleted.
      * @throws IllegalArgumentException when badge is null.
-     * @throws ServiceFailureException when db operation fails.
      */
-    void deleteBadge(Badge badge) throws ServiceFailureException;
+    void deleteBadge(Badge badge);
 
     /**
      * Returns the badge with given id.
@@ -45,15 +41,13 @@ public interface BadgeDAO {
      * @param id primary key of the requested badge.
      * @return requested Badge, null in case no such badge exists.
      * @throws IllegalArgumentException when Id is null.
-     * @throws ServiceFailureException when db operation fails.
      */
-    Badge findBadgeById(Long id) throws ServiceFailureException;
+    Badge findBadgeById(Long id);
 
     /**
      * Returns list of all Badges.
      *
      * @return list of all badges.
-     * @throws ServiceFailureException when db operation fails.
      */
-    List<Badge> getAllBadges() throws ServiceFailureException;
+    List<Badge> getAllBadges();
 }
