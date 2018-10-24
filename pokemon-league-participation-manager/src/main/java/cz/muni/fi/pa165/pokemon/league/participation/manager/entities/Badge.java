@@ -41,7 +41,7 @@ public class Badge {
     private Gym gym;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "issue_date",nullable = false)
     private LocalDate date;
 
     @NotNull
