@@ -1,5 +1,8 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
+import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.PokemonBuilder;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.TrainerBuilder;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.PokemonSpeciesBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.common.PersistenceApplicationContext;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
@@ -49,31 +52,41 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
 
     @BeforeMethod
     public void setUp() {
-        species = new PokemonSpecies();
-        species.setSpeciesName("Test species");
-        species.setPrimaryType(PokemonType.FIRE);
+        species = new PokemonSpeciesBuilder()
+                .speciesName("Species name")
+                .primaryType(PokemonType.FIRE)
+                .secondaryType(PokemonType.DARK)
+                .build();
+
         pokemonSpeciesDao.createPokemonSpecies(species);
 
-        trainer = new Trainer();
-        trainer.setName("Test trainer");
-        trainer.setBorn(LocalDate.of(2000, Month.MARCH, 1));
-        trainer.setPasswordHash("Password");
-        trainer.setSurname("Surname");
-        trainer.setUserName("Username");
+        trainer = new TrainerBuilder()
+                .born(LocalDate.of(2000, Month.APRIL, 8))
+                .isAdmin(false)
+                .name("Ash")
+                .surname("Ketchum")
+                .userName("ketchup")
+                .passwordHash("pswda")
+                .build();
+
         trainerDao.createTrainer(trainer);
 
-        pokemon1 = new Pokemon();
-        pokemon1.setNickname("Pokemon 1");
-        pokemon1.setDateTimeOfCapture(LocalDateTime.of(2018, Month.MARCH, 1, 0, 0));
-        pokemon1.setSpecies(species);
-        pokemon1.setTrainer(trainer);
+        pokemon1 = new PokemonBuilder()
+                .nickname("Pokemon 1")
+                .dateTimeOfCapture(LocalDateTime.of(2018, Month.MARCH, 1, 0, 0))
+                .pokemonSpecies(species)
+                .trainer(trainer)
+                .build();
+
         pokemonDao.createPokemon(pokemon1);
 
-        pokemon2 = new Pokemon();
-        pokemon2.setNickname("Pokemon 2");
-        pokemon2.setDateTimeOfCapture(LocalDateTime.of(2018, Month.MARCH, 1, 0, 1));
-        pokemon2.setSpecies(species);
-        pokemon2.setTrainer(trainer);
+        pokemon2 = new PokemonBuilder()
+                .nickname("Pokemon 1")
+                .dateTimeOfCapture(LocalDateTime.of(2018, Month.MARCH, 1, 0, 1))
+                .pokemonSpecies(species)
+                .trainer(trainer)
+                .build();
+
         pokemonDao.createPokemon(pokemon2);
 
     }
@@ -83,11 +96,13 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void testCreateValidPokemon() {
-        Pokemon newPokemon = new Pokemon();
-        newPokemon.setNickname("Pokemon 2");
-        newPokemon.setDateTimeOfCapture(LocalDateTime.of(2018, Month.MARCH, 1, 0, 2));
-        newPokemon.setSpecies(species);
-        newPokemon.setTrainer(trainer);
+        Pokemon newPokemon = new PokemonBuilder()
+                .nickname("Pokemon 3")
+                .dateTimeOfCapture(LocalDateTime.of(2018, Month.MARCH, 1, 0, 2))
+                .pokemonSpecies(species)
+                .trainer(trainer)
+                .build();
+
         pokemonDao.createPokemon(newPokemon);
 
         List<Pokemon> pokemons = pokemonDao.getAllPokemon();
