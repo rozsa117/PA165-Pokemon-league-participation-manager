@@ -244,6 +244,7 @@ public class PokemonSpeciesDAOTest {
         marshtomp.setSpeciesName(null);
 
         dao.updatePokemonSpecies(marshtomp);
+        em.flush();
     }
 
     /**
