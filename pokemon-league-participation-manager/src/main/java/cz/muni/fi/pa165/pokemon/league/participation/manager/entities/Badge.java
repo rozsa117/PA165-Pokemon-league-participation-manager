@@ -56,25 +56,45 @@ public class Badge {
         this.id = id;
     }
 
-    public Long getId() { return this.id; }
+    public Long getId() {
+        return this.id;
+    }
 
-    public void setId(Long id) { this.id = id; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Trainer getTrainer() { return this.trainer; }
+    public Trainer getTrainer() {
+        return this.trainer;
+    }
 
-    public void setTrainer(Trainer trainer) { this.trainer = trainer; }
+    public void setTrainer(Trainer trainer) {
+        this.trainer = trainer;
+    }
 
-    public Gym getGym() { return this.gym; }
+    public Gym getGym() {
+        return this.gym;
+    }
 
-    public void setGym(Gym gym) { this.gym = gym; }
+    public void setGym(Gym gym) {
+        this.gym = gym;
+    }
 
-    public LocalDate getDate() { return this.date; }
+    public LocalDate getDate() {
+        return this.date;
+    }
 
-    public void setDate(LocalDate date) { this.date = date; }
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
 
-    public ChallengeStatus getStatus() { return status; }
+    public ChallengeStatus getStatus() {
+        return status;
+    }
 
-    public void setStatus(ChallengeStatus status) { this.status = status; }
+    public void setStatus(ChallengeStatus status) {
+        this.status = status;
+    }
 
     @Override
     public String toString() {
