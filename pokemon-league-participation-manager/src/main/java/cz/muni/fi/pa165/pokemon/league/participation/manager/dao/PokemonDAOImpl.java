@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -20,17 +19,17 @@ public class PokemonDAOImpl implements PokemonDAO {
     private EntityManager em;
 
     @Override
-    public void createPokemon(@Valid Pokemon pokemon) {
+    public void createPokemon(Pokemon pokemon) {
         em.persist(pokemon);
     }
 
     @Override
-    public void updatePokemon(@Valid Pokemon pokemon) {
+    public void updatePokemon(Pokemon pokemon) {
         em.merge(pokemon);
     }
 
     @Override
-    public void deletePokemon(@Valid Pokemon pokemon) {
+    public void deletePokemon(Pokemon pokemon) {
         Pokemon attached = em.merge(pokemon);
         em.remove(attached);
     }
