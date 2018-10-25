@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 /**
+ * Implementation of GymDAO using JPA/Hibernate and Spring stereotypes.
  *
  * @author Tibor Zauko 433531
  */
