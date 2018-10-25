@@ -68,7 +68,6 @@ public class BadgeDAOTest {
     
     private Gym gymInBrno;
     private Gym sootopolisGym;
-    private Gym mauvilleGym;
     
     public BadgeDAOTest() {
     }
@@ -130,12 +129,6 @@ public class BadgeDAOTest {
                 .location("Sootopolis City")
                 .gymLeader(trainerWallace)
                 .build();
-        
-        mauvilleGym = new GymBuilder()
-                .type(PokemonType.ELECTRIC)
-                .location("Mauville City")
-                .gymLeader(trainerWattson)
-                .build();
 
         todaysBadge = new BadgeBuilder()
                 .date(LocalDate.now())
@@ -157,13 +150,8 @@ public class BadgeDAOTest {
         trainerDao.createTrainer(trainerWattson);
         gymDao.createGym(gymInBrno);
         gymDao.createGym(sootopolisGym);
-        gymDao.createGym(mauvilleGym);
         badgeDao.createBadge(todaysBadge);
         badgeDao.createBadge(finalBadge);
-    }
-    
-    @After
-    public void tearDown() {
     }
  
     @Test
@@ -190,12 +178,16 @@ public class BadgeDAOTest {
     public void createBadge() {
         Badge badge = new BadgeBuilder()
                 .date(LocalDate.now())
-                .trainer(trainerAsh)
-                .gym(mauvilleGym)
+                .trainer(trainerWattson)
+                .gym(sootopolisGym)
                 .status(ChallengeStatus.WAITING_TO_ACCEPT)
                 .build();
         badgeDao.createBadge(badge);
         assertThat(badgeDao.findBadgeById(badge.getId())).isEqualToComparingFieldByField(badge);
+        assertThat(badgeDao.getAllBadges())
+                .isNotNull()
+                .usingFieldByFieldElementComparator()
+                .containsExactlyInAnyOrder(badge, finalBadge, todaysBadge);
     }
     
     @Test(expected = PersistenceException.class)
@@ -203,7 +195,7 @@ public class BadgeDAOTest {
         Badge badge = new BadgeBuilder()
                 .id(10L)
                 .gym(sootopolisGym)
-                .trainer(trainerAsh)
+                .trainer(trainerWattson)
                 .date(LocalDate.now().minusYears(2))
                 .build();
         badgeDao.createBadge(badge);
