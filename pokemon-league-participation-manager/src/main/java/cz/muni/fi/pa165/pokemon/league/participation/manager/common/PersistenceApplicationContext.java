@@ -29,7 +29,7 @@ public class PersistenceApplicationContext {
      *
      * @return Transactional manager
      */
-     @Bean
+    @Bean
     public JpaTransactionManager transactionManager() {
         return new JpaTransactionManager(entityManagerFactory().getObject());
     }
@@ -39,6 +39,7 @@ public class PersistenceApplicationContext {
      *
      * @return Entity manager factory
      */
+    @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean jpaFactoryBean = new LocalContainerEntityManagerFactoryBean();
         jpaFactoryBean.setDataSource(dataSource());
@@ -51,6 +52,7 @@ public class PersistenceApplicationContext {
      *
      * @return Datasource for database.
      */
+    @Bean
     public DataSource dataSource() {
         return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.DERBY).build();
     }
