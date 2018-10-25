@@ -229,7 +229,6 @@ public class BadgeDAOTest {
         
         badgeDao.updateBadge(badge);
                 
-        badge = badgeDao.findBadgeById(todaysBadge.getId());
         assertThat(badgeDao.findBadgeById(todaysBadge.getId())).isEqualToComparingFieldByField(badge);
     }
     
