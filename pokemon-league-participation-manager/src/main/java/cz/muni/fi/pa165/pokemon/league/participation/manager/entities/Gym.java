@@ -43,10 +43,10 @@ public class Gym {
 
     @NotNull
     @OneToOne
-    @JoinColumn(name = "trainer_id", nullable = false)
+    @JoinColumn(name = "trainer_id", nullable = false, unique = true)
     private Trainer gymLeader;
 
-    @OneToMany(cascade=CascadeType.PERSIST, mappedBy = "trainer")
+    @OneToMany(mappedBy = "gym")
     private Set<Badge> badges = new HashSet<>();
 
     public Gym() {

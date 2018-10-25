@@ -14,6 +14,8 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import java.time.LocalDate;
 import java.time.Month;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,6 +44,9 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @RunWith(SpringRunner.class)
 public class GymDAOTest {
     
+    @PersistenceContext
+    private EntityManager em;
+    
     @Inject
     private GymDAO gymDao;
     @Inject
@@ -50,19 +55,9 @@ public class GymDAOTest {
     private Gym gymInBrno;
     private Gym finalGym;
     private Trainer trainerAsh;
-    
-    public GymDAOTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
+    private Trainer trainerBrock;
+    private Trainer trainerRoxanne;
         
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
     @Before
     public void setUp() {
         trainerAsh = new TrainerBuilder()
@@ -74,25 +69,41 @@ public class GymDAOTest {
                 .passwordHash("pswda")
                 .build();
         
+        trainerBrock = new TrainerBuilder()
+                .born(LocalDate.of(1995, Month.JANUARY, 19))
+                .isAdmin(false)
+                .name("Brock")
+                .surname("Boulder")
+                .userName("onixDude")
+                .passwordHash("nohash")
+                .build();
+        
+        trainerRoxanne = new TrainerBuilder()
+                .born(LocalDate.of(2000, Month.MARCH, 7))
+                .isAdmin(false)
+                .name("Roxanne")
+                .surname("Briney")
+                .userName("roxnose")
+                .passwordHash("funny")
+                .build();
+        
         gymInBrno = new GymBuilder()
                 .type(PokemonType.DRAGON)
                 .location("Brno")
-                .gymLeader(trainerAsh)
+                .gymLeader(trainerBrock)
                 .build();
         
         finalGym = new GymBuilder()
                 .type(PokemonType.ICE)
-                .location("Praha")
-                .gymLeader(trainerAsh)
+                .location("Rustboro City")
+                .gymLeader(trainerRoxanne)
                 .build();
         
         trainerDAO.createTrainer(trainerAsh);
+        trainerDAO.createTrainer(trainerBrock);
+        trainerDAO.createTrainer(trainerRoxanne);
         gymDao.createGym(gymInBrno);
         gymDao.createGym(finalGym);
-    }
-    
-    @After
-    public void tearDown() {
     }
     
     @Test
@@ -117,16 +128,28 @@ public class GymDAOTest {
     
     @Test
     public void createGym() {
-        Gym gym = mock(Gym.class);
+        Gym gym = new GymBuilder()
+                .type(PokemonType.FIRE)
+                .gymLeader(trainerAsh)
+                .location("Pallet Town")
+                .build();
         gymDao.createGym(gym);
-        assertThat(gymDao.findGymById(gymInBrno.getId())).isEqualToComparingFieldByField(gym);
+        assertThat(gymDao.findGymById(gym.getId())).isEqualToComparingFieldByField(gym);
+        assertThat(gymDao.getAllGyms())
+                .isNotNull()
+                .usingFieldByFieldElementComparator()
+                .containsExactlyInAnyOrder(gym, gymInBrno, finalGym);
     }
     
-    @Test
-    public void testMultipleCreation() {
-        assertThat(gymInBrno.getId()).isNotNull();
-        assertThat(gymDao.findGymById(gymInBrno.getId())).isEqualToComparingFieldByField(gymInBrno);
-        assertThatExceptionOfType(PersistenceException.class).isThrownBy(() -> gymDao.createGym(gymInBrno));
+    @Test(expected = PersistenceException.class)
+    public void testCreateWithSetId() {
+        Gym gym = new GymBuilder()
+                .id(10L)
+                .gymLeader(trainerAsh)
+                .location("Pallet Town")
+                .type(PokemonType.FIRE)
+                .build();
+        gymDao.createGym(gym);
     }
     
     @Test
@@ -141,17 +164,15 @@ public class GymDAOTest {
     
     @Test
     public void updateGym() {
-        Gym foundGym = gymDao.findGymById(gymInBrno.getId());
-        assertThat(foundGym).isEqualToComparingFieldByField(gymInBrno);
+        Gym gym = gymDao.findGymById(gymInBrno.getId());
+        assertThat(gym).isEqualToComparingFieldByField(gymInBrno);
         assertThat(gymDao.findGymById(finalGym.getId())).isEqualToComparingFieldByField(finalGym);
         
-        gymInBrno.setLocation("London");
-        gymDao.updateGym(gymInBrno);
-        assertThat(foundGym).isNotSameAs(gymInBrno);
+        em.detach(gym);
+        gym.setLocation("London");
+        gymDao.updateGym(gym);
         
-        foundGym = gymDao.findGymById(gymInBrno.getId());
-        assertThat(foundGym).isEqualToComparingFieldByField(gymInBrno);
-        assertThat(gymDao.findGymById(finalGym.getId())).isEqualToComparingFieldByField(finalGym);
+        assertThat(gymDao.findGymById(gymInBrno.getId())).isEqualToComparingFieldByField(gym);
     }
     
     @Test
