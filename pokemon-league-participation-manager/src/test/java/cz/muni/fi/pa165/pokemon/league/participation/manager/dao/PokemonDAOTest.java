@@ -13,9 +13,8 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 import javax.inject.Inject;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import org.junit.Assert;
@@ -76,6 +75,7 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
                 .dateTimeOfCapture(LocalDateTime.of(2018, Month.MARCH, 1, 0, 0))
                 .pokemonSpecies(species)
                 .trainer(trainer)
+                .level(2)
                 .build();
 
         pokemonDao.createPokemon(pokemon1);
@@ -85,6 +85,7 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
                 .dateTimeOfCapture(LocalDateTime.of(2018, Month.MARCH, 1, 0, 1))
                 .pokemonSpecies(species)
                 .trainer(trainer)
+                .level(2)
                 .build();
 
         pokemonDao.createPokemon(pokemon2);
@@ -101,6 +102,7 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
                 .dateTimeOfCapture(LocalDateTime.of(2018, Month.MARCH, 1, 0, 2))
                 .pokemonSpecies(species)
                 .trainer(trainer)
+                .level(2)
                 .build();
 
         pokemonDao.createPokemon(newPokemon);
@@ -117,7 +119,7 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
     public void testCreatePokemonWithoutName() {
         Pokemon newPokemon = new Pokemon();
 
-        assertThatExceptionOfType(PersistenceException.class).isThrownBy(() -> pokemonDao.createPokemon(newPokemon));
+        assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(() -> pokemonDao.createPokemon(newPokemon));
 
     }
 
