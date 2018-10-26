@@ -12,7 +12,6 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
 /**
  * Configures all beans necessary to provide persistence context.
@@ -56,10 +55,5 @@ public class PersistenceApplicationContext {
     @Bean
     public DataSource dataSource() {
         return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.DERBY).build();
-    }
-
-    @Bean
-    public MethodValidationPostProcessor methodValidationPostProcessor() {
-        return new MethodValidationPostProcessor();
     }
 }
