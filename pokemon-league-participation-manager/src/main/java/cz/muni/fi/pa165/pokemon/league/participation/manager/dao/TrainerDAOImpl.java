@@ -1,15 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.validation.Valid;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -24,17 +18,17 @@ public class TrainerDAOImpl implements TrainerDAO {
     private EntityManager em;
 
     @Override
-    public void createTrainer(@Valid Trainer trainer) {
+    public void createTrainer(Trainer trainer) {
         em.persist(trainer);
     }
 
     @Override
-    public void updateTrainer(@Valid Trainer trainer) {
+    public void updateTrainer(Trainer trainer) {
         em.merge(trainer);
     }
 
     @Override
-    public void deleteTrainer(@Valid Trainer trainer) {
+    public void deleteTrainer(Trainer trainer) {
         Trainer attached = em.merge(trainer);
         em.remove(attached);
     }

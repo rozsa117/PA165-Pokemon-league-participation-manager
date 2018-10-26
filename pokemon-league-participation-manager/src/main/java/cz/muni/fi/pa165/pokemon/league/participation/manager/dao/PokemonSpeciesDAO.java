@@ -2,7 +2,6 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -19,7 +18,7 @@ public interface PokemonSpeciesDAO {
      * @param pokemonSpecies pokemonSpecies to be created.
      * @throws IllegalArgumentException when pokemonSpecies is null.
      */
-    void createPokemonSpecies(@Valid PokemonSpecies pokemonSpecies);
+    void createPokemonSpecies(PokemonSpecies pokemonSpecies);
 
     /**
      * Updates pokemonSpecies in database.
@@ -28,7 +27,7 @@ public interface PokemonSpeciesDAO {
      * @throws IllegalArgumentException when pokemonSpecies is not an entity or
      * is a detached entity.
      */
-    void updatePokemonSpecies(@Valid PokemonSpecies pokemonSpecies);
+    void updatePokemonSpecies(PokemonSpecies pokemonSpecies);
 
     /**
      * Deletes a pokemonSpecies from database
@@ -37,7 +36,7 @@ public interface PokemonSpeciesDAO {
      * @throws IllegalArgumentException when pokemonSpecies is null.
      * database.
      */
-    void deletePokemonSpecies(@Valid PokemonSpecies pokemonSpecies);
+    void deletePokemonSpecies(PokemonSpecies pokemonSpecies);
 
     /**
      * Returns the pokemonSpecies with given id.

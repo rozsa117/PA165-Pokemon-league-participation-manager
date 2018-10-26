@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import java.util.List;
-import javax.validation.Valid;
 
 /**
  * Interface for data access object fot trainer entity class.
@@ -22,7 +16,7 @@ public interface TrainerDAO {
      * @param trainer trainer to be created.
      * @throws IllegalArgumentException when trainer is null.
      */
-    void createTrainer(@Valid Trainer trainer);
+    void createTrainer(Trainer trainer);
 
     /**
      * Updates trainer in database.
@@ -30,7 +24,7 @@ public interface TrainerDAO {
      * @param trainer treiner to be updated.
      * @throws IllegalArgumentException when triner is null.
      */
-    void updateTrainer(@Valid Trainer trainer);
+    void updateTrainer(Trainer trainer);
 
     /**
      * Deletes a trainer from database
@@ -38,7 +32,7 @@ public interface TrainerDAO {
      * @param trainer trainer to be deleted
      * @throws IllegalArgumentException when triner is null.
      */
-    void deleteTrainer(@Valid Trainer trainer);
+    void deleteTrainer(Trainer trainer);
     
     /**
      * Returns the trainer with given id.
