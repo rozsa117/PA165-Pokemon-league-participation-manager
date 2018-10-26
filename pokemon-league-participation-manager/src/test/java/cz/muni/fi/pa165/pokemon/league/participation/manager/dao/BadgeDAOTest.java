@@ -17,6 +17,8 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import java.time.LocalDate;
 import java.time.Month;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,6 +46,9 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @RunWith(SpringRunner.class)
 public class BadgeDAOTest {
     
+    @PersistenceContext
+    private EntityManager em;
+    
     @Inject
     private GymDAO gymDao;
     
@@ -58,9 +63,11 @@ public class BadgeDAOTest {
     
     private Trainer trainerAsh;
     private Trainer trainerBrock;
+    private Trainer trainerWallace;
+    private Trainer trainerWattson;
     
     private Gym gymInBrno;
-    private Gym finalGym;
+    private Gym sootopolisGym;
     
     public BadgeDAOTest() {
     }
@@ -93,42 +100,58 @@ public class BadgeDAOTest {
                 .passwordHash("pswdb")
                 .build();
         
-        gymInBrno = new GymBuilder()
-                .type(PokemonType.DRAGON)
-                .location("Brno")
-                .gymLeader(trainerAsh)
+        trainerWallace = new TrainerBuilder()
+                .born(LocalDate.of(2001, Month.DECEMBER, 23))
+                .isAdmin(false)
+                .name("Wallace")
+                .surname("Champion")
+                .userName("wheresWally")
+                .passwordHash("notHashed")
                 .build();
         
-        finalGym = new GymBuilder()
-                .type(PokemonType.ICE)
-                .location("Praha")
-                .gymLeader(trainerAsh)
+        trainerWattson = new TrainerBuilder()
+                .born(LocalDate.of(1969, Month.JULY, 20))
+                .isAdmin(false)
+                .name("Wattson")
+                .surname("Watt")
+                .userName("manELectric")
+                .passwordHash("biglaughs")
+                .build();
+        
+        gymInBrno = new GymBuilder()
+                .type(PokemonType.ROCK)
+                .location("Brno")
+                .gymLeader(trainerBrock)
+                .build();
+        
+        sootopolisGym = new GymBuilder()
+                .type(PokemonType.WATER)
+                .location("Sootopolis City")
+                .gymLeader(trainerWallace)
                 .build();
 
         todaysBadge = new BadgeBuilder()
                 .date(LocalDate.now())
-                .trainer(trainerBrock)
+                .trainer(trainerAsh)
                 .gym(gymInBrno)
                 .status(ChallengeStatus.WON)
                 .build();
         
-        todaysBadge = new BadgeBuilder()
-                .date(LocalDate.of(20015, Month.MARCH, 7))
-                .trainer(trainerBrock)
-                .gym(finalGym)
+        finalBadge = new BadgeBuilder()
+                .date(LocalDate.of(2015, Month.MARCH, 7))
+                .trainer(trainerAsh)
+                .gym(sootopolisGym)
                 .status(ChallengeStatus.LOST)
                 .build();
         
         trainerDao.createTrainer(trainerAsh);
         trainerDao.createTrainer(trainerBrock);
+        trainerDao.createTrainer(trainerWallace);
+        trainerDao.createTrainer(trainerWattson);
         gymDao.createGym(gymInBrno);
-        gymDao.createGym(finalGym);
+        gymDao.createGym(sootopolisGym);
         badgeDao.createBadge(todaysBadge);
         badgeDao.createBadge(finalBadge);
-    }
-    
-    @After
-    public void tearDown() {
     }
  
     @Test
@@ -155,19 +178,27 @@ public class BadgeDAOTest {
     public void createBadge() {
         Badge badge = new BadgeBuilder()
                 .date(LocalDate.now())
-                .trainer(trainerBrock)
-                .gym(finalGym)
+                .trainer(trainerWattson)
+                .gym(sootopolisGym)
                 .status(ChallengeStatus.WAITING_TO_ACCEPT)
                 .build();
         badgeDao.createBadge(badge);
         assertThat(badgeDao.findBadgeById(badge.getId())).isEqualToComparingFieldByField(badge);
+        assertThat(badgeDao.getAllBadges())
+                .isNotNull()
+                .usingFieldByFieldElementComparator()
+                .containsExactlyInAnyOrder(badge, finalBadge, todaysBadge);
     }
     
-    @Test
-    public void testMultipleCreation() {
-        assertThat(todaysBadge.getId()).isNotNull();
-        assertThat(badgeDao.findBadgeById(todaysBadge.getId())).isEqualToComparingFieldByField(todaysBadge);
-        assertThatExceptionOfType(PersistenceException.class).isThrownBy(() -> badgeDao.createBadge(finalBadge));
+    @Test(expected = PersistenceException.class)
+    public void testCreateWithSetId() {
+        Badge badge = new BadgeBuilder()
+                .id(10L)
+                .gym(sootopolisGym)
+                .trainer(trainerWattson)
+                .date(LocalDate.now().minusYears(2))
+                .build();
+        badgeDao.createBadge(badge);
     }
     
     @Test
@@ -185,14 +216,12 @@ public class BadgeDAOTest {
         Badge badge = badgeDao.findBadgeById(todaysBadge.getId());
         assertThat(badge).isEqualToComparingFieldByField(todaysBadge);
         assertThat(badgeDao.findBadgeById(finalBadge.getId())).isEqualToComparingFieldByField(finalBadge);
-    
-        badge.setDate(LocalDate.MIN);
-        badgeDao.updateBadge(badge);
-        assertThat(badge).isNotSameAs(todaysBadge);
+        em.detach(badge);
+        badge.setDate(badge.getDate().minusDays(14));
         
-        badge = badgeDao.findBadgeById(todaysBadge.getId());
-        assertThat(badge).isEqualToComparingFieldByField(todaysBadge);
-        assertThat(badgeDao.findBadgeById(finalBadge.getId())).isEqualToComparingFieldByField(finalBadge);
+        badgeDao.updateBadge(badge);
+                
+        assertThat(badgeDao.findBadgeById(todaysBadge.getId())).isEqualToComparingFieldByField(badge);
     }
     
     @Test

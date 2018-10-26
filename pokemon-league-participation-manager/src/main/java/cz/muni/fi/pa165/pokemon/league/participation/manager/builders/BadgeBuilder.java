@@ -52,4 +52,10 @@ public class BadgeBuilder {
         this.status = status;
         return this;
     }
+
+    public BadgeBuilder id(Long id) {
+        this.id = id;
+        return this;
+    }
+
 }
