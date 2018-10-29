@@ -115,9 +115,10 @@ public class Pokemon {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(3,73)
-                .append(dateTimeOfCapture)
-                .toHashCode();
+        final int hash = 11;
+        int result = 1;
+        result = hash * result + ((dateTimeOfCapture == null) ? 0 : dateTimeOfCapture.hashCode());
+        return result;
     }
 
     @Override

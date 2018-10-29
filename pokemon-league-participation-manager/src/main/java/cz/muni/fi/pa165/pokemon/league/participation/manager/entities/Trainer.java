@@ -136,9 +136,10 @@ public class Trainer {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 53 * hash + Objects.hashCode(this.userName);
-        return hash;
+        final int hash = 5;
+        int result = 1;
+        result = hash * result + ((userName == null) ? 0 : userName.hashCode());
+        return result;
     }
 
     @Override
