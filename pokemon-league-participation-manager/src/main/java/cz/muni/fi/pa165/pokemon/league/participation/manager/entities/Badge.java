@@ -106,9 +106,12 @@ public class Badge {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 17 * hash + (int) (this.id ^ (this.id >>> 32));
-        return hash;
+        final int hash = 7;
+        int result = 1;
+        result = hash * result
+                + ((trainer == null) ? 0 : trainer.hashCode())
+                + ((gym == null) ? 0 : gym.hashCode());
+        return result;
     }
 
     @Override

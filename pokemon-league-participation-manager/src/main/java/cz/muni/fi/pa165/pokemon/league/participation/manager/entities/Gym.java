@@ -120,8 +120,9 @@ public class Gym {
 
     @Override
     public int hashCode() {
-        int hash = 13;
-        hash = 19 * hash + (int) (this.id ^ (this.id >>> 16));
-        return hash;
+        final int hash = 13;
+        int result = 1;
+        result = hash * result + ((location == null) ? 0 : location.hashCode());
+        return result;
     }
 }

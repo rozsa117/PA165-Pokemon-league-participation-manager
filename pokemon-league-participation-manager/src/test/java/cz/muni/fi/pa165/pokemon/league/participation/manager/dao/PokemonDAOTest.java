@@ -93,7 +93,7 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
     }
 
     /**
-     * Test of createPokemon method with valid imput.
+     * Test of createPokemon method with valid input.
      */
     @Test
     public void testCreateValidPokemon() {
@@ -124,7 +124,7 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
     }
 
     /**
-     * Test of createPokemon method with null as imput.
+     * Test of createPokemon method with null as input.
      */
     @Test
     public void testCreateNullPokemon() {
@@ -149,7 +149,7 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
     }
 
     /**
-     * Test of updatePokemon method with null as imput.
+     * Test of updatePokemon method with null as input.
      */
     @Test
     public void testUpdateNullPokemon() {
@@ -170,7 +170,7 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
     }
 
     /**
-     * Test of deletePokemon method with null as imput.
+     * Test of deletePokemon method with null as input.
      */
     @Test
     public void testDeleteNullPokemon() {
