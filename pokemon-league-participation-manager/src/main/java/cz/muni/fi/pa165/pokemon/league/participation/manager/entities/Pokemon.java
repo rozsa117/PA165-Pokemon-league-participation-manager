@@ -133,7 +133,7 @@ public class Pokemon {
         }
         final Pokemon other = (Pokemon) obj;
         return new EqualsBuilder()
-                .append(dateTimeOfCapture, other.getDateTimeOfCapture())
+                .append(this.getDateTimeOfCapture(), other.getDateTimeOfCapture())
                 .isEquals();
     }
 

@@ -117,7 +117,7 @@ public class PokemonSpecies {
             return false;
         }
         final PokemonSpecies other = (PokemonSpecies) obj;
-        return Objects.equals(this.speciesName, other.getSpeciesName());
+        return Objects.equals(this.getSpeciesName(), other.getSpeciesName());
     }
 
 }
