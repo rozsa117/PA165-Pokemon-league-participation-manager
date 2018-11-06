@@ -119,5 +119,5 @@ public class PokemonSpecies {
         final PokemonSpecies other = (PokemonSpecies) obj;
         return Objects.equals(this.speciesName, other.getSpeciesName());
     }
-
+    
 }
