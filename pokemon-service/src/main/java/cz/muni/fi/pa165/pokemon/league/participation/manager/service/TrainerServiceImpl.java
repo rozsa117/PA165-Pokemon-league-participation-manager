@@ -1,7 +1,9 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.service;
 
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dao.GymDAO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dao.PokemonDAO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dao.TrainerDAO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import java.math.BigInteger;
@@ -16,7 +18,8 @@ import org.springframework.stereotype.Service;
  * Service interface implementation for object Trainer.
  *
  * @author Jiří Medveď 38451
- */@Service
+ */
+@Service
 public class TrainerServiceImpl implements TrainerService {
 
     @Inject
@@ -24,6 +27,9 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Inject
     private PokemonDAO pokemonDao;
+
+    @Inject
+    private GymDAO gymDao;
 
     @Override
     public Trainer createTrainer(Trainer trainer, String password) {
@@ -68,7 +74,8 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Override
     public Boolean isGymLeader(Trainer trainer) {
-        return trainer.isAdmin();
+        return (gymDao.getAllGyms().stream()
+                .anyMatch((gym) -> (gym.getGymLeader().equals(trainer))));
     }
 
     private static String createHash(String password) {
