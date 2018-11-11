@@ -29,10 +29,10 @@ public interface PokemonService {
     /**
      * Increase a Pokemon's level by given amount.
      * @param pokemon Pokemon whose level shall be increased.
-     * @param by Number of levels to increase by (must be positive, must not
-     * exceed 100 when added to the Pokemon's current level).
+     * @param to Levels to increase the Pokemon's level to (must be positive,
+     * must not exceed 100, must be higher than the Pokemon's current level).
      */
-    void increasePokemonLevel(Pokemon pokemon, int by);
+    void increasePokemonLevel(Pokemon pokemon, int to);
 
     /**
      * Evolve a pokemon into it's given evolution.
