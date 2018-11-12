@@ -10,4 +10,12 @@
     <packaging>jar</packaging>
     <name>Pokemon service</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>pokemon-persistence</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+    </dependencies>
+
 </project>
