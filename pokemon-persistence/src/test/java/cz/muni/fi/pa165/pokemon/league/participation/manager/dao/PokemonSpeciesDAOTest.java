@@ -344,5 +344,47 @@ public class PokemonSpeciesDAOTest {
                 .usingFieldByFieldElementComparator()
                 .containsExactlyInAnyOrder(mudkip, marshtomp, bulbasaur);
     }
+    
+    /**
+     * Test of getAllEvolutionsOfPokemonSpecies method, of class PokemonSpeciesDAO.
+     */
+    @Test
+    public void testGetAllEvolutionsOfPokemonSpecies() {
+        assertThat(dao.getAllEvolutionsOfPokemonSpecies(mudkip))
+                .isNotNull()
+                .isEmpty();
+
+        PokemonSpecies bulbasaur = bulbasaurBuilder().build();
+        PokemonSpecies marshtomp = marshtompBuilder().build();
+        PokemonSpecies other = new PokemonSpeciesBuilder()
+                .primaryType(PokemonType.WATER)
+                .evolvesFrom(mudkip)
+                .speciesName("Faketomp")
+                .build();
+        
+        PokemonSpecies saurbulba = bulbasaurBuilder()
+                .speciesName("Saurbulba")
+                .evolvesFrom(other)
+                .build();
+
+        dao.createPokemonSpecies(bulbasaur);
+        dao.createPokemonSpecies(marshtomp);
+        dao.createPokemonSpecies(other);
+        dao.createPokemonSpecies(saurbulba);
+
+        assertThat(dao.getAllEvolutionsOfPokemonSpecies(mudkip))
+                .isNotNull()
+                .usingFieldByFieldElementComparator()
+                .containsExactlyInAnyOrder(marshtomp, other);
+    }
+    
+    /**
+     * Test whether correct expection is thrown for invalid arguments.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetAllEvolutionsOfNullPokemonSpecies() {
+        dao.getAllEvolutionsOfPokemonSpecies(null);
+    }
+
 
 }

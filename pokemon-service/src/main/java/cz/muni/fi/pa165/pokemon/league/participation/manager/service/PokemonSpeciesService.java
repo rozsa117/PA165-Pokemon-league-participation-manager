@@ -2,6 +2,8 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.service;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChain;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import java.util.List;
 
 /**
@@ -15,7 +17,8 @@ public interface PokemonSpeciesService {
      * Creates a new Pokemon species.
      * @param species Species to create.
      */
-    void createPokemonSpecies(PokemonSpecies species);
+    void createPokemonSpecies(PokemonSpecies species)
+            throws EvolutionChainTooLongException;
 
     /**
      * Changes typing of Pokemon species.
@@ -31,8 +34,11 @@ public interface PokemonSpeciesService {
      * @param newPreevolution   The new preevolution of the species. The created
      * evolution chain must not contain more than 3 species and must not be
      * circular (i.e. A evolves into B evolves into C evolves into A).
+     * @throws EvolutionChainTooLongException when a created evolution chain would have more than 3 members.
+     * @throws CircularEvolutionChain when a created evolution chain would be circular.
      */
-    void changePreevolution(PokemonSpecies species, PokemonSpecies newPreevolution);
+    void changePreevolution(PokemonSpecies species, PokemonSpecies newPreevolution)
+            throws EvolutionChainTooLongException, CircularEvolutionChain;
 
     /**
      * Remove the Pokemon species.

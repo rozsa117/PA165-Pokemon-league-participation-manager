@@ -44,4 +44,14 @@ public class PokemonSpeciesDAOImpl implements PokemonSpeciesDAO {
         em.merge(pokemonSpecies);
     }
 
+    @Override
+    public List<PokemonSpecies> getAllEvolutionsOfPokemonSpecies(PokemonSpecies species) {
+        if (species == null) {
+            throw new IllegalArgumentException("species can not be null");
+        }
+        return em.createQuery("select ps from PokemonSpecies ps where ps.evolvesFrom = :species", PokemonSpecies.class)
+                .setParameter("species", species)
+                .getResultList();
+    }
+
 }
