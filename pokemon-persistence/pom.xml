@@ -8,7 +8,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>pokemon-persistece</artifactId>
+    <artifactId>pokemon-persistence</artifactId>
     <packaging>jar</packaging>
     <name>Pokemon persistence</name>
 
