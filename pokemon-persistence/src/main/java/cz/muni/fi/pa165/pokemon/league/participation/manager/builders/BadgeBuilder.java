@@ -4,6 +4,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
+
 import java.time.LocalDate;
 
 /**
