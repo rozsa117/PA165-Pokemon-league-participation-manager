@@ -8,15 +8,15 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>pokemon-persistance</artifactId>
+    <artifactId>pokemon-persistece</artifactId>
     <packaging>jar</packaging>
-    <name>Pokemon persistance</name>
+    <name>Pokemon persistence</name>
 
     <dependencies>
         <dependency>
-            <groupId>cz.muni.fi.pa165</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>pokemon-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
@@ -125,17 +125,6 @@
             <artifactId>javax.inject</artifactId>
             <version>1</version>
             <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>cz.muni.fi.pa165</groupId>
-            <artifactId>pokemon-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>cz.muni.fi.pa165</groupId>
-            <artifactId>pokemon-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

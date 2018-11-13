@@ -21,12 +21,12 @@ public interface BadgeFacade {
 
     TrainerDTO getTrainerOfBadge(Long id);
 
-    void revokeBadgeForTrainer(Long trainerId, BadgeStatusChangeDTO badge);
+    void revokeBadge(BadgeStatusChangeDTO badge);
 
     void issueBadgeToTrainer(Long trainerId, BadgeStatusChangeDTO badge);
 
-    void challengeTrainer(Long trainerId, BadgeStatusChangeDTO badge);
+    void reopenChallenge(Long trainerId, BadgeStatusChangeDTO badge);
 
     void trainerBreachedRules(Long trainerId, BadgeStatusChangeDTO badge);
-    
+
 }
