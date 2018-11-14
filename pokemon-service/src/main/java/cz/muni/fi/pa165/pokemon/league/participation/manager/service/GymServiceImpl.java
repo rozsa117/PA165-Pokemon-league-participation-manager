@@ -30,9 +30,11 @@ public class GymServiceImpl implements GymService {
     }
 
     @Override
-    public void changeGymType(Gym gym, PokemonType newType) {
-        gym.setType(newType);
-        gymDAO.updateGym(gym);
+    public void changeGymType(Gym gym, Trainer trainer, PokemonType newType) {
+        if (gym.getGymLeader().equals(trainer)) {
+            gym.setType(newType);
+            gymDAO.updateGym(gym);
+        }
     }
 
     @Override
