@@ -49,7 +49,7 @@ public interface PokemonSpeciesDAO {
     PokemonSpecies findPokemonSpeciesById(Long id);
 
     /**
-     * Returns list of all Pokemon pecies.
+     * Returns list of all Pokemon species.
      *
      * @return list of all Pokemon species.
      */

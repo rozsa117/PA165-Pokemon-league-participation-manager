@@ -3,7 +3,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.service;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dao.PokemonSpeciesDAO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChain;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChainException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import java.util.List;
 import javax.inject.Inject;
@@ -42,7 +42,7 @@ public class PokemonSpeciesServiceImpl implements PokemonSpeciesService {
 
     @Override
     public void changePreevolution(PokemonSpecies species, PokemonSpecies newPreevolution)
-            throws EvolutionChainTooLongException, CircularEvolutionChain {
+            throws EvolutionChainTooLongException, CircularEvolutionChainException {
         checkEvolutionChainValidity(newPreevolution, species);
         species.setEvolvesFrom(newPreevolution);
         speciesDao.updatePokemonSpecies(species);
@@ -81,18 +81,18 @@ public class PokemonSpeciesServiceImpl implements PokemonSpeciesService {
     }
 
     private void checkEvolutionChainValidity(PokemonSpecies newPreevolution, PokemonSpecies species) 
-            throws EvolutionChainTooLongException, CircularEvolutionChain {
+            throws EvolutionChainTooLongException, CircularEvolutionChainException {
         if (!evolutionChainNotLongerThan3(newPreevolution, species, false)) {
             LOGGER.debug("Joining {} as preevolution of {} would create too long evolution chain", newPreevolution, species);
             throw new EvolutionChainTooLongException(String.format("Can't add %s as preevolution of %s", newPreevolution, species));
         }
         if (!evolutionChainNotCircular(newPreevolution, species)) {
             LOGGER.debug("Joining {} as preevolution of {} would create circular evolution chain", newPreevolution, species);
-            throw new CircularEvolutionChain(String.format("Can't add %s as preevolution of %s", newPreevolution, species));
+            throw new CircularEvolutionChainException(String.format("Can't add %s as preevolution of %s", newPreevolution, species));
         }
     }
 
-    private boolean evolutionChainNotCircular(PokemonSpecies newPreevolution, PokemonSpecies species) throws CircularEvolutionChain {
+    private boolean evolutionChainNotCircular(PokemonSpecies newPreevolution, PokemonSpecies species) throws CircularEvolutionChainException {
         PokemonSpecies s = newPreevolution;
         while (s != null && !s.equals(species)) {
             s = s.getEvolvesFrom();

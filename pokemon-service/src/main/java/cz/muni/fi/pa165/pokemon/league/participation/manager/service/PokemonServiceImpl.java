@@ -4,7 +4,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dao.PokemonDAO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidPokemonEvolution;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidPokemonEvolutionException;
 import java.util.List;
 import javax.inject.Inject;
 import org.springframework.stereotype.Service;
@@ -39,9 +39,9 @@ public class PokemonServiceImpl implements PokemonService {
 
     @Override
     public void evolvePokemon(Pokemon pokemon, PokemonSpecies evolveInto)
-            throws InvalidPokemonEvolution {
+            throws InvalidPokemonEvolutionException {
         if (!pokemon.getSpecies().equals(evolveInto.getEvolvesFrom())) {
-            throw new InvalidPokemonEvolution(String.format("%s cannot evolve into %s", pokemon.getSpecies(), evolveInto));
+            throw new InvalidPokemonEvolutionException(String.format("%s cannot evolve into %s", pokemon.getSpecies(), evolveInto));
         }
         pokemon.setSpecies(evolveInto);
         pkmnDao.updatePokemon(pokemon);

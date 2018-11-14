@@ -18,13 +18,5 @@ public class EvolutionChainTooLongException extends Exception {
     public EvolutionChainTooLongException(String message, Throwable cause) {
         super(message, cause);
     }
-
-    public EvolutionChainTooLongException(Throwable cause) {
-        super(cause);
-    }
-
-    public EvolutionChainTooLongException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
     
 }
