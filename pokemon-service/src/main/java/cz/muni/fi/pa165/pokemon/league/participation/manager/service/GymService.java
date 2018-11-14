@@ -1,8 +1,8 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.service;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import java.util.List;
 
 /**
@@ -31,7 +31,7 @@ public interface GymService {
      * @param gym Gym to be updated.
      * @param newType New type of the gym.
      */
-    public void changeGymType(Gym gym, PokemonSpecies newType);
+    public void changeGymType(Gym gym, PokemonType newType);
     
     /**
      * Changes the leader of an existing gym.
