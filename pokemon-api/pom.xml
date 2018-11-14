@@ -9,4 +9,10 @@
     <artifactId>pokemon-api</artifactId>
     <packaging>jar</packaging>
     <name>Pokemon api</name>
+    <dependencies>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
+    </dependencies>
 </project>
