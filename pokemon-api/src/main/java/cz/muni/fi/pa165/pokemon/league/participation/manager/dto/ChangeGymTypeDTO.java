@@ -16,6 +16,9 @@ public class ChangeGymTypeDTO {
     @NotNull
     private PokemonType newGymType;
 
+    @NotNull
+    private Long trainerId;
+    
     public Long getGymId() {
         return gymId;
     }
@@ -31,12 +34,21 @@ public class ChangeGymTypeDTO {
     public void setNewGymType(PokemonType newGymType) {
         this.newGymType = newGymType;
     }
-
+    
+    public Long getTrainerId() {
+        return trainerId;
+    }
+    
+    public void setTrainerId(Long trainerId) {
+        this.trainerId = trainerId;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;
         hash = 59 * hash + Objects.hashCode(this.gymId);
         hash = 59 * hash + Objects.hashCode(this.newGymType);
+        hash = 59 * hash + Objects.hashCode(this.trainerId);
         return hash;
     }
 
@@ -55,11 +67,14 @@ public class ChangeGymTypeDTO {
         if (!Objects.equals(this.gymId, other.gymId)) {
             return false;
         }
-        return Objects.equals(this.newGymType, other.newGymType);
+        if (!Objects.equals(this.newGymType, other.newGymType)) {
+            return false;
+        }
+        return Objects.equals(this.trainerId, other.trainerId);
     }
 
     @Override
     public String toString() {
-        return "ChangeGymTypeDTO{" + "gymId=" + gymId + ", newGymType=" + newGymType + '}';
+        return "ChangeGymTypeDTO{" + "gymId=" + gymId + ", newGymType=" + newGymType + ", trainerId=" + trainerId + '}';
     }
 }

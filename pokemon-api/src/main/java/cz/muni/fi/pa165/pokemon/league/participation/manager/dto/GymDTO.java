@@ -15,7 +15,7 @@ public class GymDTO {
     
     private PokemonSpecies type;
     
-        private TrainerDTO gymLeader;
+    private TrainerDTO gymLeader;
 
     public Long getGymID() {
         return gymID;

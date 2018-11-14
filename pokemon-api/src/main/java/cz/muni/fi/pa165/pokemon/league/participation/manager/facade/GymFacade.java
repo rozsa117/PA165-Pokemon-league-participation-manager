@@ -10,39 +10,38 @@ import java.util.List;
  */
 public interface GymFacade {
     
-        
     /**
      * Create a new Gym.
      * @param gym DTO of gym to create.
      */
-    public void createGym(GymDTO gym);
+    public void createGym(GymCreateDTO gym);
     
     /**
      * Updates the location of an existing gym.
      * @param gym DTO of gym to be updated.
      * @param newLocaton new location of the gym.
      */
-    public void updateGymLocation(GymDTO gym, String newLocaton);
+    public void updateGymLocation(UpdateGymLocationDTO gym);
     
     /**
      * Changes the type of an existing gym.
      * @param gym DTO of gym to be updated.
      * @param newType New type of the gym.
      */
-    public void changeGymType(GymDTO gym, PokemonType newType);
+    public void changeGymType(ChangeGymTypeDTO gym);
     
     /**
      * Changes the leader of an existing gym.
      * @param gym DTO of gym to be updated.
      * @param newGymLeader New leader of the gym.
      */
-    public void changeGymLeader(GymDTO gym, TrainerDTO newGymLeader);
+    public void changeGymLeader(ChangeGymLeaderDTO gym);
     
     /**
      * Removes an existing gym.
      * @param gym DTO of gym to be removed.
      */
-    public void removeGym(GymDTO gym);
+    public void removeGym(Long gymId);
     
     /**
      * Finds the gym with given id.
@@ -62,7 +61,7 @@ public interface GymFacade {
      * @param gym DTO of the gym to find the leader.
      * @return The DTO of the leader of the gym.
      */
-    public TrainerDTO getGymLeader(GymDTO gym);
+    public TrainerDTO getGymLeader(Long gymId);
 
     /**
      * Returns a list of all gyms with given type.
@@ -76,6 +75,6 @@ public interface GymFacade {
      * @param trainer The leader of the gym.
      * @return The DTO of the gym with the given trainer, null in case no such gym exists.
      */
-    public GymDTO findGymByLeader(TrainerDTO trainer);
+    public GymDTO findGymByLeader(Long trainerId);
     
 }
