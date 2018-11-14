@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 
 import java.util.List;
 
@@ -50,5 +51,14 @@ public interface PokemonDAO {
      * @return list of all Pokemon. An empty list will be returned if no Pokemon exist.
      */
     List<Pokemon> getAllPokemon();
+
+    /**
+     * Return a list of all Pokemon currently trainer by trainer.
+     * 
+     * @param trainer Trainer whose Pokemon shall be returned.
+     * @return List containing all Pokemon of the given trainer.
+     * @throws IllegalArgumentException when trainer is null.
+     */
+    List<Pokemon> findPokemonOfTrainer(Trainer trainer);
 
 }

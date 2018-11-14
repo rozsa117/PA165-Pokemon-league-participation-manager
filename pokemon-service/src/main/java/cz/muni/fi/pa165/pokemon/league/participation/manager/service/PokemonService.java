@@ -4,6 +4,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.service;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidPokemonEvolutionException;
 import java.util.List;
 
 /**
@@ -38,8 +39,10 @@ public interface PokemonService {
      * Evolve a pokemon into it's given evolution.
      * @param pokemon Pokemon which shall be evolved.
      * @param evolveInto The desired evolution.
+     * @throws InvalidPokemonEvolutionException when current species can't evolve into the desired species.
      */
-    void evolvePokemon(Pokemon pokemon, PokemonSpecies evolveInto);
+    void evolvePokemon(Pokemon pokemon, PokemonSpecies evolveInto)
+            throws InvalidPokemonEvolutionException;
 
     /**
      * Release the Pokemon into the wild (a.k.a. delete the Pokemon).
