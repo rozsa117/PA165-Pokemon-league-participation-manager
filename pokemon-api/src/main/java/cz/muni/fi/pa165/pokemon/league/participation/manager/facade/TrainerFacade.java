@@ -16,55 +16,61 @@ import java.util.List;
 public interface TrainerFacade {
 
     /**
-     * Create new trainer
+     * Create a new trainer
      *
-     * @param trainer
+     * @param trainer Trainer to be created
      * @return new trainer id
      */
     public Long createTrainer(TrainerCreateDTO trainer);
 
     /**
-     * Renames trainer
+     * Change trainer name and surname
      *
-     * @param trainerRename DTO with new name and surname
+     * @param trainerRename trainer to be updated
      */
     public void renameTrainer(TrainerRenameDTO trainerRename);
 
     /**
-     * Add new pokemon to trainer
-     * @param trainerId Trainer Id
-     * @param pokemonId Pokemon Id
+     * Add a new Pokemon to a Trainer
+     *
+     * @param trainerId Trainer Id (owner)
+     * @param pokemonId Added Pokemon Id
      */
     public void addPokemon(Long trainerId, Long pokemonId);
 
     /**
-     * Remove pokemon from trainer
-     * @param trainerId Trainer Id
-     * @param pokemonId Pokemon Id
+     * Remove a Pokemon from a Trainer
+     *
+     * @param trainerId Trainer Id (owner)
+     * @param pokemonId Removed Pokemon Id
      */
     public void removePokemon(Long trainerId, Long pokemonId);
 
     /**
      * Get list of all trainers
+     *
      * @return list of all trainers
      */
     public List<TrainerDTO> getAllTrainers();
 
     /**
-     * Find trainer by Id
-     * @param trainerId
-     * @return Trainer
+     * Find a Trainer by Id
+     *
+     * @param trainerId Id of a Trainer to be found
+     * @return Trainer found Trainer, null if not found
      */
     public TrainerDTO getTrainerWithId(Long trainerId);
 
     /**
      * Autenticate trainer with password
-     * @param trainer Trainer
+     *
+     * @param trainer Trainer to be autenticated
      * @return true only if password matches stored hash
      */
     public Boolean authenticate(TrainerAuthenticateDTO trainer);
-    
+
     /**
+     * Change Trainer password
      *
      * @param trainerChangePassword trainer DTO with old and new password
      */
@@ -72,16 +78,18 @@ public interface TrainerFacade {
 
     /**
      * Is Gym Leader?
-     * @param trainerId trained id
+     *
+     * @param trainerId Trained id
      * @return true only if the Trainer is a Gym Leader
      */
     public Boolean isGymLeader(Long trainerId);
-    
+
     /**
      * Get all own pokemons
+     *
      * @param trainerId Trainer id
-     * @return
+     * @return List of pokemon owned
      */
     public List<PokemonDTO> getOwnPokemons(Long trainerId);
-    
+
 }
