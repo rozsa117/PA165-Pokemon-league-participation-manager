@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dto;
 
+import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import java.util.Objects;
 
 /**
@@ -13,7 +14,7 @@ public class GymDTO {
     
     private String location;
     
-    private PokemonSpecies type;
+    private PokemonType type;
     
     private TrainerDTO gymLeader;
 
@@ -33,11 +34,11 @@ public class GymDTO {
         this.location = location;
     }
 
-    public PokemonSpecies getType() {
+    public PokemonType getType() {
         return type;
     }
 
-    public void setType(PokemonSpecies type) {
+    public void setType(PokemonType type) {
         this.type = type;
     }
 
