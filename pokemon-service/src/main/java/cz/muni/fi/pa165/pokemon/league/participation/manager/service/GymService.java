@@ -3,6 +3,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.service;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import java.util.List;
 
 /**
