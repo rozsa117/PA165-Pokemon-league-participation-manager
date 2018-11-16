@@ -52,13 +52,4 @@ public interface PokemonDAO {
      */
     List<Pokemon> getAllPokemon();
 
-    /**
-     * Return a list of all Pokemon currently trainer by trainer.
-     * 
-     * @param trainer Trainer whose Pokemon shall be returned.
-     * @return List containing all Pokemon of the given trainer.
-     * @throws IllegalArgumentException when trainer is null.
-     */
-    List<Pokemon> findPokemonOfTrainer(Trainer trainer);
-
 }

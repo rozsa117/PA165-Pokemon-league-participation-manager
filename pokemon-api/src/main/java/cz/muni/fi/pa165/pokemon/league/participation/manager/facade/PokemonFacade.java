@@ -7,6 +7,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonCreateDT
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.LevelUpPokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ReleasePokemonDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidPokemonEvolutionException;
 import java.util.List;
 
 /**
@@ -65,8 +66,10 @@ public interface PokemonFacade {
      * Change the Pokemon's species to one of it's current species' evolutions.
      * 
      * @param chosenEvolution Specification of the chosen evolution.
+     * @throws InvalidPokemonEvolutionException when current species can't evolve into the desired species.
      */
-    void evolvePokemon(EvolvePokemonDTO chosenEvolution);
+    void evolvePokemon(EvolvePokemonDTO chosenEvolution)
+            throws InvalidPokemonEvolutionException;
     
     /**
      * Gift Pokemon to another trainer (make the Pokemon belong to the other trainer).

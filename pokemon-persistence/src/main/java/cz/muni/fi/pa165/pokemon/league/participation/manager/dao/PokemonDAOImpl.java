@@ -46,13 +46,4 @@ public class PokemonDAOImpl implements PokemonDAO {
                 .getResultList();
     }
 
-    @Override
-    public List<Pokemon> findPokemonOfTrainer(Trainer trainer) {
-        if (trainer == null) {
-            throw new IllegalArgumentException("trainer can't be null");
-        }
-        return em.createQuery("select p from Pokemon p where p.trainer = :trainer", Pokemon.class)
-                .setParameter("trainer", trainer)
-                .getResultList();
-    }
 }

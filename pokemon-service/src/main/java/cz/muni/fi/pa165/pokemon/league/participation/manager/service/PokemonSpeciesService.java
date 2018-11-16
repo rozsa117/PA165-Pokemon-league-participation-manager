@@ -16,7 +16,8 @@ public interface PokemonSpeciesService {
     /**
      * Creates a new Pokemon species.
      * @param species Species to create.
-     * @throws EvolutionChainTooLongException when the species is created as part of an evolutionary chain and the chain would have more than 3 members.
+     * @throws EvolutionChainTooLongException when the species is created as 
+     *     part of an evolutionary chain and the chain would have more than 3 members.
      */
     void createPokemonSpecies(PokemonSpecies species)
             throws EvolutionChainTooLongException;

@@ -4,6 +4,8 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangePreevolut
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangeTypingDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChainException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import java.util.List;
 
 /**
@@ -18,8 +20,11 @@ public interface PokemonSpeciesFacade {
      * 
      * @param species Species description.
      * @return ID of the created species.
+     * @throws EvolutionChainTooLongException when the species is created as 
+     *     part of an evolutionary chain and the chain would have more than 3 members.
      */
-    Long createPokemonSpecies(PokemonSpeciesCreateDTO species);
+    Long createPokemonSpecies(PokemonSpeciesCreateDTO species)
+            throws EvolutionChainTooLongException;
     
     /**
      * Finds Pokemon species with the specified ID.
@@ -57,8 +62,11 @@ public interface PokemonSpeciesFacade {
      * Change preevolution of a species.
      * 
      * @param newPreevolution Specification of new preevolution.
+     * @throws EvolutionChainTooLongException when a created evolution chain would have more than 3 members.
+     * @throws CircularEvolutionChainException when a created evolution chain would be circular.
      */
-    void changePreevolution(ChangePreevolutionDTO newPreevolution);
+    void changePreevolution(ChangePreevolutionDTO newPreevolution)
+            throws EvolutionChainTooLongException, CircularEvolutionChainException;
     
     /**
      * Remove a Pokemon species.
