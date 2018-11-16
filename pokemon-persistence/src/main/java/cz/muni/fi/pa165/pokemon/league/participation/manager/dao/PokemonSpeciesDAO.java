@@ -49,10 +49,19 @@ public interface PokemonSpeciesDAO {
     PokemonSpecies findPokemonSpeciesById(Long id);
 
     /**
-     * Returns list of all pokemonSpeciess.
+     * Returns list of all Pokemon species.
      *
-     * @return list of all pokemonSpeciess.
+     * @return list of all Pokemon species.
      */
     List<PokemonSpecies> getAllPokemonSpecies();
+
+    /**
+     * Returns list of all Pokemon species that directly evolve from the given species.
+     * 
+     * @param species Species whose evolutions shall be found.
+     * @return List of all species which evolve from the given species.
+     * @throws IllegalArgumentException when species is null.
+     */
+    public List<PokemonSpecies> getAllEvolutionsOfPokemonSpecies(PokemonSpecies species);
 
 }
