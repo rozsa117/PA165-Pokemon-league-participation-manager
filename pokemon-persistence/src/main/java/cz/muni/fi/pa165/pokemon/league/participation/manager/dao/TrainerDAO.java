@@ -46,8 +46,14 @@ public interface TrainerDAO {
     /**
      * Returns list of all trainers.
      * 
-     * @return lsit of all trainers.
+     * @return list of all trainers.
      */
     List<Trainer> getAllTrainers();
     
+    /**
+     * Get nubemer of administratos
+     * 
+     * @return number of administrators
+     */
+    Long getAdminCount();
 }

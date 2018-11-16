@@ -122,5 +122,17 @@ public class TrainerDAOTest {
         assertThat(trainerDAO.getAllTrainers()).usingFieldByFieldElementComparator()
                 .containsOnly(ashTrainer, brockTrainer);
     }
+    
+    @Test
+    public void getAdminCountTestNoTrainer () {
+        assertThat(trainerDAO.getAdminCount()).isEqualTo(0);
+    }
+    @Test
+    public void getAdminCountTestOneAdmin () {
+        trainerDAO.createTrainer(ashTrainer);
+        trainerDAO.createTrainer(brockTrainer);
+        brockTrainer.setAdmin(true);
+        assertThat(trainerDAO.getAdminCount()).isEqualTo(1);
+    }
 }
 
