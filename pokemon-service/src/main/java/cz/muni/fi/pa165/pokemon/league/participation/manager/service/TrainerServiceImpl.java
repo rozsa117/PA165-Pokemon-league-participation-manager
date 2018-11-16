@@ -1,11 +1,10 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.service;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dao.GymDAO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dao.PokemonDAO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dao.TrainerDAO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.List;
@@ -26,16 +25,29 @@ public class TrainerServiceImpl implements TrainerService {
     private TrainerDAO trainerDao;
 
     @Inject
-    private PokemonDAO pokemonDao;
-
-    @Inject
     private GymDAO gymDao;
 
     @Override
-    public Trainer createTrainer(Trainer trainer, String password) {
+    public Trainer createTrainer(Trainer trainer, String password) throws NoAdministratorException {
+        //if adding trainer that is not an admin check if there is at least one already
+        if (!trainer.isAdmin() && trainerDao.getAdminCount() == 0) {
+            throw new NoAdministratorException("There must be at least one admin");
+        }
+
         trainer.setPasswordHash(createHash(password));
         trainerDao.createTrainer(trainer);
         return trainer;
+    }
+
+    @Override
+    public void setAdmin(Long trainerId, boolean admin) throws NoAdministratorException {
+        Trainer trainer = trainerDao.findTrainerById(trainerId);
+        // if admin flag is changed from true to false check if at least one admin remains
+        if (!admin && trainer.isAdmin()
+                && trainerDao.getAdminCount() == 1) {
+            throw new NoAdministratorException("There must be at least one admin");
+        }
+        trainer.setAdmin(admin);
     }
 
     @Override

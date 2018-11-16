@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.service;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,9 @@ public interface TrainerService {
      * @param trainer Trainer
      * @param password Unencrypted password
      * @return new trainer id
+     * @throws NoAdministratorException when there is not a single administrator
      */
-    public Trainer createTrainer(Trainer trainer, String password);
+    public Trainer createTrainer(Trainer trainer, String password) throws NoAdministratorException;
 
     /**
      * Renames trainer
@@ -72,4 +74,13 @@ public interface TrainerService {
      * @return true only if the Trainer is a Gym Leader
      */
     public Boolean isGymLeader(Trainer trainer);
+    
+    /**
+     * Set admin flag
+     * @param trainerId Trainer to be updated
+     * @param admin New admin status
+     * @throws NoAdministratorException when there is not a single admin after the
+     * modification
+     */
+    public void setAdmin(Long trainerId, boolean admin) throws NoAdministratorException;
 }
