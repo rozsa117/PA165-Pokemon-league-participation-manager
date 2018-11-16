@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dto;
 
+import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
 

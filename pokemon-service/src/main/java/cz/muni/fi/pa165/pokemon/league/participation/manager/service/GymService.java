@@ -29,9 +29,10 @@ public interface GymService {
     /**
      * Changes the type of an existing gym.
      * @param gym Gym to be updated.
+     * @param trainer Trainer
      * @param newType New type of the gym.
      */
-    public void changeGymType(Gym gym, PokemonType newType, Trainer trainer);
+    public void changeGymType(Gym gym, Trainer trainer, PokemonType newType);
     
     /**
      * Changes the leader of an existing gym.
