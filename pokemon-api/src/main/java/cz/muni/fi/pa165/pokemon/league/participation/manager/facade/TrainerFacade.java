@@ -25,8 +25,6 @@ public interface TrainerFacade {
      *   there must be at least one administrator left
      */
     public Long createTrainer(TrainerCreateDTO trainer) throws NoAdministratorException;
-     */
-    public Long createTrainer(TrainerCreateDTO trainer);
 
     /**
      * Change trainer name and surname
@@ -78,8 +76,10 @@ public interface TrainerFacade {
      * Change Trainer password
      *
      * @param trainerChangePassword trainer DTO with old and new password
+     * @return true if password successfully changed, false if original password 
+     * authentication failed
      */
-    public void changePassword(TrainerChangePasswordDTO trainerChangePassword);
+    public boolean changePassword(TrainerChangePasswordDTO trainerChangePassword);
 
     /**
      * Is Gym Leader?
