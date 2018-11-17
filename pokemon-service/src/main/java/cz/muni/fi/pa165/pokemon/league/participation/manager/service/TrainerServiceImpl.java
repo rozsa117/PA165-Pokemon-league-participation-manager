@@ -28,6 +28,15 @@ public class TrainerServiceImpl implements TrainerService {
     private GymDAO gymDao;
 
     @Override
+    public boolean changePassword(Trainer trainer, String oldPassword, String newPassword) {
+        if (!authenticate(trainer, oldPassword)) {
+            return false;
+        }
+        trainer.setPasswordHash(createHash(newPassword));
+        return true;
+    }
+
+    @Override
     public Trainer createTrainer(Trainer trainer, String password) throws NoAdministratorException {
         //if adding trainer that is not an admin check if there is at least one already
         if (!trainer.isAdmin() && trainerDao.getAdminCount() == 0) {
@@ -40,8 +49,7 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    public void setAdmin(Long trainerId, boolean admin) throws NoAdministratorException {
-        Trainer trainer = trainerDao.findTrainerById(trainerId);
+    public void setAdmin(Trainer trainer, boolean admin) throws NoAdministratorException {
         // if admin flag is changed from true to false check if at least one admin remains
         if (!admin && trainer.isAdmin()
                 && trainerDao.getAdminCount() == 1) {

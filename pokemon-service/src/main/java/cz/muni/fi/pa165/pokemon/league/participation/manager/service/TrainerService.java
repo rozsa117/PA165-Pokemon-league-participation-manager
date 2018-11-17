@@ -77,10 +77,20 @@ public interface TrainerService {
     
     /**
      * Set admin flag
-     * @param trainerId Trainer to be updated
+     * @param trainer Trainer to be updated
      * @param admin New admin status
      * @throws NoAdministratorException when there is not a single admin after the
      * modification
      */
-    public void setAdmin(Long trainerId, boolean admin) throws NoAdministratorException;
+    public void setAdmin(Trainer trainer, boolean admin) throws NoAdministratorException;
+    
+    /**
+     *
+     * @param trainer Trainer to be updated
+     * @param oldPassword original password
+     * @param newPassword new password
+     * @return true if password was successfully updated, false if authentication
+     * of old password failed
+     */
+    public boolean changePassword(Trainer trainer, String oldPassword, String newPassword);
 }
