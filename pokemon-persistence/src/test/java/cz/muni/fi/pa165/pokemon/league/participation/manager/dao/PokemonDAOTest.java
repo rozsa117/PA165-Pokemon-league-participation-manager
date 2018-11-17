@@ -206,44 +206,5 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
                 .usingFieldByFieldElementComparator()
                 .containsOnly(pokemon1, pokemon2);
     }
-    
-    /**
-     * Test of findPokemonOfTrainer method - non existing Pokemon
-     */
-    @Test
-    public void testFindPokemonOfTrainer() {
-        Trainer t2 = new TrainerBuilder()
-                .name("Other")
-                .surname("The")
-                .born(LocalDate.of(1963, Month.NOVEMBER, 23))
-                .passwordHash("notHash")
-                .userName("notDocPlease")
-                .build();
-        trainerDao.createTrainer(t2);
-        Pokemon pOfT2 = new PokemonBuilder()
-                .trainer(t2)
-                .pokemonSpecies(species)
-                .dateTimeOfCapture(LocalDateTime.of(1977, Month.OCTOBER, 1, 17, 35))
-                .level(99)
-                .nickname("K-9")
-                .build();
-        pokemonDao.createPokemon(pOfT2);
-        assertThat(pokemonDao.findPokemonOfTrainer(trainer))
-                .isNotNull()
-                .usingFieldByFieldElementComparator()
-                .containsExactlyInAnyOrder(pokemon1, pokemon2);
-        assertThat(pokemonDao.findPokemonOfTrainer(t2))
-                .isNotNull()
-                .usingFieldByFieldElementComparator()
-                .containsExactlyInAnyOrder(pOfT2);
-    }
-    
-    /**
-     * Test of findPokemonOfTrainer method with null as input.
-     */
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testFindPokemonOfNullTrainer() {
-        pokemonDao.findPokemonOfTrainer(null);
-    }
 
 }

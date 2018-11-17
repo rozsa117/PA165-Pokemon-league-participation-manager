@@ -58,13 +58,6 @@ public interface PokemonService {
     Pokemon findPokemonById(Long id);
 
     /**
-     * Return all Pokemon currently owned by a trainer.
-     * @param trainer Trainer whose Pokemon shall be looked up.
-     * @return List of Pokemon belonging to the trainer.
-     */
-    List<Pokemon> findPokemonOfTrainer(Trainer trainer);
-
-    /**
      * Gift a Pokemon to another trainer.
      * @param pokemon Pokemon that is being gifted.
      * @param newTrainer The new trainer of the Pokemon.

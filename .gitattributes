@@ -1,3 +1,3 @@
-"*.java text=auto" 
-"*.xml text=auto" 
-"*.properties text=auto" 
+*.java text
+*.xml text
+*.properties text

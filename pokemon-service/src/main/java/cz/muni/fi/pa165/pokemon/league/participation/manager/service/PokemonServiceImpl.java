@@ -5,7 +5,9 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidPokemonEvolutionException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
@@ -55,11 +57,6 @@ public class PokemonServiceImpl implements PokemonService {
     @Override
     public Pokemon findPokemonById(Long id) {
         return pkmnDao.findPokemonById(id);
-    }
-
-    @Override
-    public List<Pokemon> findPokemonOfTrainer(Trainer trainer) {
-        return pkmnDao.findPokemonOfTrainer(trainer);
     }
 
     @Override

@@ -25,6 +25,8 @@ public interface TrainerFacade {
      *   there must be at least one administrator left
      */
     public Long createTrainer(TrainerCreateDTO trainer) throws NoAdministratorException;
+     */
+    public Long createTrainer(TrainerCreateDTO trainer);
 
     /**
      * Change trainer name and surname

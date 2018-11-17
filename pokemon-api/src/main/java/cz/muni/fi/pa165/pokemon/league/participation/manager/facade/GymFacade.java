@@ -1,6 +1,12 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.facade;
 
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangeGymLeaderDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangeGymTypeDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.UpdateGymLocationDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import java.util.List;
 
 /**
@@ -19,27 +25,24 @@ public interface GymFacade {
     /**
      * Updates the location of an existing gym.
      * @param gym DTO of gym to be updated.
-     * @param newLocaton new location of the gym.
      */
     public void updateGymLocation(UpdateGymLocationDTO gym);
     
     /**
      * Changes the type of an existing gym.
      * @param gym DTO of gym to be updated.
-     * @param newType New type of the gym.
      */
     public void changeGymType(ChangeGymTypeDTO gym);
     
     /**
      * Changes the leader of an existing gym.
      * @param gym DTO of gym to be updated.
-     * @param newGymLeader New leader of the gym.
      */
     public void changeGymLeader(ChangeGymLeaderDTO gym);
     
     /**
      * Removes an existing gym.
-     * @param gym DTO of gym to be removed.
+     * @param gymId Id of the gym to be removed.
      */
     public void removeGym(Long gymId);
     
@@ -58,7 +61,7 @@ public interface GymFacade {
     
     /**
      * Gets the leader of the gym.
-     * @param gym DTO of the gym to find the leader.
+     * @param gymId Id of the gym to find the trainer.
      * @return The DTO of the leader of the gym.
      */
     public TrainerDTO getGymLeader(Long gymId);
@@ -72,7 +75,7 @@ public interface GymFacade {
     
     /**
      * Returns gym with the given leader.
-     * @param trainer The leader of the gym.
+     * @param trainerId The id of leader of the gym.
      * @return The DTO of the gym with the given trainer, null in case no such gym exists.
      */
     public GymDTO findGymByLeader(Long trainerId);
