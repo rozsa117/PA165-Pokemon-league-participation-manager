@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangeTypingDTO
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChainException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import java.util.List;
 
@@ -72,7 +73,10 @@ public interface PokemonSpeciesFacade {
      * Remove a Pokemon species.
      * 
      * @param speciesId ID of the species to remove.
+     * @throws EntityIsUsedException when deleting the entity is not possible
+     * because it is referenced elsewhere.
      */
-    void removePokemonSpecies(Long speciesId);
+    void removePokemonSpecies(Long speciesId)
+            throws EntityIsUsedException;
     
 }

@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidPokemonEvolutionException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.LevelNotIncreasedException;
 import java.util.List;
 
 /**
@@ -32,8 +33,11 @@ public interface PokemonService {
      * @param pokemon Pokemon whose level shall be increased.
      * @param to Levels to increase the Pokemon's level to (must be positive,
      * must not exceed 100, must be higher than the Pokemon's current level).
+     * @throws LevelNotIncreasedException when the specified target level is
+     * lower than the Pokemon's current level.
      */
-    void increasePokemonLevel(Pokemon pokemon, int to);
+    void increasePokemonLevel(Pokemon pokemon, int to)
+            throws LevelNotIncreasedException;
 
     /**
      * Evolve a pokemon into it's given evolution.

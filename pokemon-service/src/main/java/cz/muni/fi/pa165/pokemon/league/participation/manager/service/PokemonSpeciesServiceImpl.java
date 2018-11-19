@@ -1,9 +1,11 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.service;
 
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dao.PokemonDAO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dao.PokemonSpeciesDAO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChainException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import java.util.List;
 import javax.inject.Inject;
@@ -23,6 +25,9 @@ public class PokemonSpeciesServiceImpl implements PokemonSpeciesService {
     
     @Inject
     private PokemonSpeciesDAO speciesDao;
+    
+    @Inject
+    private PokemonDAO pkmnDao;
 
     @Override
     public void createPokemonSpecies(PokemonSpecies species) throws EvolutionChainTooLongException {
@@ -49,7 +54,11 @@ public class PokemonSpeciesServiceImpl implements PokemonSpeciesService {
     }
 
     @Override
-    public void remove(PokemonSpecies species) {
+    public void remove(PokemonSpecies species) throws EntityIsUsedException {
+        if (!pkmnDao.getAllPokemonOfSpecies(species).isEmpty()
+                || !getAllEvolutionsOfPokemonSpecies(species).isEmpty()) {
+            throw new EntityIsUsedException("The species is still used in a Pokemon or as a preevolution.");
+        }
         speciesDao.deletePokemonSpecies(species);
     }
 

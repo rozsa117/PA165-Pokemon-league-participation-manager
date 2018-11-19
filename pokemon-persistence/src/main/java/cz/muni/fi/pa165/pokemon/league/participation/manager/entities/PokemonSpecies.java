@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.entities;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.validation.DifferingPokemonTypes;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,6 +23,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "POKEMON_SPECIES")
+@DifferingPokemonTypes(primaryTypeMember = "primaryType", secondaryTypeMember = "secondaryType")
 public class PokemonSpecies {
 
     @Id

@@ -3,6 +3,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.service;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChainException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import java.util.List;
 
@@ -45,8 +46,11 @@ public interface PokemonSpeciesService {
     /**
      * Remove the Pokemon species.
      * @param species Species to remove.
+     * @throws EntityIsUsedException when deleting the entity is not possible
+     * because it is referenced elsewhere.
      */
-    void remove(PokemonSpecies species);
+    void remove(PokemonSpecies species)
+            throws EntityIsUsedException;
 
     /**
      * Find a Pokemon species by its id.

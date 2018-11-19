@@ -8,6 +8,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.LevelUpPokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ReleasePokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidPokemonEvolutionException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.LevelNotIncreasedException;
 import java.util.List;
 
 /**
@@ -59,8 +60,11 @@ public interface PokemonFacade {
      * Increase the level of a Pokemon to given level.
      * 
      * @param newLevel Specification of the new level. 
+     * @throws LevelNotIncreasedException when the specified target level is
+     * lower than the Pokemon's current level.
      */
-    void levelUpPokemon(LevelUpPokemonDTO newLevel);
+    void levelUpPokemon(LevelUpPokemonDTO newLevel)
+            throws LevelNotIncreasedException;
     
     /**
      * Change the Pokemon's species to one of it's current species' evolutions.
