@@ -21,8 +21,7 @@ public interface TrainerFacade {
      *
      * @param trainer Trainer to be created
      * @return new trainer id
-     * @throws cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException
-     *   there must be at least one administrator left
+     * @throws NoAdministratorException there must be at least one administrator left
      */
     public Long createTrainer(TrainerCreateDTO trainer) throws NoAdministratorException;
 
@@ -99,10 +98,10 @@ public interface TrainerFacade {
 
     /**
      * Set admin flag
+     * 
      * @param trainerId Trainer to be set
      * @param admin Admin flag
-     * @throws cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException
-     *    there must be at least one administrator left
+     * @throws NoAdministratorException there must be at least one administrator left
      */
     public void setAdmin (Long trainerId, boolean admin) throws NoAdministratorException;
 }

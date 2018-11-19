@@ -35,6 +35,7 @@ public interface TrainerService {
 
     /**
      * Add new pokemon to trainer
+     * 
      * @param trainer Trainer 
      * @param pokemon Pokemon 
      */
@@ -42,6 +43,7 @@ public interface TrainerService {
 
     /**
      * Remove pokemon from trainer
+     * 
      * @param trainer Trainer 
      * @param pokemon Pokemon 
      */
@@ -49,12 +51,14 @@ public interface TrainerService {
 
     /**
      * Get list of all trainers
+     * 
      * @return list of all trainers
      */
     public List<Trainer> getAllTrainers();
 
     /**
      * Find trainer by Id
+     * 
      * @param id
      * @return Trainer
      */
@@ -62,6 +66,7 @@ public interface TrainerService {
 
     /**
      * Autenticate trainer with password
+     * 
      * @param trainer Trainer
      * @param password Unencrypted password
      * @return true only if password matches stored hash
@@ -70,6 +75,7 @@ public interface TrainerService {
 
     /**
      * Is Gym Leader?
+     * 
      * @param trainer Trainer
      * @return true only if the Trainer is a Gym Leader
      */
@@ -77,6 +83,7 @@ public interface TrainerService {
     
     /**
      * Set admin flag
+     * 
      * @param trainer Trainer to be updated
      * @param admin New admin status
      * @throws NoAdministratorException when there is not a single admin after the
@@ -85,7 +92,8 @@ public interface TrainerService {
     public void setAdmin(Trainer trainer, boolean admin) throws NoAdministratorException;
     
     /**
-     *
+     * Change trainer password
+     * 
      * @param trainer Trainer to be updated
      * @param oldPassword original password
      * @param newPassword new password
