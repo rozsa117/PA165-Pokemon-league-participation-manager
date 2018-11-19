@@ -6,6 +6,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerCreateDT
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerRenameDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
 import java.util.List;
 
 /**
@@ -20,8 +21,9 @@ public interface TrainerFacade {
      *
      * @param trainer Trainer to be created
      * @return new trainer id
+     * @throws NoAdministratorException there must be at least one administrator left
      */
-    public Long createTrainer(TrainerCreateDTO trainer);
+    public Long createTrainer(TrainerCreateDTO trainer) throws NoAdministratorException;
 
     /**
      * Change trainer name and surname
@@ -73,8 +75,10 @@ public interface TrainerFacade {
      * Change Trainer password
      *
      * @param trainerChangePassword trainer DTO with old and new password
+     * @return true if password successfully changed, false if original password 
+     * authentication failed
      */
-    public void changePassword(TrainerChangePasswordDTO trainerChangePassword);
+    public boolean changePassword(TrainerChangePasswordDTO trainerChangePassword);
 
     /**
      * Is Gym Leader?
@@ -91,5 +95,14 @@ public interface TrainerFacade {
      * @return List of pokemon owned
      */
     public List<PokemonDTO> getOwnPokemons(Long trainerId);
+
+    /**
+     * Set admin flag
+     * 
+     * @param trainerId Trainer to be set
+     * @param admin Admin flag
+     * @throws NoAdministratorException there must be at least one administrator left
+     */
+    public void setAdmin (Long trainerId, boolean admin) throws NoAdministratorException;
 
 }

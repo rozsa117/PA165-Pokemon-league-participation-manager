@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
  * @author Michal Mokros 456442
  */
 @Transactional
-@ContextConfiguration(classes  = PersistenceApplicationContext.class)
+@ContextConfiguration(classes = PersistenceApplicationContext.class)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, TransactionalTestExecutionListener.class})
 @RunWith(SpringRunner.class)
 public class TrainerDAOTest {
@@ -122,5 +122,27 @@ public class TrainerDAOTest {
         assertThat(trainerDAO.getAllTrainers()).usingFieldByFieldElementComparator()
                 .containsOnly(ashTrainer, brockTrainer);
     }
-}
 
+    @Test
+    public void getAdminCountTestNoTrainer() {
+        assertThat(trainerDAO.getAdminCount()).isEqualTo(0);
+    }
+
+    @Test
+    public void getAdminCountTestOneAdmin() {
+
+        Trainer adminTrainer = new TrainerBuilder()
+                .born(LocalDate.of(1996, 1, 1))
+                .isAdmin(true)
+                .name("Amnin")
+                .surname("Admin")
+                .userName("Admin")
+                .passwordHash("adminpwd")
+                .build();
+
+        trainerDAO.createTrainer(ashTrainer);
+        trainerDAO.createTrainer(adminTrainer);
+
+        assertThat(trainerDAO.getAdminCount()).isEqualTo(1);
+    }
+}

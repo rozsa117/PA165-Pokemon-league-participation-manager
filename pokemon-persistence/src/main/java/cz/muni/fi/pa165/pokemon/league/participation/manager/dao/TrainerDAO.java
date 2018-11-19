@@ -50,4 +50,10 @@ public interface TrainerDAO {
      */
     List<Trainer> getAllTrainers();
     
+    /**
+     * Get nubemer of administratos
+     * 
+     * @return number of administrators
+     */
+    Long getAdminCount();
 }

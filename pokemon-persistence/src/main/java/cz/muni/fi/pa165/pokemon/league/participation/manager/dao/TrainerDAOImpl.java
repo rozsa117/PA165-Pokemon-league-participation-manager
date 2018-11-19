@@ -23,6 +23,13 @@ public class TrainerDAOImpl implements TrainerDAO {
     }
 
     @Override
+    public Long getAdminCount() {
+        
+        return em.createQuery("SELECT count(t) FROM Trainer t where t.admin = true"
+                ,Long.class).getSingleResult();
+    }
+
+    @Override
     public void updateTrainer(Trainer trainer) {
         em.merge(trainer);
     }
