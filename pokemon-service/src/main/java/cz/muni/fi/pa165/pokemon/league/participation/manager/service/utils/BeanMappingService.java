@@ -10,7 +10,7 @@ import org.dozer.Mapper;
  * 
  * @author Tamás Rózsa
  */
-public interface BeamMappingService {
+public interface BeanMappingService {
     
     /**
      * Returns the mapper.

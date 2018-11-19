@@ -53,6 +53,9 @@ public class Trainer {
 
     @OneToMany
     private Set<Pokemon> pokemons = new HashSet<>();
+
+    @OneToMany
+    private Set<Badge> badges = new HashSet<>();
     
     public Trainer() {
     }
@@ -127,6 +130,18 @@ public class Trainer {
     
     public void deletePokemon(Pokemon pokemon) {
         pokemons.remove(pokemon);
+    }
+
+    public Set<Badge> getBadges() {
+        return badges;
+    }
+
+    public void addBadge(Badge badge) {
+        badges.add(badge);
+    }
+
+    public void deleteBadge(Badge badge) {
+        badges.remove(badge);
     }
     
     @Override

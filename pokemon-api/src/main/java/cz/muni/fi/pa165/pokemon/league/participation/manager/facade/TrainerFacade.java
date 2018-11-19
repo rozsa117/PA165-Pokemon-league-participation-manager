@@ -104,4 +104,5 @@ public interface TrainerFacade {
      * @throws NoAdministratorException there must be at least one administrator left
      */
     public void setAdmin (Long trainerId, boolean admin) throws NoAdministratorException;
+
 }
