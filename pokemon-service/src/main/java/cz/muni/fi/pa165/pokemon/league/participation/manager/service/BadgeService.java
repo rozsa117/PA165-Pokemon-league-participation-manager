@@ -28,13 +28,6 @@ public interface BadgeService {
     void removeBadge(Badge badge);
 
     /**
-     * Changes date on badge.
-     * @param badge to be changed
-     * @param newDate new date of badge
-     */
-    void changeBadgeDate(Badge badge, LocalDate newDate);
-
-    /**
      * Changes status on badge
      * @param badge to be changed
      * @param newStatus new status of badge
@@ -53,13 +46,13 @@ public interface BadgeService {
      * @param trainer whose badges shall be found
      * @return list of badges belonging to the trainer
      */
-    Set<Badge> findBadgeOfTrainer(Trainer trainer);
+    Set<Badge> findBadgesOfTrainer(Trainer trainer);
 
     /**
      * Return all currently existing badges for gym
      * @param gym for which badges shall be found
      * @return list of badges for gym
      */
-    Set<Badge> findBadgeOfGym(Gym gym);
+    Set<Badge> findBadgesOfGym(Gym gym);
 
 }

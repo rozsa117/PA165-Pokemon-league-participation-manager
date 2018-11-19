@@ -31,12 +31,6 @@ public class BadgeServiceImpl implements BadgeService {
     }
 
     @Override
-    public void changeBadgeDate(Badge badge, LocalDate newDate) {
-        badge.setDate(newDate);
-        badgeDAO.updateBadge(badge);
-    }
-
-    @Override
     public void changeBadgeStatus(Badge badge, ChallengeStatus newStatus) {
         badge.setStatus(newStatus);
         badgeDAO.updateBadge(badge);
@@ -48,12 +42,12 @@ public class BadgeServiceImpl implements BadgeService {
     }
 
     @Override
-    public Set<Badge> findBadgeOfTrainer(Trainer trainer) {
+    public Set<Badge> findBadgesOfTrainer(Trainer trainer) {
         return trainer.getBadges();
     }
 
     @Override
-    public Set<Badge> findBadgeOfGym(Gym gym) {
+    public Set<Badge> findBadgesOfGym(Gym gym) {
         return gym.getBadges();
     }
 }
