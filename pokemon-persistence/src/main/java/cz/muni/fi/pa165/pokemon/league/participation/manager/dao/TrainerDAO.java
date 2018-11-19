@@ -21,8 +21,8 @@ public interface TrainerDAO {
     /**
      * Updates trainer in database.
      * 
-     * @param trainer treiner to be updated.
-     * @throws IllegalArgumentException when triner is null.
+     * @param trainer trainer to be updated.
+     * @throws IllegalArgumentException when trainer is null.
      */
     void updateTrainer(Trainer trainer);
 
@@ -30,7 +30,7 @@ public interface TrainerDAO {
      * Deletes a trainer from database
      * 
      * @param trainer trainer to be deleted
-     * @throws IllegalArgumentException when triner is null.
+     * @throws IllegalArgumentException when trainer is null.
      */
     void deleteTrainer(Trainer trainer);
     
@@ -46,7 +46,7 @@ public interface TrainerDAO {
     /**
      * Returns list of all trainers.
      * 
-     * @return lsit of all trainers.
+     * @return list of all trainers.
      */
     List<Trainer> getAllTrainers();
     
