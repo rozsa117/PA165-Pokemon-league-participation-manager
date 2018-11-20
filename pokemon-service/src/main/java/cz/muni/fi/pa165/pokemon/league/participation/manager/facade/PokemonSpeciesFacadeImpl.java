@@ -8,9 +8,9 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpe
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChainException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.PokemonSpeciesService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.BeanMappingService;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -56,20 +56,24 @@ public class PokemonSpeciesFacadeImpl implements PokemonSpeciesFacade {
 
     @Override
     public List<PokemonSpeciesDTO> getAllEvolutionsOfPokemonSpecies(Long speciesId) {
-        return bms.mapTo(pss.getAllEvolutionsOfPokemonSpecies(speciesId == null ? null : pss.findPokemonSpeciesById(speciesId)), PokemonSpeciesDTO.class);
+        return bms.mapTo(
+                pss.getAllEvolutionsOfPokemonSpecies(
+                        speciesId == null ? null : pss.findPokemonSpeciesById(speciesId))
+                , PokemonSpeciesDTO.class);
     }
 
     @Override
-    public void changeTyping(ChangeTypingDTO newTyping) {
-        PokemonSpecies sp = pss.findPokemonSpeciesById(newTyping.getSpeciesId());
+    public void changeTyping(ChangeTypingDTO newTyping) throws NoSuchEntityException {
+        PokemonSpecies sp = getNonNullSpecies(newTyping.getSpeciesId());
         if (sp != null) {
             pss.changeTyping(sp, newTyping.getPrimaryType(), newTyping.getSecondaryType());
         }
     }
 
     @Override
-    public void changePreevolution(ChangePreevolutionDTO newPreevolution) throws EvolutionChainTooLongException, CircularEvolutionChainException {
-        PokemonSpecies sp = pss.findPokemonSpeciesById(newPreevolution.getSpeciesId());
+    public void changePreevolution(ChangePreevolutionDTO newPreevolution)
+            throws EvolutionChainTooLongException, CircularEvolutionChainException, NoSuchEntityException {
+        PokemonSpecies sp = getNonNullSpecies(newPreevolution.getSpeciesId());
         if (sp != null) {
             pss.changePreevolution(sp, pss.findPokemonSpeciesById(newPreevolution.getPreevolutionId()));
         }
@@ -81,6 +85,14 @@ public class PokemonSpeciesFacadeImpl implements PokemonSpeciesFacade {
         if (sp != null) {
             pss.remove(sp);
         }
+    }
+    
+    private PokemonSpecies getNonNullSpecies(Long speciesId) throws NoSuchEntityException {
+        PokemonSpecies sp = pss.findPokemonSpeciesById(speciesId);
+        if (sp == null) {
+            throw new NoSuchEntityException("No species of id " +speciesId+ " exists");
+        }
+        return sp;
     }
     
 }

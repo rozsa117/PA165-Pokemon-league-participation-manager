@@ -31,7 +31,11 @@ public interface TrainerFacade {
      * @param trainerRename trainer to be updated
      */
     public void renameTrainer(TrainerRenameDTO trainerRename);
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> Add missing tests, add null checks
     /**
      * Get list of all trainers
      *

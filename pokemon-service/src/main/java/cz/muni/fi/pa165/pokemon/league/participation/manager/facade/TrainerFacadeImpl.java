@@ -1,6 +1,5 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.facade;
 
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerAuthenticateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerChangePasswordDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerCreateDTO;
@@ -9,7 +8,6 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerRenameDT
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.TrainerFacade;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.service.PokemonService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.BeanMappingService;
 import org.springframework.stereotype.Service;
@@ -29,9 +27,6 @@ public class TrainerFacadeImpl implements TrainerFacade {
 
     @Inject
     private TrainerService trainerService;
-
-    @Inject
-    private PokemonService pokemonService;
 
     @Inject
     private BeanMappingService beanMappingService;
