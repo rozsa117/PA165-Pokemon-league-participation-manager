@@ -5,7 +5,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeStatusChangeDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.UnallowedAccessException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
 
 /**
  * Interface for Badge Facade
@@ -59,12 +59,12 @@ public interface BadgeFacade {
      * @param trainerId id of trainer to which challenge should be reopen to
      * @param badge of challenge to be reopened
      */
-    void reopenChallenge(Long trainerId, BadgeStatusChangeDTO badge) throws UnallowedAccessException;
+    void reopenChallenge(Long trainerId, BadgeStatusChangeDTO badge) throws InsufficientRightsException;
 
     /**
      * Gym leader with given trainerId updates the status on badge
      * @param badge to be updated
      */
-    void updateBadgeStatus(Long trainerId, BadgeStatusChangeDTO badge) throws UnallowedAccessException;
+    void updateBadgeStatus(Long trainerId, BadgeStatusChangeDTO badge) throws InsufficientRightsException;
 
 }

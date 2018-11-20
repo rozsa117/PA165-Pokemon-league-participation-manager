@@ -5,21 +5,17 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions;
  *
  * @author Michal Mokros 456442
  */
-public class UnallowedAccessException extends Exception {
+public class InsufficientRightsException extends Exception {
 
-    public UnallowedAccessException() {
+    public InsufficientRightsException() {
         super("Entity tried to access unallowed object");
     }
 
-    public UnallowedAccessException(String message) {
+    public InsufficientRightsException(String message) {
         super(message);
     }
 
-    public UnallowedAccessException(Throwable cause) {
-        super(cause);
-    }
-
-    public UnallowedAccessException(String message, Throwable cause) {
+    public InsufficientRightsException(String message, Throwable cause) {
         super(message, cause);
     }
 }

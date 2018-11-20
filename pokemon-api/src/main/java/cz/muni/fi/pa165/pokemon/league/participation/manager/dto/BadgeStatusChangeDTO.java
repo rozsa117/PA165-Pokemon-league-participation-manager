@@ -15,6 +15,7 @@ public class BadgeStatusChangeDTO {
     @NotNull
     private Long badgeId;
 
+    @NotNull
     private Long trainerId;
 
     private ChallengeStatus newStatus;

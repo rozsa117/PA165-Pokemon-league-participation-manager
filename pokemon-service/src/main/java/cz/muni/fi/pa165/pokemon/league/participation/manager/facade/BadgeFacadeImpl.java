@@ -8,7 +8,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.UnallowedAccessException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BadgeService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.GymService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
@@ -73,21 +73,21 @@ public class BadgeFacadeImpl implements BadgeFacade {
 
     @Override
     public void reopenChallenge(Long trainerId, BadgeStatusChangeDTO badge)
-            throws UnallowedAccessException {
+            throws InsufficientRightsException {
         if (trainerId.equals(badge.getTrainerId()) ||
                 !badgeService.findBadgeById(badge.getBadgeId()).getStatus().equals(ChallengeStatus.LOST)) {
-            throw new UnallowedAccessException("Trainer " + trainerId + " tried to reopen badge not belonging to him");
+            throw new InsufficientRightsException("Trainer " + trainerId + " tried to reopen badge not belonging to him");
         }
 
         badgeService.changeBadgeStatus(badgeService.findBadgeById(badge.getBadgeId()), ChallengeStatus.WAITING_TO_ACCEPT);
     }
 
     @Override
-    public void updateBadgeStatus(Long trainerId, BadgeStatusChangeDTO badge) throws UnallowedAccessException {
+    public void updateBadgeStatus(Long trainerId, BadgeStatusChangeDTO badge) throws InsufficientRightsException {
         Gym gym = badgeService.findBadgeById(badge.getBadgeId()).getGym();
 
         if (!gym.getGymLeader().equals(trainerService.getTrainerWithId(trainerId))) {
-            throw new UnallowedAccessException("Trainer " + trainerId + " is not leader of gym " + gym.getId());
+            throw new InsufficientRightsException("Trainer " + trainerId + " is not leader of gym " + gym.getId());
         }
 
         badgeService.changeBadgeStatus(badgeService.findBadgeById(badge.getBadgeId()), badge.getNewStatus());

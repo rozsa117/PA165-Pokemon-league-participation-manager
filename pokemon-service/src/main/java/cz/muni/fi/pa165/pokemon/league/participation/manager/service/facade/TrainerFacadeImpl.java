@@ -1,6 +1,11 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.service.facade;
 
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.*;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerAuthenticateDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerChangePasswordDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerCreateDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerRenameDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.TrainerFacade;
