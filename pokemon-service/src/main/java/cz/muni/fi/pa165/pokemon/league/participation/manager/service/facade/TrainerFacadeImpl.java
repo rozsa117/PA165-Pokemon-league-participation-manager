@@ -1,21 +1,17 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.service.facade;
 
-import javax.inject.Inject;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonDTO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerAuthenticateDTO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerChangePasswordDTO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerCreateDTO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerRenameDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.*;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.TrainerFacade;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.PokemonService;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.BeamMappingService;
-import java.util.List;
-import javax.transaction.Transactional;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.BeanMappingService;
 import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * Facade interface implementation for object Trainer.
@@ -33,7 +29,7 @@ public class TrainerFacadeImpl implements TrainerFacade {
     private PokemonService pokemonService;
 
     @Inject
-    private BeamMappingService beanMappingService;
+    private BeanMappingService beanMappingService;
 
     @Override
 

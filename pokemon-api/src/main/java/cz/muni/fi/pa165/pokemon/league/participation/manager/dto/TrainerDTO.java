@@ -12,6 +12,8 @@ import java.util.Set;
  */
 public class TrainerDTO {
 
+    private Long id;
+
     private String passwordHash;
 
     private String userName;
@@ -90,6 +92,14 @@ public class TrainerDTO {
 
     public void setGymLeader(boolean gymLeader) {
         this.gymLeader = gymLeader;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

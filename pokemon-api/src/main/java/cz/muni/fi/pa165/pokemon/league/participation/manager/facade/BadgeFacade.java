@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeStatusChangeDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.UnallowedAccessException;
 
 /**
  * Interface for Badge Facade
@@ -16,9 +17,8 @@ public interface BadgeFacade {
     /**
      * Create a new badge
      * @param badge DTO of badge to create
-     * @return ID of created badge
      */
-    Long createBadge(BadgeCreateDTO badge);
+    void createBadge(BadgeCreateDTO badge);
 
     /**
      * Finds the badge with given ID
@@ -52,19 +52,19 @@ public interface BadgeFacade {
      * @param trainerId id of trainer to which badge should be issued
      * @param badge to be issued to
      */
-    void issueBadgeToTrainer(Long trainerId, BadgeStatusChangeDTO badge);
+    void issueBadgeToTrainer(Long trainerId, BadgeDTO badge);
 
     /**
      * Reopens a closed challenge for trainer with given id
      * @param trainerId id of trainer to which challenge should be reopen to
      * @param badge of challenge to be reopened
      */
-    void reopenChallenge(Long trainerId, BadgeStatusChangeDTO badge);
+    void reopenChallenge(Long trainerId, BadgeStatusChangeDTO badge) throws UnallowedAccessException;
 
     /**
      * Gym leader with given trainerId updates the status on badge
      * @param badge to be updated
      */
-    void updateBadgeStatus(Long trainerId, BadgeStatusChangeDTO badge);
+    void updateBadgeStatus(Long trainerId, BadgeStatusChangeDTO badge) throws UnallowedAccessException;
 
 }
