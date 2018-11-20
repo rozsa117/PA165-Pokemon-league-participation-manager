@@ -12,6 +12,8 @@ import java.util.Set;
  */
 public class TrainerDTO {
 
+    private Long id;
+
     private String passwordHash;
 
     private String userName;
@@ -92,15 +94,23 @@ public class TrainerDTO {
         this.gymLeader = gymLeader;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
-        return "Trainer{ " + ", name = " + name + ", surname = " + surname + ", born = " + born + " }";
+        return "Trainer{ " + ",id = " + id + ", name = " + name + ", surname = " + surname + ", born = " + born + " }";
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.userName);
+        hash = 37 * hash + Objects.hashCode(this.userName) + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -116,7 +126,7 @@ public class TrainerDTO {
             return false;
         }
         final TrainerDTO other = (TrainerDTO) obj;
-        if (!Objects.equals(this.userName, other.userName)) {
+        if (!Objects.equals(this.userName, other.userName) || !Objects.equals(this.id, id)) {
             return false;
         }
         return true;
