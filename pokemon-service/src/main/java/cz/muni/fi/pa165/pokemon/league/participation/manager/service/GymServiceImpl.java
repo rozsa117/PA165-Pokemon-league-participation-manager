@@ -7,6 +7,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import java.util.List;
 import javax.inject.Inject;
 import java.util.stream.Collectors;
+import org.springframework.dao.DataAccessException;
 
 /**
  * Implementation of GymService.
@@ -20,56 +21,106 @@ public class GymServiceImpl implements GymService {
     
     @Override
     public void createGym(Gym gym) {
-        gymDAO.createGym(gym);
+        try {
+            gymDAO.createGym(gym);
+        }
+        catch(Exception ex) {
+            throw new DataAccessException("Cannot create new gym " + gym.toString(), ex) {};
+        }
     }
 
     @Override
     public void updateGymLocation(Gym gym, String newLocaton) {
-        gym.setLocation(newLocaton);
-        gymDAO.updateGym(gym);
+        try {
+            gym.setLocation(newLocaton);
+            gymDAO.updateGym(gym);
+        }
+        catch(Exception ex) {
+            throw new DataAccessException("Cannot update location fot gym " + gym.toString(), ex) {};
+        }
     }
 
     @Override
     public void changeGymType(Gym gym, Trainer trainer, PokemonType newType) {
-        if (gym.getGymLeader().equals(trainer)) {
-            gym.setType(newType);
-            gymDAO.updateGym(gym);
+        try {
+            if (gym.getGymLeader().equals(trainer)) {
+                gym.setType(newType);
+                gymDAO.updateGym(gym);
+            }
+        }
+        catch(Exception ex) {
+            throw new DataAccessException("Cannot change gym type for gym " + gym.toString(), ex) {};
         }
     }
 
     @Override
     public void changeGymLeader(Gym gym, Trainer newGymLeader) {
-        gym.setGymLeader(newGymLeader);
-        gymDAO.updateGym(gym);
+        try {
+            gym.setGymLeader(newGymLeader);
+            gymDAO.updateGym(gym);
+        }
+        catch(Exception ex) {
+            throw new DataAccessException("Cannot change gym leader for gym " + gym.toString(), ex) {};
+        }
     }
 
     @Override
     public void removeGym(Gym gym) {
-        gymDAO.deleteGym(gym);
+        try {
+            gymDAO.deleteGym(gym);
+        }
+        catch(Exception ex) {
+            throw new DataAccessException("Cannot remove the following gym " + gym.toString(), ex) {};
+        }
     }
 
     @Override
     public Gym findGymById(Long id) {
-        return gymDAO.findGymById(id);
+        try {
+            return gymDAO.findGymById(id);
+        }
+        catch(Exception ex) {
+            throw new DataAccessException("Cannot find gym with id " + id, ex) {};
+        }
     }
 
     @Override
     public List<Gym> getAllGyms() {
-        return gymDAO.getAllGyms();
+        try {
+            return gymDAO.getAllGyms();
+        }
+        catch(Exception ex) {
+            throw new DataAccessException("Cannot get all gyms.", ex) {};
+        }
     }
 
     @Override
     public Trainer getGymLeader(Gym gym) {
-        return gymDAO.findGymById(gym.getId()).getGymLeader();
+        try {
+            return gymDAO.findGymById(gym.getId()).getGymLeader();
+        }
+        catch(Exception ex) {
+            throw new DataAccessException("Cannot get gym leader of the following gym " + gym.toString(), ex) {};
+        }
     }
 
     @Override
     public List<Gym> findGymsByType(PokemonType type) {
-        return gymDAO.getAllGyms().stream().filter((gym) -> gym.getType().equals(type)).collect(Collectors.toList());
+        try {
+            return gymDAO.getAllGyms().stream().filter((gym) -> gym.getType().equals(type)).collect(Collectors.toList());
+        }
+        catch(Exception ex) {
+            throw new DataAccessException("Cannot find gyms with type " + type.toString(), ex) {};
+        }
     }
 
     @Override
     public Gym findGymByLeader(Trainer trainer) {
-        return gymDAO.getAllGyms().stream().filter((gym) -> gym.getGymLeader().equals(trainer)).findFirst().get();
+        try {
+            return gymDAO.getAllGyms().stream().filter((gym) -> gym.getGymLeader().equals(trainer)).findFirst().get();
+        }
+        catch(Exception ex) {
+            throw new DataAccessException("Cannot fing the gym for the following trainer " + trainer.toString(), ex) {};
+        }
     }
 }
