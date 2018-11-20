@@ -12,7 +12,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdmini
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.TrainerFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.PokemonService;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.BeamMappingService;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.BeanMappingService;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class TrainerFacadeImpl implements TrainerFacade {
     private PokemonService pokemonService;
 
     @Inject
-    private BeamMappingService beanMappingService;
+    private BeanMappingService beanMappingService;
 
     @Override
 

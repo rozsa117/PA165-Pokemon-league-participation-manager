@@ -10,7 +10,7 @@ import java.util.Objects;
  */
 public class GymDTO {
     
-    private Long gymID;
+    private Long id;;
     
     private String location;
     
@@ -18,12 +18,12 @@ public class GymDTO {
     
     private TrainerDTO gymLeader;
 
-    public Long getGymID() {
-        return gymID;
+    public Long getId() {
+        return id;
     }
 
-    public void setGymID(Long gymID) {
-        this.gymID = gymID;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getLocation() {
@@ -53,7 +53,7 @@ public class GymDTO {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.gymID);
+        hash = 97 * hash + Objects.hashCode(this.id);
         hash = 97 * hash + Objects.hashCode(this.location);
         hash = 97 * hash + Objects.hashCode(this.type);
         hash = 97 * hash + Objects.hashCode(this.gymLeader);
@@ -75,7 +75,7 @@ public class GymDTO {
         if (!Objects.equals(this.location, other.location)) {
             return false;
         }
-        if (!Objects.equals(this.gymID, other.gymID)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Objects.equals(this.type, other.type)) {
@@ -86,7 +86,7 @@ public class GymDTO {
 
     @Override
     public String toString() {
-        return "GymDTO{" + "gymID=" + gymID + ", location=" + location + ", type=" + type + ", gymLeader=" + gymLeader + '}';
+        return "GymDTO{" + "id=" + id + ", location=" + location + ", type=" + type + ", gymLeader=" + gymLeader + '}';
     }
     
 }
