@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import javax.validation.constraints.NotNull;
 
 /**
  * Implementation of gym facade interface.
@@ -58,12 +59,12 @@ public class GymFacadeImpl implements GymFacade {
     }
 
     @Override
-    public void removeGym(Long gymId) {
+    public void removeGym(@NotNull Long gymId) {
         gymService.removeGym(beanMappingService.mapTo(gymService.findGymById(gymId), Gym.class));
     }
 
     @Override
-    public GymDTO findGymById(Long id) {
+    public GymDTO findGymById(@NotNull Long id) {
         return beanMappingService.mapTo(gymService.findGymById(id), GymDTO.class);
     }
 
@@ -73,7 +74,7 @@ public class GymFacadeImpl implements GymFacade {
     }
 
     @Override
-    public TrainerDTO getGymLeader(Long gymId) {
+    public TrainerDTO getGymLeader(@NotNull Long gymId) {
         return beanMappingService.mapTo(gymService.getGymLeader(gymService.findGymById(gymId)), TrainerDTO.class);
     }
 
@@ -86,7 +87,7 @@ public class GymFacadeImpl implements GymFacade {
     }
 
     @Override
-    public GymDTO findGymByLeader(Long trainerId) {
+    public GymDTO findGymByLeader(@NotNull Long trainerId) {
         return beanMappingService.mapTo(
                 gymService.getAllGyms().stream()
                         .filter((gym) -> gym.getGymLeader().getId().equals(trainerId)).findFirst().get(),
