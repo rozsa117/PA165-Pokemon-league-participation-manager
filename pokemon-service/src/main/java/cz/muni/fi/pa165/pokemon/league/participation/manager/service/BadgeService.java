@@ -6,6 +6,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -46,13 +47,13 @@ public interface BadgeService {
      * @param trainer whose badges shall be found
      * @return list of badges belonging to the trainer
      */
-    Set<Badge> findBadgesOfTrainer(Trainer trainer);
+    List<Badge> findBadgesOfTrainer(Trainer trainer);
 
     /**
      * Return all currently existing badges for gym
      * @param gym for which badges shall be found
      * @return list of badges for gym
      */
-    Set<Badge> findBadgesOfGym(Gym gym);
+    List<Badge> findBadgesOfGym(Gym gym);
 
 }

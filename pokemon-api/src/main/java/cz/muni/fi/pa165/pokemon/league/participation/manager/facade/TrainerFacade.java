@@ -31,23 +31,7 @@ public interface TrainerFacade {
      * @param trainerRename trainer to be updated
      */
     public void renameTrainer(TrainerRenameDTO trainerRename);
-
-    /**
-     * Add a new Pokemon to a Trainer
-     *
-     * @param trainerId Trainer Id (owner)
-     * @param pokemonId Added Pokemon Id
-     */
-    public void addPokemon(Long trainerId, Long pokemonId);
-
-    /**
-     * Remove a Pokemon from a Trainer
-     *
-     * @param trainerId Trainer Id (owner)
-     * @param pokemonId Removed Pokemon Id
-     */
-    public void removePokemon(Long trainerId, Long pokemonId);
-
+    
     /**
      * Get list of all trainers
      *

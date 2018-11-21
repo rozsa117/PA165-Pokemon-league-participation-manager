@@ -8,7 +8,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStat
 
 import javax.inject.Inject;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Implementation of Badge Service
@@ -42,12 +42,12 @@ public class BadgeServiceImpl implements BadgeService {
     }
 
     @Override
-    public Set<Badge> findBadgesOfTrainer(Trainer trainer) {
-        return trainer.getBadges();
+    public List<Badge> findBadgesOfTrainer(Trainer trainer) {
+        return badgeDAO.findBadgesOfTrainer(trainer);
     }
 
     @Override
-    public Set<Badge> findBadgesOfGym(Gym gym) {
-        return gym.getBadges();
+    public List<Badge> findBadgesOfGym(Gym gym) {
+        return badgeDAO.findBadgesOfGym(gym);
     }
 }

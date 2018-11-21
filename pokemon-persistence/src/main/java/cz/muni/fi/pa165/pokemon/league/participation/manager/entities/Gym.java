@@ -46,9 +46,6 @@ public class Gym {
     @JoinColumn(name = "trainer_id", nullable = false, unique = true)
     private Trainer gymLeader;
 
-    @OneToMany(mappedBy = "gym")
-    private Set<Badge> badges = new HashSet<>();
-
     public Gym() {
     }
 
@@ -86,18 +83,6 @@ public class Gym {
 
     public void setGymLeader(Trainer gymLeader) {
         this.gymLeader = gymLeader;
-    }
-
-    public Set<Badge> getBadges() {
-        return Collections.unmodifiableSet(this.badges);
-    }
-
-    public void addBadge(Badge badge) {
-        this.badges.add(badge);
-    }
-
-    public void removeBadge(Badge badge) {
-        this.badges.remove(badge);
     }
 
     @Override

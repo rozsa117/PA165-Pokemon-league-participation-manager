@@ -34,22 +34,6 @@ public interface TrainerService {
     public void renameTrainer(Trainer trainer, String newName, String newSurname);
 
     /**
-     * Add new pokemon to trainer
-     * 
-     * @param trainer Trainer 
-     * @param pokemon Pokemon 
-     */
-    public void addPokemon(Trainer trainer, Pokemon pokemon);
-
-    /**
-     * Remove pokemon from trainer
-     * 
-     * @param trainer Trainer 
-     * @param pokemon Pokemon 
-     */
-    public void removePokemon(Trainer trainer, Pokemon pokemon);
-
-    /**
      * Get list of all trainers
      * 
      * @return list of all trainers
@@ -57,10 +41,10 @@ public interface TrainerService {
     public List<Trainer> getAllTrainers();
 
     /**
-     * Find trainer by Id
+     * Find trainer by Id.
      * 
-     * @param id
-     * @return Trainer
+     * @param id The id of the trainer to find.
+     * @return The found trainer.
      */
     public Trainer getTrainerWithId(Long id);
 
@@ -101,4 +85,12 @@ public interface TrainerService {
      * of old password failed
      */
     public boolean changePassword(Trainer trainer, String oldPassword, String newPassword);
+    
+    /**
+     * Finds all pokemons of a trainer.
+     * 
+     * @param trainer The trainer to find pokemons of.
+     * @return List of all pokemons of the trainer.
+     */
+    public List<Pokemon> getOwnPokemons(Trainer trainer);
 }

@@ -51,12 +51,6 @@ public class Trainer {
     @Column(name = "trnr_admin", nullable = false)
     private boolean admin = false;
 
-    @OneToMany
-    private Set<Pokemon> pokemons = new HashSet<>();
-
-    @OneToMany
-    private Set<Badge> badges = new HashSet<>();
-    
     public Trainer() {
     }
 
@@ -118,30 +112,6 @@ public class Trainer {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
-    }
-
-    public Set<Pokemon> getPokemons() {
-        return pokemons;
-    }
-    
-    public void addPokemon(Pokemon pokemon) {
-        pokemons.add(pokemon);
-    }
-    
-    public void deletePokemon(Pokemon pokemon) {
-        pokemons.remove(pokemon);
-    }
-
-    public Set<Badge> getBadges() {
-        return badges;
-    }
-
-    public void addBadge(Badge badge) {
-        badges.add(badge);
-    }
-
-    public void deleteBadge(Badge badge) {
-        badges.remove(badge);
     }
     
     @Override
