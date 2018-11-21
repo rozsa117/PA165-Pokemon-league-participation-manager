@@ -27,72 +27,75 @@ import org.springframework.stereotype.Service;
 public class PokemonSpeciesFacadeImpl implements PokemonSpeciesFacade {
 
     @Inject
-    private PokemonSpeciesService pss;
-    
+    private PokemonSpeciesService pokemonSpeciesService;
+
     @Inject
-    private BeanMappingService bms;
-    
+    private BeanMappingService beanMappingService;
+
     @Override
     public Long createPokemonSpecies(PokemonSpeciesCreateDTO species) throws EvolutionChainTooLongException {
-        PokemonSpecies sp = new PokemonSpecies();
-        sp.setSpeciesName(species.getSpeciesName());
-        sp.setPrimaryType(species.getPrimaryType());
-        sp.setSecondaryType(species.getSecondaryType());
-        sp.setEvolvesFrom(species.getPreevolutionId() == null ? null : pss.findPokemonSpeciesById(species.getPreevolutionId()));
-        pss.createPokemonSpecies(sp);
-        return sp.getId();
+        PokemonSpecies speciesEntity = new PokemonSpecies();
+        speciesEntity.setSpeciesName(species.getSpeciesName());
+        speciesEntity.setPrimaryType(species.getPrimaryType());
+        speciesEntity.setSecondaryType(species.getSecondaryType());
+        speciesEntity.setEvolvesFrom(
+                species.getPreevolutionId() == null
+                ? null
+                : pokemonSpeciesService.findPokemonSpeciesById(species.getPreevolutionId())
+        );
+        pokemonSpeciesService.createPokemonSpecies(speciesEntity);
+        return speciesEntity.getId();
     }
 
     @Override
     public PokemonSpeciesDTO findPokemonSpeciesById(@NotNull Long id) {
-        PokemonSpecies sp = pss.findPokemonSpeciesById(id);
-        return sp == null ? null : bms.mapTo(sp, PokemonSpeciesDTO.class);
+        PokemonSpecies species = pokemonSpeciesService.findPokemonSpeciesById(id);
+        return species == null ? null : beanMappingService.mapTo(species, PokemonSpeciesDTO.class);
     }
 
     @Override
     public List<PokemonSpeciesDTO> getAllPokemonSpecies() {
-        return bms.mapTo(pss.getAllPokemonSpecies(), PokemonSpeciesDTO.class);
+        return beanMappingService.mapTo(pokemonSpeciesService.getAllPokemonSpecies(), PokemonSpeciesDTO.class);
     }
 
     @Override
     public List<PokemonSpeciesDTO> getAllEvolutionsOfPokemonSpecies(Long speciesId) {
-        return bms.mapTo(
-                pss.getAllEvolutionsOfPokemonSpecies(
-                        speciesId == null ? null : pss.findPokemonSpeciesById(speciesId))
-                , PokemonSpeciesDTO.class);
+        return beanMappingService.mapTo(
+                pokemonSpeciesService.getAllEvolutionsOfPokemonSpecies(
+                        speciesId == null ? null : pokemonSpeciesService.findPokemonSpeciesById(speciesId)),
+                 PokemonSpeciesDTO.class);
     }
 
     @Override
     public void changeTyping(ChangeTypingDTO newTyping) throws NoSuchEntityException {
-        PokemonSpecies sp = getNonNullSpecies(newTyping.getSpeciesId());
-        if (sp != null) {
-            pss.changeTyping(sp, newTyping.getPrimaryType(), newTyping.getSecondaryType());
-        }
+        PokemonSpecies species = getNonNullSpecies(newTyping.getSpeciesId());
+            pokemonSpeciesService.changeTyping(species, newTyping.getPrimaryType(), newTyping.getSecondaryType());
     }
 
     @Override
     public void changePreevolution(ChangePreevolutionDTO newPreevolution)
             throws EvolutionChainTooLongException, CircularEvolutionChainException, NoSuchEntityException {
-        PokemonSpecies sp = getNonNullSpecies(newPreevolution.getSpeciesId());
-        if (sp != null) {
-            pss.changePreevolution(sp, pss.findPokemonSpeciesById(newPreevolution.getPreevolutionId()));
-        }
+        PokemonSpecies species = getNonNullSpecies(newPreevolution.getSpeciesId());
+            pokemonSpeciesService.changePreevolution(
+                    species,
+                    pokemonSpeciesService.findPokemonSpeciesById(newPreevolution.getPreevolutionId())
+            );
     }
 
     @Override
     public void removePokemonSpecies(@NotNull Long speciesId) throws EntityIsUsedException {
-        PokemonSpecies sp = pss.findPokemonSpeciesById(speciesId);
-        if (sp != null) {
-            pss.remove(sp);
+        PokemonSpecies species = pokemonSpeciesService.findPokemonSpeciesById(speciesId);
+        if (species != null) {
+            pokemonSpeciesService.remove(species);
         }
     }
-    
+
     private PokemonSpecies getNonNullSpecies(Long speciesId) throws NoSuchEntityException {
-        PokemonSpecies sp = pss.findPokemonSpeciesById(speciesId);
-        if (sp == null) {
-            throw new NoSuchEntityException("No species of id " +speciesId+ " exists");
+        PokemonSpecies species = pokemonSpeciesService.findPokemonSpeciesById(speciesId);
+        if (species == null) {
+            throw new NoSuchEntityException("No species of id " + speciesId + " exists");
         }
-        return sp;
+        return species;
     }
-    
+
 }

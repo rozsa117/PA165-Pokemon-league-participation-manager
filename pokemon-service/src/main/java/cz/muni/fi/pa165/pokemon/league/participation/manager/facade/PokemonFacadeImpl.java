@@ -32,131 +32,131 @@ import javax.validation.constraints.NotNull;
 public class PokemonFacadeImpl implements PokemonFacade {
 
     @Inject
-    private PokemonService ps;
+    private PokemonService pokemonService;
 
     @Inject
-    private TrainerService ts;
+    private TrainerService trainerService;
 
     @Inject
-    private PokemonSpeciesService pss;
+    private PokemonSpeciesService pokemonSpeciesService;
 
     @Inject
-    private BeanMappingService bms;
+    private BeanMappingService beanMappingService;
 
     @Override
     public Long createPokemon(PokemonCreateDTO pokemon) throws NoSuchEntityException {
-        Trainer tr = ts.getTrainerWithId(pokemon.getCreatingTrainerId());
-        if (tr == null) {
+        Trainer trainer = trainerService.getTrainerWithId(pokemon.getCreatingTrainerId());
+        if (trainer == null) {
             throw new NoSuchEntityException("Can't create new Pokemon: trainer of id "
                     + pokemon.getCreatingTrainerId()
                     + " doesn't exist"
             );
         }
-        PokemonSpecies sp = pss.findPokemonSpeciesById(pokemon.getPokemonSpeciesId());
-        if (sp == null) {
+        PokemonSpecies species = pokemonSpeciesService.findPokemonSpeciesById(pokemon.getPokemonSpeciesId());
+        if (species == null) {
             throw new NoSuchEntityException("Can't create new Pokemon: species of id "
                     + pokemon.getPokemonSpeciesId()
                     + " doesn't exist"
             );   
         }
-        Pokemon pkmn = new Pokemon();
-        pkmn.setSpecies(sp);
-        pkmn.setDateTimeOfCapture(LocalDateTime.now());
-        pkmn.setLevel(pokemon.getLevel());
-        pkmn.setNickname(pokemon.getNickname());
-        pkmn.setTrainer(tr);
-        ps.createPokemon(pkmn);
-        return pkmn.getId();
+        Pokemon pokemonEntity = new Pokemon();
+        pokemonEntity.setSpecies(species);
+        pokemonEntity.setDateTimeOfCapture(LocalDateTime.now());
+        pokemonEntity.setLevel(pokemon.getLevel());
+        pokemonEntity.setNickname(pokemon.getNickname());
+        pokemonEntity.setTrainer(trainer);
+        pokemonService.createPokemon(pokemonEntity);
+        return pokemonEntity.getId();
     }
 
     @Override
     public PokemonDTO findPokemonById(@NotNull Long id) {
-        return bms.mapTo(ps.findPokemonById(id), PokemonDTO.class);
+        return beanMappingService.mapTo(pokemonService.findPokemonById(id), PokemonDTO.class);
     }
 
     @Override
     public List<PokemonDTO> getPokemonOfTrainer(@NotNull Long trainerId)
             throws NoSuchEntityException {
-        Trainer tr = getNonNullRequestingTrainer(trainerId);
-        return bms.mapTo(tr.getPokemon(), PokemonDTO.class);
+        Trainer trainer = getNonNullRequestingTrainer(trainerId);
+        return beanMappingService.mapTo(trainer.getPokemon(), PokemonDTO.class);
     }
 
     @Override
     public void releasePokemon(ReleasePokemonDTO releasedPokemon)
             throws InsufficientRightsException, NoSuchEntityException {
-        Trainer tr = getNonNullRequestingTrainer(releasedPokemon.getRequestingTrainerId());
-        Pokemon pkmn = getNonNullPokemon(releasedPokemon.getPokemonId());
-        authorizeTrainer(tr, pkmn);
-        ps.releasePokemon(pkmn);
+        Trainer trainer = getNonNullRequestingTrainer(releasedPokemon.getRequestingTrainerId());
+        Pokemon pokemon = getNonNullPokemon(releasedPokemon.getPokemonId());
+        authorizeTrainer(trainer, pokemon);
+        pokemonService.releasePokemon(pokemon);
     }
 
     @Override
     public void renamePokemon(RenamePokemonDTO newNickname)
             throws InsufficientRightsException, NoSuchEntityException {
-        Trainer tr = getNonNullRequestingTrainer(newNickname.getRequestingTrainerId());
-        Pokemon pkmn = getNonNullPokemon(newNickname.getPokemonId());
-        authorizeTrainer(tr, pkmn);
-        ps.renamePokemon(pkmn, newNickname.getNewNickname());
+        Trainer trainer = getNonNullRequestingTrainer(newNickname.getRequestingTrainerId());
+        Pokemon pokemon = getNonNullPokemon(newNickname.getPokemonId());
+        authorizeTrainer(trainer, pokemon);
+        pokemonService.renamePokemon(pokemon, newNickname.getNewNickname());
     }
 
     @Override
     public void levelUpPokemon(LevelUpPokemonDTO newLevel)
             throws LevelNotIncreasedException, InsufficientRightsException, NoSuchEntityException {
-        Trainer tr = ts.getTrainerWithId(newLevel.getRequestingTrainerId());
-        Pokemon pkmn = getNonNullPokemon(newLevel.getPokemonId());
-        authorizeTrainer(tr, pkmn);
-        ps.increasePokemonLevel(pkmn, newLevel.getNewLevel());
+        Trainer trainer = trainerService.getTrainerWithId(newLevel.getRequestingTrainerId());
+        Pokemon pokemon = getNonNullPokemon(newLevel.getPokemonId());
+        authorizeTrainer(trainer, pokemon);
+        pokemonService.increasePokemonLevel(pokemon, newLevel.getNewLevel());
     }
 
     @Override
     public void evolvePokemon(EvolvePokemonDTO chosenEvolution)
             throws InvalidPokemonEvolutionException, InsufficientRightsException, NoSuchEntityException {
-        Trainer tr = ts.getTrainerWithId(chosenEvolution.getRequestingTrainerId());
-        PokemonSpecies sp = pss.findPokemonSpeciesById(chosenEvolution.getNewSpeciesId());
-        if (sp == null) {
+        Trainer trainer = trainerService.getTrainerWithId(chosenEvolution.getRequestingTrainerId());
+        PokemonSpecies species = pokemonSpeciesService.findPokemonSpeciesById(chosenEvolution.getNewSpeciesId());
+        if (species == null) {
             throw new NoSuchEntityException("No Pokemon species of id " + chosenEvolution.getNewSpeciesId() + " exists");
         }
-        Pokemon pkmn = getNonNullPokemon(chosenEvolution.getPokemonId());
-        authorizeTrainer(tr, pkmn);
-        ps.evolvePokemon(pkmn, sp);
+        Pokemon pokemon = getNonNullPokemon(chosenEvolution.getPokemonId());
+        authorizeTrainer(trainer, pokemon);
+        pokemonService.evolvePokemon(pokemon, species);
     }
 
     @Override
     public void giftPokemon(GiftPokemonDTO gift)
             throws InsufficientRightsException, NoSuchEntityException {
-        Trainer tr = ts.getTrainerWithId(gift.getRequestingTrainerId());
-        Trainer giftedTr = ts.getTrainerWithId(gift.getGiftedTrainerId());
-        if (giftedTr == null) {
+        Trainer trainer = trainerService.getTrainerWithId(gift.getRequestingTrainerId());
+        Trainer giftedTrainer = trainerService.getTrainerWithId(gift.getGiftedTrainerId());
+        if (giftedTrainer == null) {
             throw new NoSuchEntityException("No trainer of gifted trainer id " + gift.getGiftedTrainerId() + " exists");
         }
-        Pokemon pkmn = getNonNullPokemon(gift.getPokemonId());
-        authorizeTrainer(tr, pkmn);
-        ps.giftPokemon(pkmn, giftedTr);
+        Pokemon pokemon = getNonNullPokemon(gift.getPokemonId());
+        authorizeTrainer(trainer, pokemon);
+        pokemonService.giftPokemon(pokemon, giftedTrainer);
     }
 
-    private void authorizeTrainer(Trainer requester, Pokemon pkmn)
+    private void authorizeTrainer(Trainer requestingTrainer, Pokemon pokemon)
             throws InsufficientRightsException {
-        if (!requester.equals(pkmn.getTrainer())) {
+        if (!requestingTrainer.equals(pokemon.getTrainer())) {
             throw new InsufficientRightsException(
-                    "Requesting trainer of id " + requester.getId() + " does not own Pokemon " + pkmn.getId()
+                    "Requesting trainer of id " + requestingTrainer.getId() + " does not own Pokemon " + pokemon.getId()
             );
         }
     }
 
     private Pokemon getNonNullPokemon(Long pokemonId) throws NoSuchEntityException {
-        Pokemon pkmn = ps.findPokemonById(pokemonId);
-        if (pkmn == null) {
+        Pokemon pokemon = pokemonService.findPokemonById(pokemonId);
+        if (pokemon == null) {
             throw new NoSuchEntityException("No Pokemon of id " + pokemonId + " exists");
         }
-        return pkmn;
+        return pokemon;
     }
 
     private Trainer getNonNullRequestingTrainer(Long trainerId) throws NoSuchEntityException {
-        Trainer tr = ts.getTrainerWithId(trainerId);
-        if (tr == null) {
+        Trainer trainer = trainerService.getTrainerWithId(trainerId);
+        if (trainer == null) {
             throw new NoSuchEntityException("No trainer of given requesting trainer id " + trainerId + " exists");
         }
-        return tr;
+        return trainer;
     }
 
 }
