@@ -63,5 +63,11 @@ public interface PokemonService {
      * @param newTrainer The new trainer of the Pokemon.
      */
     void giftPokemon(Pokemon pokemon, Trainer newTrainer);
-
+    
+    /**
+     * Finds all pokemon of a trainer;
+     * @param trainer Trainer to find pokemon of.
+     * @return The list of all pokemon of trainer.
+     */
+    public List<Pokemon> getPokemonOfTrainer(Trainer trainer);
 }

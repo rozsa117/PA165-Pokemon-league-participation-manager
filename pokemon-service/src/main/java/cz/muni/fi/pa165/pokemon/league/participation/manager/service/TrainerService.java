@@ -85,12 +85,4 @@ public interface TrainerService {
      * of old password failed
      */
     public boolean changePassword(Trainer trainer, String oldPassword, String newPassword);
-    
-    /**
-     * Finds all pokemons of a trainer.
-     * 
-     * @param trainer The trainer to find pokemons of.
-     * @return List of all pokemons of the trainer.
-     */
-    public List<Pokemon> getPokemonOfTrainer(Trainer trainer);
 }

@@ -73,14 +73,6 @@ public interface TrainerFacade {
     public Boolean isGymLeader(Long trainerId);
 
     /**
-     * Get all own pokemons
-     *
-     * @param trainerId Trainer id
-     * @return List of pokemon owned
-     */
-    public List<PokemonDTO> getPokemonOfTrainer(Long trainerId);
-
-    /**
      * Set admin flag
      * 
      * @param trainerId Trainer to be set
