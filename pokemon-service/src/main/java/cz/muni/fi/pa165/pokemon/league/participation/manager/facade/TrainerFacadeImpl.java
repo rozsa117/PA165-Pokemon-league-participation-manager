@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.pokemon.league.participation.manager.service.facade;
+package cz.muni.fi.pa165.pokemon.league.participation.manager.facade;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerAuthenticateDTO;
@@ -37,13 +37,6 @@ public class TrainerFacadeImpl implements TrainerFacade {
     private BeanMappingService beanMappingService;
 
     @Override
-
-    public void addPokemon(Long trainerId, Long pokemonId) {
-        trainerService.getTrainerWithId(trainerId)
-                .addPokemon(pokemonService.findPokemonById(pokemonId));
-    }
-
-    @Override
     public Boolean authenticate(TrainerAuthenticateDTO trainer) {
         return trainerService.authenticate(trainerService.getTrainerWithId(trainer.getUserId()),
                 trainer.getPassword());
@@ -69,12 +62,6 @@ public class TrainerFacadeImpl implements TrainerFacade {
     }
 
     @Override
-    public List<PokemonDTO> getOwnPokemons(Long trainerId) {
-        return beanMappingService.mapTo(trainerService.getTrainerWithId(trainerId)
-                .getPokemons(), PokemonDTO.class);
-    }
-
-    @Override
     public TrainerDTO getTrainerWithId(Long trainerId) {
         return beanMappingService.mapTo(trainerService.getTrainerWithId(trainerId), TrainerDTO.class);
     }
@@ -82,11 +69,6 @@ public class TrainerFacadeImpl implements TrainerFacade {
     @Override
     public Boolean isGymLeader(Long trainerId) {
         return trainerService.isGymLeader(trainerService.getTrainerWithId(trainerId));
-    }
-
-    @Override
-    public void removePokemon(Long trainerId, Long pokemonId) {
-        trainerService.getTrainerWithId(trainerId).deletePokemon(pokemonService.findPokemonById(pokemonId));
     }
 
     @Override

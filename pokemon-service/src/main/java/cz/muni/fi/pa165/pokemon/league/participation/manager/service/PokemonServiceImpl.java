@@ -20,23 +20,23 @@ import org.springframework.stereotype.Service;
 public class PokemonServiceImpl implements PokemonService {
 
     @Inject
-    private PokemonDAO pkmnDao;
+    private PokemonDAO pokemonDao;
 
     @Override
     public void createPokemon(Pokemon pokemon) {
-        pkmnDao.createPokemon(pokemon);
+        pokemonDao.createPokemon(pokemon);
     }
 
     @Override
     public void renamePokemon(Pokemon pokemon, String newNickname) {
         pokemon.setNickname(newNickname);
-        pkmnDao.updatePokemon(pokemon);
+        pokemonDao.updatePokemon(pokemon);
     }
 
     @Override
     public void increasePokemonLevel(Pokemon pokemon, int to) {
         pokemon.setLevel(to);
-        pkmnDao.updatePokemon(pokemon);
+        pokemonDao.updatePokemon(pokemon);
     }
 
     @Override
@@ -46,23 +46,27 @@ public class PokemonServiceImpl implements PokemonService {
             throw new InvalidPokemonEvolutionException(String.format("%s cannot evolve into %s", pokemon.getSpecies(), evolveInto));
         }
         pokemon.setSpecies(evolveInto);
-        pkmnDao.updatePokemon(pokemon);
+        pokemonDao.updatePokemon(pokemon);
     }
 
     @Override
     public void releasePokemon(Pokemon pokemon) {
-        pkmnDao.deletePokemon(pokemon);
+        pokemonDao.deletePokemon(pokemon);
     }
 
     @Override
     public Pokemon findPokemonById(Long id) {
-        return pkmnDao.findPokemonById(id);
+        return pokemonDao.findPokemonById(id);
     }
 
     @Override
     public void giftPokemon(Pokemon pokemon, Trainer newTrainer) {
         pokemon.setTrainer(newTrainer);
-        pkmnDao.updatePokemon(pokemon);
+        pokemonDao.updatePokemon(pokemon);
     }
 
+    @Override
+    public List<Pokemon> getPokemonOfTrainer(Trainer trainer) {
+        return pokemonDao.getPokemonOfTrainer(trainer);
+    }
 }

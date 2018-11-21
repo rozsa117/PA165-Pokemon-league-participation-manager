@@ -233,4 +233,14 @@ public class BadgeDAOTest {
     public void getAllBadges() {
         assertThat(badgeDao.getAllBadges()).usingFieldByFieldElementComparator().containsOnly(todaysBadge, finalBadge);
     }
+    
+    @Test
+    public void findBadgesOfGym() {
+        assertThat(badgeDao.findBadgesOfGym(gymInBrno)).usingFieldByFieldElementComparator().containsOnly(todaysBadge);
+    }
+
+    @Test
+    public void findBadgesOfTrainer() {
+        assertThat(badgeDao.findBadgesOfTrainer(trainerAsh)).usingFieldByFieldElementComparator().containsOnly(todaysBadge, finalBadge);
+    }
 }

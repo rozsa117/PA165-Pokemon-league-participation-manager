@@ -2,7 +2,6 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.service;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dao.GymDAO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dao.TrainerDAO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
 import java.math.BigInteger;
@@ -64,19 +63,7 @@ public class TrainerServiceImpl implements TrainerService {
         trainer.setName(newSurname);
         trainerDao.updateTrainer(trainer);
     }
-
-    @Override
-    public void addPokemon(Trainer trainer, Pokemon pokemon) {
-        trainer.addPokemon(pokemon);
-        trainerDao.updateTrainer(trainer);
-    }
-
-    @Override
-    public void removePokemon(Trainer trainer, Pokemon pokemon) {
-        trainer.deletePokemon(pokemon);
-        trainerDao.updateTrainer(trainer);
-    }
-
+    
     @Override
     public List<Trainer> getAllTrainers() {
         return trainerDao.getAllTrainers();
@@ -167,5 +154,4 @@ public class TrainerServiceImpl implements TrainerService {
         int paddingLength = (array.length * 2) - hex.length();
         return paddingLength > 0 ? String.format("%0" + paddingLength + "d", 0) + hex : hex;
     }
-
 }

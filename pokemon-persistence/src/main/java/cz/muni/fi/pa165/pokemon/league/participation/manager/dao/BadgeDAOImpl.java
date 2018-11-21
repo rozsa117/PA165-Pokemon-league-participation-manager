@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -42,4 +44,15 @@ public class BadgeDAOImpl implements BadgeDAO {
         return em.createQuery("select b from Badge b", Badge.class).getResultList();
     }
 
+    @Override
+    public List<Badge> findBadgesOfGym(Gym gym) {
+        return em.createQuery("SELECT b FROM Badge b WHERE b.gym = :g", Badge.class)
+                .setParameter("g", gym).getResultList();
+    }
+
+    @Override
+    public List<Badge> findBadgesOfTrainer(Trainer trainer) {
+        return em.createQuery("SELECT b FROM Badge b WHERE b.trainer = :t", Badge.class)
+                .setParameter("t", trainer).getResultList();
+    }
 }

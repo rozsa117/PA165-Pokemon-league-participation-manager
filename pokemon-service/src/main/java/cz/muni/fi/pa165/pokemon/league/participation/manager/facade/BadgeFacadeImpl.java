@@ -65,9 +65,6 @@ public class BadgeFacadeImpl implements BadgeFacade {
 
     @Override
     public void issueBadgeToTrainer(Long trainerId, BadgeDTO badge) {
-        trainerService.getTrainerWithId(trainerId)
-                .addBadge(beanMappingService
-                        .mapTo(badgeService.findBadgeById(badge.getId()), Badge.class));
         badge.setTrainer(beanMappingService.mapTo(trainerService.getTrainerWithId(trainerId), TrainerDTO.class));
     }
 

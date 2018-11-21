@@ -46,4 +46,10 @@ public class PokemonDAOImpl implements PokemonDAO {
                 .getResultList();
     }
 
+    @Override
+    public List<Pokemon> getPokemonOfTrainer(Trainer trainer) {
+        return em.createQuery("SELECT p FROM Pokemon p WHERE p.trainer = :t", Pokemon.class)
+                .setParameter("t", trainer).getResultList();
+    }
+
 }
