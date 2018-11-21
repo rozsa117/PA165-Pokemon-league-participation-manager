@@ -161,8 +161,8 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    public List<Pokemon> getOwnPokemons(Trainer trainer) {
-        return pokemonDao.getAllPokemonsOfTrainer(trainer);
+    public List<Pokemon> getPokemonOfTrainer(Trainer trainer) {
+        return pokemonDao.getPokemonOfTrainer(trainer);
     }
 
 }

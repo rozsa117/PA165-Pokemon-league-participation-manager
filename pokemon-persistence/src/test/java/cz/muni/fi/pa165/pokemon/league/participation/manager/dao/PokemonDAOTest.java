@@ -208,8 +208,8 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void testGetAllPokemonsOfTrainer() {
-        assertThat(pokemonDao.getAllPokemonsOfTrainer(trainer))
+    public void testGetPokemonOfTrainer() {
+        assertThat(pokemonDao.getPokemonOfTrainer(trainer))
                 .usingFieldByFieldElementComparator()
                 .containsOnly(pokemon1, pokemon2);
     }

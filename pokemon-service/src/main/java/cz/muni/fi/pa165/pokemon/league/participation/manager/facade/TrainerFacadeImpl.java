@@ -62,9 +62,9 @@ public class TrainerFacadeImpl implements TrainerFacade {
     }
 
     @Override
-    public List<PokemonDTO> getOwnPokemons(Long trainerId) {
+    public List<PokemonDTO> getPokemonOfTrainer(Long trainerId) {
         return beanMappingService
-                .mapTo(trainerService.getOwnPokemons(trainerService.getTrainerWithId(trainerId)), PokemonDTO.class);
+                .mapTo(trainerService.getPokemonOfTrainer(trainerService.getTrainerWithId(trainerId)), PokemonDTO.class);
     }
 
     @Override

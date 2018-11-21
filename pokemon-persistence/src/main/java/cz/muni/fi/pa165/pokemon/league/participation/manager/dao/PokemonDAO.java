@@ -58,5 +58,5 @@ public interface PokemonDAO {
      * @param trainer The trainer to find the pokemons of.
      * @return All pokemons of the trainer.
      */
-    List<Pokemon> getAllPokemonsOfTrainer(Trainer trainer);
+    List<Pokemon> getPokemonOfTrainer(Trainer trainer);
 }

@@ -78,7 +78,7 @@ public interface TrainerFacade {
      * @param trainerId Trainer id
      * @return List of pokemon owned
      */
-    public List<PokemonDTO> getOwnPokemons(Long trainerId);
+    public List<PokemonDTO> getPokemonOfTrainer(Long trainerId);
 
     /**
      * Set admin flag
