@@ -8,19 +8,9 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions;
  */
 public class InvalidPokemonEvolutionException extends Exception {
 
-    /**
-     * Creates a new instance of PokemonInvalidEvolutionException without
-     * detail message.
-     */
     public InvalidPokemonEvolutionException() {
     }
 
-    /**
-     * Constructs an instance of PokemonInvalidEvolutionException with the
-     * specified detail message.
-     *
-     * @param msg the detail message.
-     */
     public InvalidPokemonEvolutionException(String msg) {
         super(msg);
     }

@@ -5,7 +5,6 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerChangePa
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerRenameDTO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public interface TrainerFacade {
      * @param trainerRename trainer to be updated
      */
     public void renameTrainer(TrainerRenameDTO trainerRename);
-    
+
     /**
      * Get list of all trainers
      *

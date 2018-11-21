@@ -3,12 +3,14 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.dto;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.validation.DifferingPokemonTypes;
 
 /**
  * DTO for requests for change of a Pokemon species' typing.
  * 
  * @author Tibor Zauko 433531
  */
+@DifferingPokemonTypes(primaryTypeMember = "primaryType", secondaryTypeMember = "secondaryType")
 public class ChangeTypingDTO {
 
     @NotNull

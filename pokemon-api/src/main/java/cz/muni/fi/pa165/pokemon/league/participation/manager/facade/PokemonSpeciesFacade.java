@@ -5,7 +5,9 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangeTypingDTO
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChainException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import java.util.List;
 
 /**
@@ -55,8 +57,10 @@ public interface PokemonSpeciesFacade {
      * Change typing of a Pokemon species.
      * 
      * @param newTyping Specification of new typing.
+     * @throws NoSuchEntityException when an entity of given ID doesn't exist.
      */
-    void changeTyping(ChangeTypingDTO newTyping);
+    void changeTyping(ChangeTypingDTO newTyping)
+            throws NoSuchEntityException;
     
     /**
      * Change preevolution of a species.
@@ -64,15 +68,19 @@ public interface PokemonSpeciesFacade {
      * @param newPreevolution Specification of new preevolution.
      * @throws EvolutionChainTooLongException when a created evolution chain would have more than 3 members.
      * @throws CircularEvolutionChainException when a created evolution chain would be circular.
+     * @throws NoSuchEntityException when an entity of given ID doesn't exist.
      */
     void changePreevolution(ChangePreevolutionDTO newPreevolution)
-            throws EvolutionChainTooLongException, CircularEvolutionChainException;
+            throws EvolutionChainTooLongException, CircularEvolutionChainException, NoSuchEntityException;
     
     /**
      * Remove a Pokemon species.
      * 
      * @param speciesId ID of the species to remove.
+     * @throws EntityIsUsedException when deleting the entity is not possible
+     * because it is referenced elsewhere.
      */
-    void removePokemonSpecies(Long speciesId);
+    void removePokemonSpecies(Long speciesId)
+            throws EntityIsUsedException;
     
 }

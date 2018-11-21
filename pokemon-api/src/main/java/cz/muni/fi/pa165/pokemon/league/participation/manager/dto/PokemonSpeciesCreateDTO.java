@@ -4,12 +4,14 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.validation.DifferingPokemonTypes;
 
 /**
  * DTO for Pokemon species creation requests.
  * 
  * @author Tibor Zauko 433531
  */
+@DifferingPokemonTypes(primaryTypeMember = "primaryType", secondaryTypeMember = "secondaryType")
 public class PokemonSpeciesCreateDTO {
 
     @NotNull

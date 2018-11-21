@@ -1,7 +1,7 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -50,6 +50,16 @@ public class PokemonDAOImpl implements PokemonDAO {
     public List<Pokemon> getPokemonOfTrainer(Trainer trainer) {
         return em.createQuery("SELECT p FROM Pokemon p WHERE p.trainer = :t", Pokemon.class)
                 .setParameter("t", trainer).getResultList();
+    }
+
+    @Override
+    public List<Pokemon> getAllPokemonOfSpecies(PokemonSpecies species) {
+        if (species == null) {
+            throw new IllegalArgumentException("Species can't be null");
+        }
+        return em.createQuery("SELECT p FROM Pokemon p where p.species = :species")
+                .setParameter("species", species)
+                .getResultList();
     }
 
 }

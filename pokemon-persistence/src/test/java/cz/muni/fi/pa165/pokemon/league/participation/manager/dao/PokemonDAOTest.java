@@ -213,5 +213,26 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
                 .usingFieldByFieldElementComparator()
                 .containsOnly(pokemon1, pokemon2);
     }
+
+    @Test
+    public void testGetAllPokemonOfSpecies() {
+        assertThat(pokemonDao.getAllPokemonOfSpecies(species))
+                .isNotNull()
+                .usingFieldByFieldElementComparator()
+                .containsExactlyInAnyOrder(pokemon1,pokemon2);
+        PokemonSpecies sp = new PokemonSpeciesBuilder()
+                .speciesName("Bulbasaur")
+                .primaryType(PokemonType.GRASS)
+                .build();
+        pokemonSpeciesDao.createPokemonSpecies(sp);
+        assertThat(pokemonDao.getAllPokemonOfSpecies(sp))
+                .isNotNull()
+                .isEmpty();
+    }
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testGetAllPokemonOfNullSpecies() {
+        pokemonDao.getAllPokemonOfSpecies(null);
+    }
     
 }

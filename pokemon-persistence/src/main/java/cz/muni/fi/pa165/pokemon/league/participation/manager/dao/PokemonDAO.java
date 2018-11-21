@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 
 import java.util.List;
@@ -59,4 +60,14 @@ public interface PokemonDAO {
      * @return All pokemons of the trainer.
      */
     List<Pokemon> getPokemonOfTrainer(Trainer trainer);
+
+    /*
+     * Return a list of all Pokemon belonging to given species.
+     * 
+     * @param species Species of Pokemon to retrieve.
+     * @return List of all Pokemon belonging to the given species.
+     * @throws IllegalArgumentException when species is null.
+     */
+    public List<Pokemon> getAllPokemonOfSpecies(PokemonSpecies species);
+
 }
