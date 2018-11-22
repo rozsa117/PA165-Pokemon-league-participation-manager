@@ -78,4 +78,23 @@ public class GymServiceTest {
         assertThat(gymService.findGymById(Long.MIN_VALUE)).isNull();
     }
 
+    @Test
+    public void testUpdateGymLocation() {
+        String newLocation = "New Location";
+        gymService.updateGymLocation(gym, newLocation);
+
+        assertThat(gymService.findGymById(gym.getId()).getLocation())
+                .isEqualTo(newLocation);
+    }
+
+    
+    @Test
+    public void testChangeGymType() {
+        PokemonType newType = PokemonType.STEEL;
+        gymService.changeGymType(gym, trainerLeader, newType);
+
+        assertThat(gymService.findGymById(gym.getId()).getType())
+                .isEqualTo(newType);
+    }
+
 }
