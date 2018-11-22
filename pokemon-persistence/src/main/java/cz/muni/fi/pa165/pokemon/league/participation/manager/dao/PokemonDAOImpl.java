@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

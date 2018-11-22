@@ -78,7 +78,7 @@ public class PokemonFacadeImpl implements PokemonFacade {
     public List<PokemonDTO> getPokemonOfTrainer(@NotNull Long trainerId)
             throws NoSuchEntityException {
         Trainer trainer = getNonNullRequestingTrainer(trainerId);
-        return beanMappingService.mapTo(trainer.getPokemon(), PokemonDTO.class);
+        return beanMappingService.mapTo(pokemonService.getPokemonOfTrainer(trainer), PokemonDTO.class);
     }
 
     @Override
