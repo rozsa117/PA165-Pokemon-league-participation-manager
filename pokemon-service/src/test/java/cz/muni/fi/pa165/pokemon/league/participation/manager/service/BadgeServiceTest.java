@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.Rule;
@@ -25,7 +26,10 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
+import java.util.function.Consumer;
+
 
 /**
  * Tests for badge service.
@@ -120,7 +124,6 @@ public class BadgeServiceTest {
         
         when(badgeDAO.findBadgeById(badgeWon.getId())).thenReturn(badgeWon);
         when(badgeDAO.findBadgeById(badgeRevoked.getId())).thenReturn(badgeRevoked);
-        when(badgeDAO.getAllBadges()).thenReturn(Stream.of(badgeWon, badgeRevoked).collect(Collectors.toList()));
         when(badgeDAO.findBadgesOfTrainer(trainer)).thenReturn(Stream.of(badgeWon, badgeRevoked).collect(Collectors.toList()));
         when(badgeDAO.findBadgesOfTrainer(trainerLeader)).thenReturn(new ArrayList<>());
         when(badgeDAO.findBadgesOfGym(gymWithBadges)).thenReturn(Stream.of(badgeWon, badgeRevoked).collect(Collectors.toList()));
@@ -185,5 +188,58 @@ public class BadgeServiceTest {
     public void testRemoveBadge() {
         badgeService.removeBadge(badge);
         assertThat(badge.getId()).isNull();
+    }
+
+    @Test
+    public void testCreateBadgeWithExceptionThrown() {
+        testExpectedDataAccessException((badgeService) -> badgeService.createBadge(badge));
+    }
+    
+    @Test
+    public void testUpdateadgeWithExceptionThrown() {
+        testExpectedDataAccessException((badgeService) -> badgeService.changeBadgeStatus(badge, ChallengeStatus.WAITING_TO_ACCEPT));
+    }
+    
+    @Test
+    public void testRemoveBadgeWithExceptionThrown() {
+        testExpectedDataAccessException((badgeService) -> badgeService.removeBadge(badge));
+    }
+    
+    @Test
+    public void testFindByIdWithExceptionThrown() {
+        testExpectedDataAccessException((badgeService) -> badgeService.findBadgeById(badge.getId()));
+    }
+    
+    @Test
+    public void testFindBadgesOfTraierWithExceptionThrown() {
+        testExpectedDataAccessException((badgeService) -> badgeService.findBadgesOfTrainer(trainerLeader));
+    }
+    
+    @Test
+    public void testFindBadgesOfGymWithExceptionThrown() {
+        testExpectedDataAccessException((badgeService) -> badgeService.findBadgesOfGym(gymWithoutBadges));
+    }
+        
+    private void testExpectedDataAccessException(Consumer<BadgeService> operation) {
+        DataAccessException dae = new DataAccessException("throw") {};
+        
+        when(badgeDAO.findBadgeById(badge.getId())).thenThrow(dae);
+        when(badgeDAO.findBadgesOfTrainer(trainerLeader)).thenThrow(dae);
+        when(badgeDAO.findBadgesOfGym(gymWithoutBadges)).thenThrow(dae);
+            
+        doAnswer(invocation -> {
+            throw dae;
+        }).when(badgeDAO).createBadge(badge);
+        
+        doAnswer(invocation -> {
+            throw dae;
+        }).when(badgeDAO).updateBadge(badge);
+        
+        doAnswer(invocation -> {
+            throw dae;
+        }).when(badgeDAO).deleteBadge(badge);
+        
+        assertThatExceptionOfType(DataAccessException.class)
+                .isThrownBy(() -> operation.accept(badgeService));
     }
 }
