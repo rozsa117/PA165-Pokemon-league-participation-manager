@@ -46,7 +46,7 @@ public class BadgeServiceTest {
     @InjectMocks
     private BadgeServiceImpl badgeService;
     
-    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule(); 
+    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
     
     private Badge badgeWon;
     private Badge badgeRevoked;

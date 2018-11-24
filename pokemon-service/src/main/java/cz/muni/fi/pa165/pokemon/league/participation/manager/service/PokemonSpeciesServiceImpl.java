@@ -31,7 +31,7 @@ public class PokemonSpeciesServiceImpl implements PokemonSpeciesService {
 
     @Override
     public void createPokemonSpecies(PokemonSpecies species) throws EvolutionChainTooLongException {
-        if (species.getEvolvesFrom() != null && evolutionChainNotLongerThan3(species.getEvolvesFrom(), species, true)) {
+        if (species.getEvolvesFrom() != null && !evolutionChainNotLongerThan3(species.getEvolvesFrom(), species, true)) {
             LOGGER.debug("{} as preevolution of {} would make too long evolution chain", species.getEvolvesFrom(), species);
             throw new EvolutionChainTooLongException(String.format("Can't create %s as evolution of %s", species, species.getEvolvesFrom()));
         }
