@@ -66,7 +66,7 @@ public class GymServiceImpl implements GymService {
     }
 
     @Override
-    public void changeGymLeader(Gym gym, Trainer newGymLeader) throws EntityIsUsedException  {
+    public void changeGymLeader(Gym gym, Trainer newGymLeader) throws EntityIsUsedException {
         if (!newGymLeader.equals(gym.getGymLeader())) {
             Gym usedGym = this.findGymByLeader(newGymLeader);
             if (usedGym != null) {
@@ -85,7 +85,7 @@ public class GymServiceImpl implements GymService {
     @Override
     public void removeGym(Gym gym) throws EntityIsUsedException {
 
-        if (badgeDAO.findBadgesOfGym(gym).size()!= 0) {
+        if (badgeDAO.findBadgesOfGym(gym).size() != 0) {
             throw new EntityIsUsedException("Gym is used on badge(s)");
         }
 
