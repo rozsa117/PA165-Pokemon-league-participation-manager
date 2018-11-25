@@ -5,13 +5,13 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dao.GymDAO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.DataAccessException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import javax.inject.Inject;
 import java.util.stream.Collectors;
-import org.springframework.dao.DataAccessException;
 
 /**
  * Implementation of GymService.

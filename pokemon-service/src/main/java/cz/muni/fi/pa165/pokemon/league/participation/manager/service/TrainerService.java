@@ -1,6 +1,5 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.service;
 
-import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
 import java.util.List;
@@ -55,7 +54,7 @@ public interface TrainerService {
      * @param password Unencrypted password
      * @return true only if password matches stored hash
      */
-    public Boolean authenticate(Trainer trainer, String password);
+    public boolean authenticate(Trainer trainer, String password);
 
     /**
      * Is Gym Leader?
@@ -63,7 +62,7 @@ public interface TrainerService {
      * @param trainer Trainer
      * @return true only if the Trainer is a Gym Leader
      */
-    public Boolean isGymLeader(Trainer trainer);
+    public boolean isGymLeader(Trainer trainer);
     
     /**
      * Set admin flag

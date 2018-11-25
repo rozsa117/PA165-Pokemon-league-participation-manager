@@ -6,9 +6,8 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpe
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidPokemonEvolutionException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.LevelNotIncreasedException;
-import java.util.ArrayList;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.DAOExceptionWrapper;
 import java.util.List;
-import java.util.Set;
 import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +24,13 @@ public class PokemonServiceImpl implements PokemonService {
 
     @Override
     public void createPokemon(Pokemon pokemon) {
-        pokemonDao.createPokemon(pokemon);
+        DAOExceptionWrapper.withoutResult(() -> pokemonDao.createPokemon(pokemon), "createPokemon failed");
     }
 
     @Override
     public void renamePokemon(Pokemon pokemon, String newNickname) {
         pokemon.setNickname(newNickname);
-        pokemonDao.updatePokemon(pokemon);
+        daoUpdatePokemon(pokemon);
     }
 
     @Override
@@ -40,7 +39,7 @@ public class PokemonServiceImpl implements PokemonService {
             throw new LevelNotIncreasedException("The new level is lower than the current level of the Pokemon");
         }
         pokemon.setLevel(to);
-        pokemonDao.updatePokemon(pokemon);
+        daoUpdatePokemon(pokemon);
     }
 
     @Override
@@ -50,27 +49,31 @@ public class PokemonServiceImpl implements PokemonService {
             throw new InvalidPokemonEvolutionException(String.format("%s cannot evolve into %s", pokemon.getSpecies(), evolveInto));
         }
         pokemon.setSpecies(evolveInto);
-        pokemonDao.updatePokemon(pokemon);
+        daoUpdatePokemon(pokemon);
     }
 
     @Override
     public void releasePokemon(Pokemon pokemon) {
-        pokemonDao.deletePokemon(pokemon);
+        DAOExceptionWrapper.withoutResult(() -> pokemonDao.deletePokemon(pokemon), "deletePokemon failed");
     }
 
     @Override
     public Pokemon findPokemonById(Long id) {
-        return pokemonDao.findPokemonById(id);
+        return DAOExceptionWrapper.withResult(() -> pokemonDao.findPokemonById(id), "findPokemonById failed");
     }
 
     @Override
     public void giftPokemon(Pokemon pokemon, Trainer newTrainer) {
         pokemon.setTrainer(newTrainer);
-        pokemonDao.updatePokemon(pokemon);
+        daoUpdatePokemon(pokemon);
     }
 
     @Override
     public List<Pokemon> getPokemonOfTrainer(Trainer trainer) {
-        return pokemonDao.getPokemonOfTrainer(trainer);
+        return DAOExceptionWrapper.withResult(()-> pokemonDao.getPokemonOfTrainer(trainer), "getPokemonOfTrainerFailed");
+    }
+
+    private void daoUpdatePokemon(Pokemon pokemon) {
+        DAOExceptionWrapper.withoutResult(() -> pokemonDao.updatePokemon(pokemon), "updatePokemon failed");
     }
 }

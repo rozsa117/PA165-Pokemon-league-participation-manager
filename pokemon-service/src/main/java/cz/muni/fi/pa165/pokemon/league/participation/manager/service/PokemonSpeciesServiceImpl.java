@@ -7,6 +7,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChainException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.DAOExceptionWrapper;
 import java.util.List;
 import javax.inject.Inject;
 import org.slf4j.Logger;
@@ -35,14 +36,14 @@ public class PokemonSpeciesServiceImpl implements PokemonSpeciesService {
             LOGGER.debug("{} as preevolution of {} would make too long evolution chain", species.getEvolvesFrom(), species);
             throw new EvolutionChainTooLongException(String.format("Can't create %s as evolution of %s", species, species.getEvolvesFrom()));
         }
-        speciesDao.createPokemonSpecies(species);
+        DAOExceptionWrapper.withoutResult(() -> speciesDao.createPokemonSpecies(species), "createPokemonSpecies failed");
     }
 
     @Override
     public void changeTyping(PokemonSpecies species, PokemonType newPrimaryType, PokemonType newSecondaryType) {
         species.setPrimaryType(newPrimaryType);
         species.setSecondaryType(newSecondaryType);
-        speciesDao.updatePokemonSpecies(species);
+        daoUpdatePokemonSpecies(species);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class PokemonSpeciesServiceImpl implements PokemonSpeciesService {
             throws EvolutionChainTooLongException, CircularEvolutionChainException {
         checkEvolutionChainValidity(newPreevolution, species);
         species.setEvolvesFrom(newPreevolution);
-        speciesDao.updatePokemonSpecies(species);
+        daoUpdatePokemonSpecies(species);
     }
 
     @Override
@@ -59,26 +60,29 @@ public class PokemonSpeciesServiceImpl implements PokemonSpeciesService {
                 || !getAllEvolutionsOfPokemonSpecies(species).isEmpty()) {
             throw new EntityIsUsedException("The species is still used in a Pokemon or as a preevolution.");
         }
-        speciesDao.deletePokemonSpecies(species);
+        DAOExceptionWrapper.withoutResult(() -> speciesDao.deletePokemonSpecies(species), "deletePokemonSpecies failed");
     }
 
     @Override
     public PokemonSpecies findPokemonSpeciesById(Long id) {
-        return speciesDao.findPokemonSpeciesById(id);
+        return DAOExceptionWrapper.withResult(() ->speciesDao.findPokemonSpeciesById(id), "findPokemonSpeciesById failed");
     }
 
     @Override
     public List<PokemonSpecies> getAllPokemonSpecies() {
-        return speciesDao.getAllPokemonSpecies();
+        return DAOExceptionWrapper.withResult(() -> speciesDao.getAllPokemonSpecies(), "getAllPokemonSpecies failed");
     }
 
     @Override
     public List<PokemonSpecies> getAllEvolutionsOfPokemonSpecies(PokemonSpecies species) {
-        return speciesDao.getAllEvolutionsOfPokemonSpecies(species);
+        return DAOExceptionWrapper.withResult(
+                () -> speciesDao.getAllEvolutionsOfPokemonSpecies(species)
+                , "getAllEvolutionsOfPokemonSpecies failed"
+        );
     }
 
     private boolean hasMoreEvolutionaryStagesThan(PokemonSpecies species, int i) {
-        List<PokemonSpecies> evolutions = speciesDao.getAllEvolutionsOfPokemonSpecies(species);
+        List<PokemonSpecies> evolutions = getAllEvolutionsOfPokemonSpecies(species);
         if (i > 0) {
             return evolutions.stream().allMatch(
                     (PokemonSpecies sp) -> hasMoreEvolutionaryStagesThan(sp, i - 1));
@@ -109,7 +113,6 @@ public class PokemonSpeciesServiceImpl implements PokemonSpeciesService {
         return s == null;
     }
 
-    
     private boolean evolutionChainNotLongerThan3(PokemonSpecies newPreevolution, PokemonSpecies species, boolean onlyCheckPreevolutionChain)
             throws EvolutionChainTooLongException {
         int chainLen = 1;
@@ -122,6 +125,10 @@ public class PokemonSpeciesServiceImpl implements PokemonSpeciesService {
             return true;
         }
         return !(chainLen > 3 || hasMoreEvolutionaryStagesThan(species, 3 - chainLen));
+    }
+    
+    private void daoUpdatePokemonSpecies(PokemonSpecies species) {
+        DAOExceptionWrapper.withoutResult(() -> speciesDao.updatePokemonSpecies(species), "updatePokemonSpecies failed");
     }
 
 }
