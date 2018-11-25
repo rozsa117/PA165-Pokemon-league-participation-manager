@@ -196,7 +196,7 @@ public class BadgeServiceTest {
         badgeService.removeBadge(badge);
         assertThat(badge.getId()).isNull();
     }
-/*
+
     @Test
     public void testCreateBadgeWithExceptionThrown() {
         testExpectedDataAccessException((badgeService) -> badgeService.createBadge(badge));
@@ -226,9 +226,9 @@ public class BadgeServiceTest {
     public void testFindBadgesOfGymWithExceptionThrown() {
         testExpectedDataAccessException((badgeService) -> badgeService.findBadgesOfGym(gymWithoutBadges));
     }
-        */
+        
     private void testExpectedDataAccessException(Consumer<BadgeService> operation) {
-        PersistenceException pex = new PersistenceException("throw") {};
+        PersistenceException pex = new PersistenceException("throw");
         
         when(badgeDAO.findBadgeById(badge.getId())).thenThrow(pex);
         when(badgeDAO.findBadgesOfTrainer(trainerLeader)).thenThrow(pex);

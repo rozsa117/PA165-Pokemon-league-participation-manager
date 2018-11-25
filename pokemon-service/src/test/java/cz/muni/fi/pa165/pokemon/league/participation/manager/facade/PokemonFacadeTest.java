@@ -110,7 +110,6 @@ public class PokemonFacadeTest {
                 .name("Ash")
                 .surname("Ketchum")
                 .userName("ketchup")
-                .passwordHash("pswda")
                 .build();
         
          ashEntity = new TrainerBuilder()
@@ -129,7 +128,6 @@ public class PokemonFacadeTest {
                 .name("Brock")
                 .surname("Boulder")
                 .userName("onixDude")
-                .passwordHash("nohash")
                 .build();
         
         brockEntity = new TrainerBuilder()

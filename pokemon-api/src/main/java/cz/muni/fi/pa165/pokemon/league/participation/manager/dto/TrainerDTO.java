@@ -14,8 +14,6 @@ public class TrainerDTO {
 
     private Long id;
 
-    private String passwordHash;
-
     private String userName;
 
     private String name;
@@ -25,16 +23,6 @@ public class TrainerDTO {
     private LocalDate born;
 
     private boolean admin;
-    
-    private Set<PokemonDTO> pokemons = new HashSet<>();
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
 
     public String getUserName() {
         return userName;
@@ -76,14 +64,6 @@ public class TrainerDTO {
         this.admin = admin;
     }
 
-    public Set<PokemonDTO> getPokemons() {
-        return pokemons;
-    }
-
-    public void setPokemons(Set<PokemonDTO> pokemons) {
-        this.pokemons = pokemons;
-    }
-    
     public Long getId() {
         return id;
     }

@@ -12,8 +12,6 @@ public class TrainerDTOBuilder {
     
     private Long id;
 
-    private String passwordHash;
-
     private String userName;
 
     private String name;
@@ -27,7 +25,6 @@ public class TrainerDTOBuilder {
     public TrainerDTO build() {
         TrainerDTO trainerDTO = new TrainerDTO();
         trainerDTO.setId(id);
-        trainerDTO.setPasswordHash(passwordHash);
         trainerDTO.setUserName(userName);
         trainerDTO.setName(name);
         trainerDTO.setSurname(surname);
@@ -38,11 +35,6 @@ public class TrainerDTOBuilder {
     
     public TrainerDTOBuilder id(Long id) {
         this.id = id;
-        return this;
-    }
-    
-    public TrainerDTOBuilder passwordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
         return this;
     }
     

@@ -7,6 +7,8 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerRenameDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
 import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 /**
  * Facade interface for object Trainer.
@@ -22,14 +24,14 @@ public interface TrainerFacade {
      * @return new trainer id
      * @throws NoAdministratorException there must be at least one administrator left
      */
-    public Long createTrainer(TrainerCreateDTO trainer) throws NoAdministratorException;
+    public Long createTrainer(@Valid TrainerCreateDTO trainer) throws NoAdministratorException;
 
     /**
      * Change trainer name and surname
      *
      * @param trainerRename trainer to be updated
      */
-    public void renameTrainer(TrainerRenameDTO trainerRename);
+    public void renameTrainer(@Valid TrainerRenameDTO trainerRename);
 
     /**
      * Get list of all trainers
@@ -44,7 +46,7 @@ public interface TrainerFacade {
      * @param trainerId Id of a Trainer to be found
      * @return Trainer found Trainer, null if not found
      */
-    public TrainerDTO getTrainerWithId(Long trainerId);
+    public TrainerDTO getTrainerWithId(@NotNull Long trainerId);
 
     /**
      * Autenticate trainer with password
@@ -52,7 +54,7 @@ public interface TrainerFacade {
      * @param trainer Trainer to be autenticated
      * @return true only if password matches stored hash
      */
-    public Boolean authenticate(TrainerAuthenticateDTO trainer);
+    public boolean authenticate(@Valid TrainerAuthenticateDTO trainer);
 
     /**
      * Change Trainer password
@@ -61,7 +63,7 @@ public interface TrainerFacade {
      * @return true if password successfully changed, false if original password 
      * authentication failed
      */
-    public boolean changePassword(TrainerChangePasswordDTO trainerChangePassword);
+    public boolean changePassword(@Valid TrainerChangePasswordDTO trainerChangePassword);
 
     /**
      * Is Gym Leader?
@@ -69,7 +71,7 @@ public interface TrainerFacade {
      * @param trainerId Trained id
      * @return true only if the Trainer is a Gym Leader
      */
-    public Boolean isGymLeader(Long trainerId);
+    public boolean isGymLeader(@NotNull Long trainerId);
 
     /**
      * Set admin flag
@@ -78,6 +80,6 @@ public interface TrainerFacade {
      * @param admin Admin flag
      * @throws NoAdministratorException there must be at least one administrator left
      */
-    public void setAdmin (Long trainerId, boolean admin) throws NoAdministratorException;
+    public void setAdmin (@NotNull Long trainerId, boolean admin) throws NoAdministratorException;
 
 }
