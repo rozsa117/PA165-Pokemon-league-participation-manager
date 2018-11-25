@@ -11,12 +11,13 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Arrays;
 import javax.inject.Inject;
+import javax.persistence.PersistenceException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import org.junit.Before;
@@ -72,8 +73,7 @@ public class GymServiceTest {
     //Trainer without gym
     private Trainer otherTrainer;
 
-    private final DataAccessException dae = new DataAccessException("throw") {
-    };
+    private final PersistenceException persistenceException = new PersistenceException("throw");
 
     public GymServiceTest() {
     }
@@ -151,20 +151,19 @@ public class GymServiceTest {
 
         when(gymDAO.findGymById(gymPraha.getId())).thenReturn(gymPraha);
         when(gymDAO.findGymById(gymBrno.getId())).thenReturn(gymBrno);
-        when(gymDAO.getAllGyms()).thenReturn(Stream.of(gymPraha, gymBrno)
-                .collect(Collectors.toList()));
 
+        when(gymDAO.getAllGyms()).thenReturn(Arrays.asList(gymPraha, gymBrno));
     }
 
     @Test
     public void testFindById() {
         assertThat(gymService.findGymById(gymPraha.getId()))
-                .isEqualToComparingFieldByField(gymPraha);
+                .isEqualTo(gymPraha);
     }
 
     @Test
     public void testFindByIdWithException() {
-        doThrow(dae).when(gymDAO).findGymById(errorneousGym.getId());
+        doThrow(persistenceException).when(gymDAO).findGymById(errorneousGym.getId());
 
         assertThatExceptionOfType(DataAccessException.class)
                 .as("Testing DAO exception")
@@ -181,13 +180,14 @@ public class GymServiceTest {
         String newLocation = "New Location";
         gymService.updateGymLocation(gymPraha, newLocation);
 
-        assertThat(gymService.findGymById(gymPraha.getId()).getLocation())
+        assertThat(gymPraha.getLocation())
                 .isEqualTo(newLocation);
+        verify(gymDAO, times(1)).updateGym(gymPraha);
     }
 
     @Test
     public void testUpdateGymLocationWithException() {
-        doThrow(dae).when(gymDAO).updateGym(errorneousGym);
+        doThrow(persistenceException).when(gymDAO).updateGym(errorneousGym);
 
         String newLocation = "New Location";
 
@@ -197,31 +197,34 @@ public class GymServiceTest {
     }
 
     @Test
-    public void testChangeGymTypeByOwnTrainer() {
+    public void testChangeGymTypeByOwnTrainer() throws InsufficientRightsException {
         PokemonType newType = PokemonType.STEEL;
-        boolean result = gymService.changeGymType(gymPraha, gymPraha.getGymLeader(), newType);
-        assertThat(result).isTrue();
-        assertThat(gymService.findGymById(gymPraha.getId()).getType())
+        gymService.changeGymType(gymPraha, gymPraha.getGymLeader(), newType);
+
+        assertThat(gymPraha.getType())
                 .isEqualTo(newType);
+        verify(gymDAO, times(1)).updateGym(gymPraha);
     }
 
     @Test
     public void testChangeGymTypeByOtherTrainer() {
-        PokemonType originalType = gymPraha.getType();
         PokemonType newType = PokemonType.STEEL;
-        boolean result = gymService.changeGymType(gymPraha, otherTrainer, newType);
-        assertThat(result).isFalse();
-        assertThat(gymService.findGymById(gymPraha.getId()).getType())
-                .isEqualTo(originalType);
+        assertThatExceptionOfType(InsufficientRightsException.class)
+                .as("Testing changing Gym type by trainer that is not Gym Leader")
+                .isThrownBy(() -> gymService.changeGymType(
+                gymBrno,
+                otherTrainer,
+                newType));
     }
 
     @Test
     public void testChangeGymTypeWithException() {
-        doThrow(dae).when(gymDAO).updateGym(errorneousGym);
+        doThrow(persistenceException).when(gymDAO).updateGym(errorneousGym);
 
         PokemonType newType = PokemonType.STEEL;
 
-        assertThatExceptionOfType(DataAccessException.class)
+        assertThatExceptionOfType(DataAccessException.class
+        )
                 .as("Testing DAO exception")
                 .isThrownBy(() -> gymService.changeGymType(
                 errorneousGym,
@@ -233,13 +236,15 @@ public class GymServiceTest {
     public void testChangeGymLeader() throws EntityIsUsedException {
         gymService.changeGymLeader(gymPraha, otherTrainer);
 
-        assertThat(gymService.findGymById(gymPraha.getId()).getGymLeader())
+        assertThat(gymPraha.getGymLeader())
                 .isEqualTo(otherTrainer);
+        verify(gymDAO, times(1)).updateGym(gymPraha);
     }
 
     @Test
     public void testChangeDuplicateGymLeader() {
-        assertThatExceptionOfType(EntityIsUsedException.class)
+        assertThatExceptionOfType(EntityIsUsedException.class
+        )
                 .as("Testing GymLeader change to a trainer already used on another Gym")
                 .isThrownBy(() -> gymService
                 .changeGymLeader(gymPraha, gymLeaderBrno));
@@ -247,9 +252,10 @@ public class GymServiceTest {
 
     @Test
     public void testChangeGymLeaderWithException() {
-        doThrow(dae).when(gymDAO).updateGym(errorneousGym);
+        doThrow(persistenceException).when(gymDAO).updateGym(errorneousGym);
 
-        assertThatExceptionOfType(DataAccessException.class)
+        assertThatExceptionOfType(DataAccessException.class
+        )
                 .as("Testing DAO exception")
                 .isThrownBy(() -> gymService
                 .changeGymLeader(errorneousGym, otherTrainer));
@@ -272,10 +278,10 @@ public class GymServiceTest {
                 .status(ChallengeStatus.WAITING_TO_ACCEPT)
                 .build();
 
-        when(badgeDAO.findBadgesOfGym(gymBrno)).thenReturn(Stream.of(badge)
-                .collect(Collectors.toList()));
+        when(badgeDAO.findBadgesOfGym(gymBrno)).thenReturn(Arrays.asList(badge));
 
-        assertThatExceptionOfType(EntityIsUsedException.class)
+        assertThatExceptionOfType(EntityIsUsedException.class
+        )
                 .as("Gym with an exisitng badges should not be possible to remove")
                 .isThrownBy(() -> gymService
                 .removeGym(gymBrno));
@@ -283,9 +289,10 @@ public class GymServiceTest {
 
     @Test
     public void testRemoveGymWithException() {
-        doThrow(dae).when(gymDAO).deleteGym(errorneousGym);
+        doThrow(persistenceException).when(gymDAO).deleteGym(errorneousGym);
 
-        assertThatExceptionOfType(DataAccessException.class)
+        assertThatExceptionOfType(DataAccessException.class
+        )
                 .as("Testing DAO exception")
                 .isThrownBy(() -> gymService
                 .removeGym(errorneousGym));
@@ -301,7 +308,8 @@ public class GymServiceTest {
     public void testCreateGymDuplicateGymLeader() {
         gymOstrava.setGymLeader(gymLeaderBrno);
 
-        assertThatExceptionOfType(EntityIsUsedException.class)
+        assertThatExceptionOfType(EntityIsUsedException.class
+        )
                 .as("Testing create Gym with Gym Leader that is used on another Gym")
                 .isThrownBy(() -> gymService
                 .createGym(gymOstrava));
@@ -309,7 +317,7 @@ public class GymServiceTest {
 
     @Test
     public void testCreateGymWithException() {
-        doThrow(dae).when(gymDAO).createGym(errorneousGym);
+        doThrow(persistenceException).when(gymDAO).createGym(errorneousGym);
 
         assertThatExceptionOfType(DataAccessException.class
         )
@@ -325,7 +333,7 @@ public class GymServiceTest {
 
     @Test
     public void testGetAllGymsWithException() {
-        doThrow(dae).when(gymDAO).getAllGyms();
+        doThrow(persistenceException).when(gymDAO).getAllGyms();
 
         assertThatExceptionOfType(DataAccessException.class
         )
@@ -337,14 +345,15 @@ public class GymServiceTest {
     @Test
     public void testGetGymLeader() {
         assertThat(gymService.getGymLeader(gymPraha))
-                .isEqualToComparingFieldByField(gymPraha.getGymLeader());
+                .isEqualTo(gymPraha.getGymLeader());
     }
 
     @Test
     public void testGetGymLeaderWithException() {
-        doThrow(dae).when(gymDAO).findGymById(errorneousGym.getId());
+        doThrow(persistenceException).when(gymDAO).findGymById(errorneousGym.getId());
 
-        assertThatExceptionOfType(DataAccessException.class)
+        assertThatExceptionOfType(DataAccessException.class
+        )
                 .isThrownBy(() -> gymService
                 .getGymLeader(errorneousGym));
     }
@@ -352,7 +361,7 @@ public class GymServiceTest {
     @Test
     public void testFindGymByTrainer() {
         assertThat(gymService.findGymByLeader(gymLeaderPraha))
-                .isEqualToComparingFieldByField(gymPraha);
+                .isEqualTo(gymPraha);
     }
 
     @Test
