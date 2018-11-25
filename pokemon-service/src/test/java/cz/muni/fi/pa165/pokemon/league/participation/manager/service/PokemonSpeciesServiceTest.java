@@ -149,6 +149,7 @@ public class PokemonSpeciesServiceTest {
 
     @Test
     public void changePreevolutionTest() throws EvolutionChainTooLongException, CircularEvolutionChainException {
+        pokemonSpeciesPikachu.setEvolvesFrom(null);
         assertThatExceptionOfType(EvolutionChainTooLongException.class)
                 .isThrownBy(() -> pokemonSpeciesService.changePreevolution(pokemonSpeciesPichu, pokemonSpeciesPreevolutionTwo));
         pokemonSpeciesPreevolutionOne.setEvolvesFrom(null);
