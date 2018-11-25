@@ -104,7 +104,7 @@ public class TrainerDTO {
 
     @Override
     public String toString() {
-        return "Trainer{ " + ",id = " + id + ", name = " + name + ", surname = " + surname + ", born = " + born + " }";
+        return "Trainer{ " + "id = " + id + ", name = " + name + ", surname = " + surname + ", born = " + born + " }";
     }
 
     @Override
