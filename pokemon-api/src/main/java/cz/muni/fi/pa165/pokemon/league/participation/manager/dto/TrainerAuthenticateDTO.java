@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dto;
 
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * DTO class for autheticate Trainer.
@@ -9,7 +11,11 @@ import java.util.Objects;
  */
 public class TrainerAuthenticateDTO {
 
+    @NotNull
     private Long trainerId;
+
+    @NotNull
+    @Size(min = TrainerDTOConstants.PASSWORD_MIN_LENGTH, max = TrainerDTOConstants.PASSWORD_MAX_LENGTH)
     private String password;
 
     public Long getUserId() {

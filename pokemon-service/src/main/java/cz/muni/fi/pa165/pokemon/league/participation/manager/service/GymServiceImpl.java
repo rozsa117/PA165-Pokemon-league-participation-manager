@@ -12,12 +12,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import javax.inject.Inject;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 
 /**
  * Implementation of GymService.
  *
  * @author Tamás Rózsa 445653
  */
+@Service
 public class GymServiceImpl implements GymService {
 
     @Inject

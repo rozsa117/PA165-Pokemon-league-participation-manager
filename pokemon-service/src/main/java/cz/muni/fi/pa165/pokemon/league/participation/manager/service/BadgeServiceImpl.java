@@ -9,12 +9,14 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStat
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  * Implementation of Badge Service
  *
  * @author Michal Mokros 456442
  */
+@Service
 public class BadgeServiceImpl implements BadgeService {
 
     @Inject
