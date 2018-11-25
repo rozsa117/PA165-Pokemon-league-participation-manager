@@ -55,5 +55,5 @@ public interface TrainerDAO {
      * 
      * @return number of administrators
      */
-    Long getAdminCount();
+    long getAdminCount();
 }
