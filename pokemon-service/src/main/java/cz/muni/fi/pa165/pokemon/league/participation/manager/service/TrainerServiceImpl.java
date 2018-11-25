@@ -4,8 +4,11 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dao.GymDAO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dao.TrainerDAO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.DAOExceptionWrapper;
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -32,18 +35,19 @@ public class TrainerServiceImpl implements TrainerService {
             return false;
         }
         trainer.setPasswordHash(createHash(newPassword));
+        daoUpdateTrainer(trainer);
         return true;
     }
 
     @Override
     public Trainer createTrainer(Trainer trainer, String password) throws NoAdministratorException {
         //if adding trainer that is not an admin check if there is at least one already
-        if (!trainer.isAdmin() && trainerDao.getAdminCount() == 0) {
+        if (!trainer.isAdmin() && daoGetAdminCount() == 0) {
             throw new NoAdministratorException("There must be at least one admin");
         }
 
         trainer.setPasswordHash(createHash(password));
-        trainerDao.createTrainer(trainer);
+        DAOExceptionWrapper.withoutResult(() -> trainerDao.createTrainer(trainer), "createTrainerFailed");
         return trainer;
     }
 
@@ -51,38 +55,39 @@ public class TrainerServiceImpl implements TrainerService {
     public void setAdmin(Trainer trainer, boolean admin) throws NoAdministratorException {
         // if admin flag is changed from true to false check if at least one admin remains
         if (!admin && trainer.isAdmin()
-                && trainerDao.getAdminCount() == 1) {
+                && daoGetAdminCount() == 1) {
             throw new NoAdministratorException("There must be at least one admin");
         }
         trainer.setAdmin(admin);
+        daoUpdateTrainer(trainer);
     }
 
     @Override
     public void renameTrainer(Trainer trainer, String newName, String newSurname) {
         trainer.setName(newName);
         trainer.setName(newSurname);
-        trainerDao.updateTrainer(trainer);
+        daoUpdateTrainer(trainer);
     }
-    
+
     @Override
     public List<Trainer> getAllTrainers() {
-        return trainerDao.getAllTrainers();
+        return DAOExceptionWrapper.withResult(() -> trainerDao.getAllTrainers(), "getAllTrainers failed");
     }
 
     @Override
     public Trainer getTrainerWithId(Long id) {
-        return trainerDao.findTrainerById(id);
+        return DAOExceptionWrapper.withResult(() -> trainerDao.findTrainerById(id), "findTrainerById failed");
     }
 
     @Override
-    public Boolean authenticate(Trainer trainer, String password) {
+    public boolean authenticate(Trainer trainer, String password) {
         return validatePassword(password, trainer.getPasswordHash());
     }
 
     @Override
-    public Boolean isGymLeader(Trainer trainer) {
-        return (gymDao.getAllGyms().stream()
-                .anyMatch((gym) -> (gym.getGymLeader().equals(trainer))));
+    public boolean isGymLeader(Trainer trainer) {
+        return (DAOExceptionWrapper.withResult(() -> gymDao.getAllGyms(), "getAllGyms failed")
+                .stream().anyMatch((gym) -> (gym.getGymLeader().equals(trainer))));
     }
 
     private static String createHash(String password) {
@@ -103,7 +108,7 @@ public class TrainerServiceImpl implements TrainerService {
         try {
             PBEKeySpec spec = new PBEKeySpec(password, salt, iterations, bytes * 8);
             return SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256").generateSecret(spec).getEncoded();
-        } catch (Exception e) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
     }
@@ -154,4 +159,13 @@ public class TrainerServiceImpl implements TrainerService {
         int paddingLength = (array.length * 2) - hex.length();
         return paddingLength > 0 ? String.format("%0" + paddingLength + "d", 0) + hex : hex;
     }
+
+    private long daoGetAdminCount() {
+        return DAOExceptionWrapper.withResult(() -> trainerDao.getAdminCount(), "getAdminCount failed");
+    }
+
+    private void daoUpdateTrainer(Trainer trainer) {
+        DAOExceptionWrapper.withoutResult(() -> trainerDao.updateTrainer(trainer), "updateTrainer failed");
+    }
+
 }
