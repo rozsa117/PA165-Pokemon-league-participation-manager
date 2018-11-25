@@ -6,6 +6,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import javax.inject.Inject;
@@ -51,14 +52,14 @@ public class GymServiceImpl implements GymService {
     }
 
     @Override
-    public boolean changeGymType(Gym gym, Trainer trainer, PokemonType newType) {
+    public void changeGymType(Gym gym, Trainer trainer, PokemonType newType)
+            throws InsufficientRightsException {
+        if (gym.getGymLeader() != trainer) {
+            throw new InsufficientRightsException("Only Gym Leader may change Gym Type");
+        }
         try {
-            if (gym.getGymLeader().equals(trainer)) {
-                gym.setType(newType);
-                gymDAO.updateGym(gym);
-                return true;
-            }
-            return false;
+            gym.setType(newType);
+            gymDAO.updateGym(gym);
         } catch (Exception ex) {
             throw new DataAccessException("Cannot change gym type for gym " + gym.toString(), ex) {
             };

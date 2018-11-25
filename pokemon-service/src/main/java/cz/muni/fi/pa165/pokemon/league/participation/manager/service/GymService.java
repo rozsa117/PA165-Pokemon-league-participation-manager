@@ -4,6 +4,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
 import java.util.List;
 
 /**
@@ -37,10 +38,11 @@ public interface GymService {
      * @param gym Gym to be updated.
      * @param trainer changin Trainer
      * @param newType New type of the gym.
-     * @return true if successful, false if changed by trainer that is not the
-     * GymLeader of this gym
+     * @throws InsufficientRightsException when other trainer then Gym Leader tries
+     * to change Gym Type
      */
-    public boolean changeGymType(Gym gym, Trainer trainer, PokemonType newType);
+    public void changeGymType(Gym gym, Trainer trainer, PokemonType newType) 
+            throws InsufficientRightsException;
 
     /**
      * Changes the leader of an existing gym.
