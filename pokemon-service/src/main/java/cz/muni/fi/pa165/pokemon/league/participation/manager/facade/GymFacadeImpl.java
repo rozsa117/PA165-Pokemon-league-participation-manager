@@ -8,9 +8,11 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.UpdateGymLocationDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.GymService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.BeanMappingService;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
@@ -37,7 +39,7 @@ public class GymFacadeImpl implements GymFacade {
     private BeanMappingService beanMappingService;
     
     @Override
-    public void createGym(GymCreateDTO gym) {
+    public void createGym(GymCreateDTO gym) throws EntityIsUsedException {
         gymService.createGym(beanMappingService.mapTo(gym, Gym.class));
     }
 
@@ -47,19 +49,19 @@ public class GymFacadeImpl implements GymFacade {
     }
 
     @Override
-    public void changeGymType(ChangeGymTypeDTO gym) {
+    public void changeGymType(ChangeGymTypeDTO gym) throws InsufficientRightsException {
         gymService.changeGymType(beanMappingService.mapTo(gym, Gym.class),
                 trainerService.getTrainerWithId(gym.getTrainerId()), gym.getNewGymType());
     }
 
     @Override
-    public void changeGymLeader(ChangeGymLeaderDTO gym) {
+    public void changeGymLeader(ChangeGymLeaderDTO gym)  throws EntityIsUsedException  {
         gymService.changeGymLeader(beanMappingService.mapTo(gym, Gym.class), 
                 trainerService.getTrainerWithId(gym.getNewGymLeaderID()));
     }
 
     @Override
-    public void removeGym(@NotNull Long gymId) {
+    public void removeGym(@NotNull Long gymId)  throws EntityIsUsedException  {
         gymService.removeGym(beanMappingService.mapTo(gymService.findGymById(gymId), Gym.class));
     }
 
@@ -92,6 +94,5 @@ public class GymFacadeImpl implements GymFacade {
                 gymService.getAllGyms().stream()
                         .filter((gym) -> gym.getGymLeader().getId().equals(trainerId)).findFirst().get(),
                 GymDTO.class);
-        
     }
 }

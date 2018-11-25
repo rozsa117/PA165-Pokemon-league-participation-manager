@@ -1,18 +1,19 @@
+package cz.muni.fi.pa165.pokemon.league.participation.manager.service;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.inject.Inject;
 
 import org.dozer.Mapper;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.BeanMappingService;
+import org.springframework.stereotype.Service;
 
 /**
  * Implementation of interface beam mapping service
  * 
  * @author Tamás Rózsa 445653
  */
+@Service
 public class BeanMappingServiceImpl implements BeanMappingService {
 
     @Inject

@@ -7,9 +7,8 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerRenameDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.TrainerFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.BeanMappingService;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;

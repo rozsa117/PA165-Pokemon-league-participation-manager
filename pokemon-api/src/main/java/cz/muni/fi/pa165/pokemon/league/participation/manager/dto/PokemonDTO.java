@@ -10,7 +10,7 @@ import java.util.Objects;
  */
 public class PokemonDTO {
 
-    private Long pokemonId;
+    private Long id;
 
     private String nickname;
 
@@ -20,14 +20,14 @@ public class PokemonDTO {
 
     private TrainerDTO trainer;
 
-    private LocalDateTime dateTimeOfCreation;
+    private LocalDateTime dateTimeOfCapture;
 
-    public Long getPokemonId() {
-        return pokemonId;
+    public Long getId() {
+        return id;
     }
 
-    public void setPokemonId(Long pokemonId) {
-        this.pokemonId = pokemonId;
+    public void setId(Long pokemonId) {
+        this.id = pokemonId;
     }
 
     public String getNickname() {
@@ -62,23 +62,23 @@ public class PokemonDTO {
         this.trainer = trainer;
     }
 
-    public LocalDateTime getDateTimeOfCreation() {
-        return dateTimeOfCreation;
+    public LocalDateTime getDateTimeOfCapture() {
+        return dateTimeOfCapture;
     }
 
-    public void setDateTimeOfCreation(LocalDateTime dateTimeOfCreation) {
-        this.dateTimeOfCreation = dateTimeOfCreation;
+    public void setDateTimeOfCapture(LocalDateTime dateTimeOfCreation) {
+        this.dateTimeOfCapture = dateTimeOfCreation;
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 71 * hash + Objects.hashCode(this.pokemonId);
+        hash = 71 * hash + Objects.hashCode(this.id);
         hash = 71 * hash + Objects.hashCode(this.nickname);
         hash = 71 * hash + Objects.hashCode(this.species);
         hash = 71 * hash + this.level;
         hash = 71 * hash + Objects.hashCode(this.trainer);
-        hash = 71 * hash + Objects.hashCode(this.dateTimeOfCreation);
+        hash = 71 * hash + Objects.hashCode(this.dateTimeOfCapture);
         return hash;
     }
 
@@ -100,7 +100,7 @@ public class PokemonDTO {
         if (!Objects.equals(this.nickname, other.nickname)) {
             return false;
         }
-        if (!Objects.equals(this.pokemonId, other.pokemonId)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Objects.equals(this.species, other.species)) {
@@ -109,12 +109,12 @@ public class PokemonDTO {
         if (!Objects.equals(this.trainer, other.trainer)) {
             return false;
         }
-        return Objects.equals(this.dateTimeOfCreation, other.dateTimeOfCreation);
+        return Objects.equals(this.dateTimeOfCapture, other.dateTimeOfCapture);
     }
 
     @Override
     public String toString() {
-        return "PokemonDTO{" + "pokemonId=" + pokemonId + ", nickname=" + nickname + ", species=" + species + ", level=" + level + ", trainer=" + trainer + ", dateTimeOfCreation=" + dateTimeOfCreation + '}';
+        return "PokemonDTO{" + "id=" + id + ", nickname=" + nickname + ", species=" + species + ", level=" + level + ", trainer=" + trainer + ", dateTimeOfCapture=" + dateTimeOfCapture + '}';
     }
 
 }

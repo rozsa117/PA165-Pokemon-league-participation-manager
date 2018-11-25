@@ -25,9 +25,7 @@ public class TrainerDTO {
     private LocalDate born;
 
     private boolean admin;
-
-    private boolean gymLeader;
-
+    
     private Set<PokemonDTO> pokemons = new HashSet<>();
 
     public String getPasswordHash() {
@@ -85,15 +83,7 @@ public class TrainerDTO {
     public void setPokemons(Set<PokemonDTO> pokemons) {
         this.pokemons = pokemons;
     }
-
-    public boolean isGymLeader() {
-        return gymLeader;
-    }
-
-    public void setGymLeader(boolean gymLeader) {
-        this.gymLeader = gymLeader;
-    }
-
+    
     public Long getId() {
         return id;
     }
