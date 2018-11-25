@@ -6,6 +6,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dao.PokemonSpeciesD
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChainException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.DataAccessException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
@@ -120,14 +121,14 @@ public class PokemonSpeciesServiceTest {
         when(pokemonSpeciesDAO.getAllEvolutionsOfPokemonSpecies(pokemonSpeciesRaichu)).thenReturn(new ArrayList<>());
         when(pokemonSpeciesDAO.getAllEvolutionsOfPokemonSpecies(exceptionalPokemonSpecies)).thenThrow(PE);
         when(pokemonSpeciesDAO.getAllPokemonSpecies()).thenReturn(Stream.of(pokemonSpeciesPichu, pokemonSpeciesRaichu, pokemonSpeciesPikachu).collect(Collectors.toList()));
+        doThrow(PE).when(pokemonSpeciesDAO).createPokemonSpecies(exceptionalPokemonSpecies);
         doThrow(PE).when(pokemonSpeciesDAO).updatePokemonSpecies(exceptionalPokemonSpecies);
         doThrow(PE).when(pokemonSpeciesDAO).deletePokemonSpecies(exceptionalPokemonSpecies);
     }
 
     @Test
     public void createPokemonSpeciesTest() throws EvolutionChainTooLongException {
-        doThrow(PE).when(pokemonSpeciesDAO).createPokemonSpecies(exceptionalPokemonSpecies);
-        assertThatExceptionOfType(PersistenceException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> pokemonSpeciesService.createPokemonSpecies(exceptionalPokemonSpecies));
         assertThatExceptionOfType(EvolutionChainTooLongException.class)
                 .isThrownBy(() -> pokemonSpeciesService.createPokemonSpecies(pokemonSpeciesPreevolutionTwo));
@@ -138,7 +139,7 @@ public class PokemonSpeciesServiceTest {
 
     @Test
     public void changeTypingTest() {
-        assertThatExceptionOfType(PersistenceException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> pokemonSpeciesService.changeTyping(exceptionalPokemonSpecies, PokemonType.BUG, PokemonType.DARK));
         pokemonSpeciesService.changeTyping(pokemonSpeciesPichu, PokemonType.DARK, PokemonType.DRAGON);
         verify(pokemonSpeciesDAO, atLeastOnce()).updatePokemonSpecies(pokemonSpeciesPichu);
@@ -150,12 +151,12 @@ public class PokemonSpeciesServiceTest {
     public void changePreevolutionTest() throws EvolutionChainTooLongException, CircularEvolutionChainException {
         assertThatExceptionOfType(EvolutionChainTooLongException.class)
                 .isThrownBy(() -> pokemonSpeciesService.changePreevolution(pokemonSpeciesPichu, pokemonSpeciesPreevolutionTwo));
-//        assertThatExceptionOfType(CircularEvolutionChainException.class)
-//                .isThrownBy(() -> pokemonSpeciesService.changePreevolution(pokemonSpeciesPikachu, pokemonSpeciesRaichu));
-        assertThatExceptionOfType(PersistenceException.class)
-                .isThrownBy(() -> pokemonSpeciesService.changePreevolution(exceptionalPokemonSpecies, pokemonSpeciesPikachu));
         pokemonSpeciesPreevolutionOne.setEvolvesFrom(null);
-        pokemonSpeciesService.changePreevolution(pokemonSpeciesRaichu, pokemonSpeciesPreevolutionTwo);
+        assertThatExceptionOfType(CircularEvolutionChainException.class)
+                .isThrownBy(() -> pokemonSpeciesService.changePreevolution(pokemonSpeciesPreevolutionOne, pokemonSpeciesPreevolutionTwo));
+        assertThatExceptionOfType(DataAccessException.class)
+                .isThrownBy(() -> pokemonSpeciesService.changePreevolution(exceptionalPokemonSpecies, pokemonSpeciesPikachu));
+            pokemonSpeciesService.changePreevolution(pokemonSpeciesRaichu, pokemonSpeciesPreevolutionTwo);
         verify(pokemonSpeciesDAO, atLeastOnce()).updatePokemonSpecies(pokemonSpeciesRaichu);
         assertThat(pokemonSpeciesRaichu.getEvolvesFrom()).isEqualToComparingFieldByField(pokemonSpeciesPreevolutionTwo);
     }
@@ -164,7 +165,7 @@ public class PokemonSpeciesServiceTest {
     public void removeTest() throws EntityIsUsedException {
         assertThatExceptionOfType(EntityIsUsedException.class)
                 .isThrownBy(() -> pokemonSpeciesService.remove(pokemonSpeciesPikachu));
-        assertThatExceptionOfType(PersistenceException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> pokemonSpeciesService.remove(exceptionalPokemonSpecies));
         pokemonSpeciesService.remove(pokemonSpeciesPreevolutionTwo);
         verify(pokemonSpeciesDAO, atLeastOnce()).deletePokemonSpecies(pokemonSpeciesPreevolutionTwo);
@@ -172,14 +173,14 @@ public class PokemonSpeciesServiceTest {
 
     @Test
     public void findPokemonSpeciesByIdTest() {
-        assertThatExceptionOfType(PersistenceException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> pokemonSpeciesService.findPokemonSpeciesById(exceptionalPokemonSpecies.getId()));
-        assertThat(pokemonSpeciesService.findPokemonSpeciesById(pokemonSpeciesPikachu.getId())).isEqualToComparingFieldByField(pokemonSpeciesPikachu);
+        assertThat(pokemonSpeciesService.findPokemonSpeciesById(pokemonSpeciesPikachu.getId())).isEqualTo(pokemonSpeciesPikachu);
     }
 
     @Test
     public void getAllPokemonSpeciesTest() {
-        assertThat(pokemonSpeciesService.getAllPokemonSpecies()).usingFieldByFieldElementComparator()
+        assertThat(pokemonSpeciesService.getAllPokemonSpecies())
                 .containsOnly(pokemonSpeciesPichu, pokemonSpeciesPikachu, pokemonSpeciesRaichu);
     }
 }

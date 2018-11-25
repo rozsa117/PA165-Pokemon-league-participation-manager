@@ -8,6 +8,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.DataAccessException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidPokemonEvolutionException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.LevelNotIncreasedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
@@ -30,8 +31,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Tests for Pokemon Service
@@ -160,7 +160,7 @@ public class PokemonServiceTest {
 
         exceptionalPokemon = new PokemonBuilder()
                 .id(102L)
-                .level(1000)
+                .level(10)
                 .nickname("Hacked Pokemon")
                 .trainer(trainerBrock)
                 .pokemonSpecies(pokemonSpeciesPichu)
@@ -176,77 +176,82 @@ public class PokemonServiceTest {
         when(pokemonDAO.getAllPokemonOfSpecies(pokemonSpeciesCharmander)).thenReturn(new ArrayList<>());
         when(pokemonDAO.getAllPokemonOfSpecies(pokemonSpeciesCharmeleon)).thenReturn(new ArrayList<>());
         when(pokemonDAO.getPokemonOfTrainer(trainerBrock)).thenThrow(PE);
+        doThrow(PE).when(pokemonDAO).createPokemon(exceptionalPokemon);
         doThrow(PE).when(pokemonDAO).updatePokemon(exceptionalPokemon);
         doThrow(PE).when(pokemonDAO).deletePokemon(exceptionalPokemon);
     }
 
     @Test
     public void testCreatePokemon() {
-        doThrow(PE).when(pokemonDAO).createPokemon(exceptionalPokemon);
-        assertThatExceptionOfType(PersistenceException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> pokemonService.createPokemon(exceptionalPokemon));
         pokemonService.createPokemon(pokemonPikachu);
-        assertThat(pokemonPikachu.getId()).isNotNull();
+        verify(pokemonDAO, atLeastOnce()).createPokemon(pokemonPikachu);
     }
 
     @Test
     public void testRenamePokemon() {
         pokemonService.renamePokemon(pokemonPikachu, "renamedPokemon");
         assertThat(pokemonPikachu.getNickname()).isEqualTo("renamedPokemon");
-        assertThatExceptionOfType(PersistenceException.class)
+        verify(pokemonDAO, atLeastOnce()).updatePokemon(pokemonPikachu);
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> pokemonService.renamePokemon(exceptionalPokemon, "OP"));
     }
 
     @Test
     public void testIncreasePokemonLevel() throws LevelNotIncreasedException {
-        assertThatExceptionOfType(PersistenceException.class)
-                .isThrownBy(() -> pokemonService.increasePokemonLevel(exceptionalPokemon, 1000));
+        assertThatExceptionOfType(DataAccessException.class)
+                .isThrownBy(() -> pokemonService.increasePokemonLevel(exceptionalPokemon, 99));
         assertThatExceptionOfType(LevelNotIncreasedException.class)
                 .isThrownBy(() -> pokemonService.increasePokemonLevel(pokemonPikachu, 1));
 
         pokemonService.increasePokemonLevel(pokemonPikachu, 80);
         assertThat(pokemonPikachu.getLevel()).isEqualTo(80);
+        verify(pokemonDAO, atLeastOnce()).updatePokemon(pokemonPikachu);
     }
 
     @Test
     public void evolvePokemonTest() throws InvalidPokemonEvolutionException {
-        assertThatExceptionOfType(PersistenceException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> pokemonService.evolvePokemon(exceptionalPokemon, pokemonSpeciesPikachu));
         assertThatExceptionOfType(InvalidPokemonEvolutionException.class)
                 .isThrownBy(() -> pokemonService.evolvePokemon(pokemonPikachu, pokemonSpeciesCharmander));
 
         pokemonService.evolvePokemon(pokemonPikachu, pokemonSpeciesRaichu);
         assertThat(pokemonPikachu.getSpecies()).isEqualToComparingFieldByField(pokemonSpeciesRaichu);
+        verify(pokemonDAO, atLeastOnce()).updatePokemon(pokemonPikachu);
     }
 
     @Test
     public void releasePokemonTest() {
-        assertThatExceptionOfType(PersistenceException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> pokemonService.releasePokemon(exceptionalPokemon));
         pokemonService.releasePokemon(pokemonPikachu);
+        verify(pokemonDAO, atLeastOnce()).deletePokemon(pokemonPikachu);
     }
 
     @Test
     public void findPokemonByIdTest() {
-        assertThatExceptionOfType(PersistenceException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> pokemonService.findPokemonById(exceptionalPokemon.getId()));
         assertThat(pokemonService.findPokemonById(pokemonPikachu.getId()))
-                .isEqualToComparingFieldByField(pokemonPikachu);
+                .isEqualTo(pokemonPikachu);
     }
 
     @Test
     public void giftPokemonTest() {
-        assertThatExceptionOfType(PersistenceException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> pokemonService.giftPokemon(exceptionalPokemon, trainerAsh));
         pokemonService.giftPokemon(pokemonPikachu, trainerBrock);
-        assertThat(pokemonPikachu.getTrainer()).isEqualToComparingFieldByField(trainerBrock);
+        assertThat(pokemonPikachu.getTrainer()).isEqualTo(trainerBrock);
+        verify(pokemonDAO, atLeastOnce()).updatePokemon(pokemonPikachu);
     }
 
     @Test
     public void getPokemonOfTrainerTest() {
-        assertThatExceptionOfType(PersistenceException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> pokemonService.getPokemonOfTrainer(trainerBrock));
         assertThat(pokemonService.getPokemonOfTrainer(trainerAsh))
-                .usingFieldByFieldElementComparator().containsOnly(pokemonPikachu, pokemonCharizard);
+                .containsOnly(pokemonPikachu, pokemonCharizard);
     }
 }
