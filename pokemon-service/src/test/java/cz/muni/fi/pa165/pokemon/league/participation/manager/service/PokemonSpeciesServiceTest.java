@@ -22,8 +22,8 @@ import org.springframework.test.context.ContextConfiguration;
 
 import javax.persistence.PersistenceException;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -116,11 +116,11 @@ public class PokemonSpeciesServiceTest {
         when(pokemonSpeciesDAO.findPokemonSpeciesById(pokemonSpeciesPikachu.getId())).thenReturn(pokemonSpeciesPikachu);
         when(pokemonSpeciesDAO.findPokemonSpeciesById(pokemonSpeciesRaichu.getId())).thenReturn(pokemonSpeciesRaichu);
         when(pokemonSpeciesDAO.findPokemonSpeciesById(exceptionalPokemonSpecies.getId())).thenThrow(PE);
-        when(pokemonSpeciesDAO.getAllEvolutionsOfPokemonSpecies(pokemonSpeciesPichu)).thenReturn(Stream.of(pokemonSpeciesPikachu).collect(Collectors.toList()));
-        when(pokemonSpeciesDAO.getAllEvolutionsOfPokemonSpecies(pokemonSpeciesPikachu)).thenReturn(Stream.of(pokemonSpeciesRaichu).collect(Collectors.toList()));
+        when(pokemonSpeciesDAO.getAllEvolutionsOfPokemonSpecies(pokemonSpeciesPichu)).thenReturn(Collections.singletonList(pokemonSpeciesPikachu));
+        when(pokemonSpeciesDAO.getAllEvolutionsOfPokemonSpecies(pokemonSpeciesPikachu)).thenReturn(Collections.singletonList(pokemonSpeciesRaichu));
         when(pokemonSpeciesDAO.getAllEvolutionsOfPokemonSpecies(pokemonSpeciesRaichu)).thenReturn(new ArrayList<>());
         when(pokemonSpeciesDAO.getAllEvolutionsOfPokemonSpecies(exceptionalPokemonSpecies)).thenThrow(PE);
-        when(pokemonSpeciesDAO.getAllPokemonSpecies()).thenReturn(Stream.of(pokemonSpeciesPichu, pokemonSpeciesRaichu, pokemonSpeciesPikachu).collect(Collectors.toList()));
+        when(pokemonSpeciesDAO.getAllPokemonSpecies()).thenReturn(Arrays.asList(pokemonSpeciesPichu, pokemonSpeciesRaichu, pokemonSpeciesPikachu));
         doThrow(PE).when(pokemonSpeciesDAO).createPokemonSpecies(exceptionalPokemonSpecies);
         doThrow(PE).when(pokemonSpeciesDAO).updatePokemonSpecies(exceptionalPokemonSpecies);
         doThrow(PE).when(pokemonSpeciesDAO).deletePokemonSpecies(exceptionalPokemonSpecies);

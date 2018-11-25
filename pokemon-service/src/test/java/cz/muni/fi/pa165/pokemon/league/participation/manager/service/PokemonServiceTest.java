@@ -26,8 +26,8 @@ import javax.persistence.PersistenceException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -170,9 +170,9 @@ public class PokemonServiceTest {
         when(pokemonDAO.findPokemonById(pokemonPikachu.getId())).thenReturn(pokemonPikachu);
         when(pokemonDAO.findPokemonById(pokemonCharizard.getId())).thenReturn(pokemonCharizard);
         when(pokemonDAO.findPokemonById(exceptionalPokemon.getId())).thenThrow(PE);
-        when(pokemonDAO.getPokemonOfTrainer(trainerAsh)).thenReturn(Stream.of(pokemonPikachu, pokemonCharizard).collect(Collectors.toList()));
-        when(pokemonDAO.getAllPokemonOfSpecies(pokemonSpeciesPikachu)).thenReturn(Stream.of(pokemonPikachu).collect(Collectors.toList()));
-        when(pokemonDAO.getAllPokemonOfSpecies(pokemonSpeciesCharizard)).thenReturn(Stream.of(pokemonCharizard).collect(Collectors.toList()));
+        when(pokemonDAO.getPokemonOfTrainer(trainerAsh)).thenReturn(Arrays.asList(pokemonPikachu, pokemonCharizard));
+        when(pokemonDAO.getAllPokemonOfSpecies(pokemonSpeciesPikachu)).thenReturn(Collections.singletonList(pokemonPikachu));
+        when(pokemonDAO.getAllPokemonOfSpecies(pokemonSpeciesCharizard)).thenReturn(Collections.singletonList(pokemonCharizard));
         when(pokemonDAO.getAllPokemonOfSpecies(pokemonSpeciesCharmander)).thenReturn(new ArrayList<>());
         when(pokemonDAO.getAllPokemonOfSpecies(pokemonSpeciesCharmeleon)).thenReturn(new ArrayList<>());
         when(pokemonDAO.getPokemonOfTrainer(trainerBrock)).thenThrow(PE);
