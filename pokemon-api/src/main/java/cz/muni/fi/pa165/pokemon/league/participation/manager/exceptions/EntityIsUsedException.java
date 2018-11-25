@@ -7,7 +7,8 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions;
 
 /**
  * Exception for situations when an entity can't be removed because it is still
- * in use somewhere.
+ * in use somewhere or it may used only once and an attempt to use it for the
+ * second time occurs.
  * 
  * @author Tibor Zauko 433531
  */
