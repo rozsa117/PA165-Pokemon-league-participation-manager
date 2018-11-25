@@ -31,25 +31,17 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.Serv
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Rule;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.MockitoJUnit;
@@ -209,8 +201,8 @@ public class PokemonFacadeTest {
     
     @Test
     public void testGetPokemonOfTrainer() throws NoSuchEntityException {
-        List<Pokemon> pokemonEntity = Stream.of(pikachuEntity).collect(Collectors.toList());
-        List<PokemonDTO> pokemonDTO = Stream.of(pikachuDTO).collect(Collectors.toList());
+        List<Pokemon> pokemonEntity = Arrays.asList(new Pokemon[] {pikachuEntity});
+        List<PokemonDTO> pokemonDTO = Arrays.asList(new PokemonDTO[] {pikachuDTO});
         when(pokemonService.getPokemonOfTrainer(ashEntity)).thenReturn(pokemonEntity);
         when(beanMappingService.mapTo(pokemonEntity, PokemonDTO.class)).thenReturn(pokemonDTO);
         assertThat(pokemonFacade.getPokemonOfTrainer(ashDTO.getId()))

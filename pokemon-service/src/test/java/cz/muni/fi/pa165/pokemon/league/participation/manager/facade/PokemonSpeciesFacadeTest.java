@@ -13,17 +13,13 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEn
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.PokemonSpeciesService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Rule;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -127,10 +123,8 @@ public class PokemonSpeciesFacadeTest {
     
     @Test
     public void testGetAllPokemonSpecies() {
-        List<PokemonSpecies> pokemonEntities = 
-                Stream.of(pikachuEntity, raichuEntity).collect(Collectors.toList());
-        List<PokemonSpeciesDTO> pokemonDTOs = 
-                Stream.of(pikachuSpecies, raichuSpecies).collect(Collectors.toList());
+        List<PokemonSpecies> pokemonEntities = Arrays.asList(new PokemonSpecies[] {pikachuEntity, raichuEntity});
+        List<PokemonSpeciesDTO> pokemonDTOs = Arrays.asList(new PokemonSpeciesDTO[] {pikachuSpecies, raichuSpecies});
         when(pokemonSpeciesService.getAllPokemonSpecies()).thenReturn(pokemonEntities);
         when(beanMappingService.mapTo(pokemonEntities, PokemonSpeciesDTO.class)).thenReturn(pokemonDTOs);
         assertThat(pokemonSpeciesFacade.getAllPokemonSpecies())
@@ -139,8 +133,8 @@ public class PokemonSpeciesFacadeTest {
     
     @Test
     public void testGetAllEvolutionsOfPokemonSpecies() {
-        List<PokemonSpecies> pikachuEntityList = Stream.of(pikachuEntity).collect(Collectors.toList());
-        List<PokemonSpeciesDTO> pikachuSpeciesList = Stream.of(pikachuSpecies).collect(Collectors.toList());
+        List<PokemonSpecies> pikachuEntityList = Arrays.asList(new PokemonSpecies[] {pikachuEntity});
+        List<PokemonSpeciesDTO> pikachuSpeciesList = Arrays.asList(new PokemonSpeciesDTO[] {pikachuSpecies});
         when(pokemonSpeciesService.findPokemonSpeciesById(2L)).thenReturn(raichuEntity);
         when(pokemonSpeciesService.getAllEvolutionsOfPokemonSpecies(raichuEntity)).thenReturn(pikachuEntityList);
         when(beanMappingService.mapTo(pikachuEntityList, PokemonSpeciesDTO.class)).thenReturn(pikachuSpeciesList);

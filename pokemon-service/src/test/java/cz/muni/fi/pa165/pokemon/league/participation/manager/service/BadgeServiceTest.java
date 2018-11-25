@@ -12,8 +12,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Arrays;
 import javax.inject.Inject;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -131,9 +130,9 @@ public class BadgeServiceTest {
        
         when(badgeDAO.findBadgeById(badgeWon.getId())).thenReturn(badgeWon);
         when(badgeDAO.findBadgeById(badgeRevoked.getId())).thenReturn(badgeRevoked);
-        when(badgeDAO.findBadgesOfTrainer(trainer)).thenReturn(Stream.of(badgeWon, badgeRevoked).collect(Collectors.toList()));
+        when(badgeDAO.findBadgesOfTrainer(trainer)).thenReturn(Arrays.asList(new Badge[] {badgeWon, badgeRevoked}));
         when(badgeDAO.findBadgesOfTrainer(trainerLeader)).thenReturn(new ArrayList<>());
-        when(badgeDAO.findBadgesOfGym(gymWithBadges)).thenReturn(Stream.of(badgeWon, badgeRevoked).collect(Collectors.toList()));
+        when(badgeDAO.findBadgesOfGym(gymWithBadges)).thenReturn(Arrays.asList(new Badge[] {badgeWon, badgeRevoked}));
         when(badgeDAO.findBadgesOfGym(gymWithoutBadges)).thenReturn(new ArrayList<>());
     
         doAnswer(invocation -> {
