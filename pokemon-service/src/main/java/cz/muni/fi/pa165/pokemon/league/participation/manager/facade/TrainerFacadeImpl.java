@@ -7,7 +7,6 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerRenameDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.TrainerFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.BeanMappingService;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ public class TrainerFacadeImpl implements TrainerFacade {
     private BeanMappingService beanMappingService;
 
     @Override
-    public Boolean authenticate(TrainerAuthenticateDTO trainer) {
+    public boolean authenticate(TrainerAuthenticateDTO trainer) {
         return trainerService.authenticate(trainerService.getTrainerWithId(trainer.getUserId()),
                 trainer.getPassword());
     }
@@ -62,15 +61,14 @@ public class TrainerFacadeImpl implements TrainerFacade {
     }
 
     @Override
-    public Boolean isGymLeader(Long trainerId) {
+    public boolean isGymLeader(Long trainerId) {
         return trainerService.isGymLeader(trainerService.getTrainerWithId(trainerId));
     }
 
     @Override
     public void renameTrainer(TrainerRenameDTO trainerRename) {
         Trainer trainerEntity = trainerService.getTrainerWithId(trainerRename.getTrainerId());
-        trainerEntity.setName(trainerRename.getName());
-        trainerEntity.setSurname(trainerRename.getSurname());
+        trainerService.renameTrainer(trainerEntity, trainerRename.getName(), trainerRename.getSurname());
     }
 
     @Override
