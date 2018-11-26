@@ -12,8 +12,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Arrays;
 import javax.inject.Inject;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -29,6 +28,8 @@ import org.mockito.junit.MockitoRule;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import java.util.function.Consumer;
+import javax.persistence.PersistenceException;
+import org.junit.BeforeClass;
 
 
 /**
@@ -46,24 +47,24 @@ public class BadgeServiceTest {
     @InjectMocks
     private BadgeServiceImpl badgeService;
     
-    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule(); 
+    @Rule 
+    public MockitoRule mockitoRule = MockitoJUnit.rule(); 
     
-    private Badge badgeWon;
-    private Badge badgeRevoked;
-    private Badge badge;
+    private static Badge badgeWon;
+    private static Badge badgeRevoked;
+    private static Badge badge;
     
-    private Trainer trainerLeader;
-    private Trainer trainer;
+    private static Trainer trainerLeader;
+    private static Trainer trainer;
     
-    private Gym gymWithBadges;
-    private Gym gymWithoutBadges;
+    private static Gym gymWithBadges;
+    private static Gym gymWithoutBadges;
     
     public BadgeServiceTest() {
     }
     
-    @Before
-    public void setUp() {
-        
+    @BeforeClass
+    public static void setUpClass() { 
         trainerLeader = new TrainerBuilder()
                 .id(100L)
                 .born(LocalDate.of(1997, 8, 13))
@@ -122,11 +123,16 @@ public class BadgeServiceTest {
                 .trainer(trainer)
                 .build();
         
+    }
+    
+    @Before
+    public void setUp() {
+       
         when(badgeDAO.findBadgeById(badgeWon.getId())).thenReturn(badgeWon);
         when(badgeDAO.findBadgeById(badgeRevoked.getId())).thenReturn(badgeRevoked);
-        when(badgeDAO.findBadgesOfTrainer(trainer)).thenReturn(Stream.of(badgeWon, badgeRevoked).collect(Collectors.toList()));
+        when(badgeDAO.findBadgesOfTrainer(trainer)).thenReturn(Arrays.asList(new Badge[] {badgeWon, badgeRevoked}));
         when(badgeDAO.findBadgesOfTrainer(trainerLeader)).thenReturn(new ArrayList<>());
-        when(badgeDAO.findBadgesOfGym(gymWithBadges)).thenReturn(Stream.of(badgeWon, badgeRevoked).collect(Collectors.toList()));
+        when(badgeDAO.findBadgesOfGym(gymWithBadges)).thenReturn(Arrays.asList(new Badge[] {badgeWon, badgeRevoked}));
         when(badgeDAO.findBadgesOfGym(gymWithoutBadges)).thenReturn(new ArrayList<>());
     
         doAnswer(invocation -> {
@@ -221,22 +227,22 @@ public class BadgeServiceTest {
     }
         
     private void testExpectedDataAccessException(Consumer<BadgeService> operation) {
-        DataAccessException dae = new DataAccessException("throw") {};
+        PersistenceException pex = new PersistenceException("throw");
         
-        when(badgeDAO.findBadgeById(badge.getId())).thenThrow(dae);
-        when(badgeDAO.findBadgesOfTrainer(trainerLeader)).thenThrow(dae);
-        when(badgeDAO.findBadgesOfGym(gymWithoutBadges)).thenThrow(dae);
+        when(badgeDAO.findBadgeById(badge.getId())).thenThrow(pex);
+        when(badgeDAO.findBadgesOfTrainer(trainerLeader)).thenThrow(pex);
+        when(badgeDAO.findBadgesOfGym(gymWithoutBadges)).thenThrow(pex);
             
         doAnswer(invocation -> {
-            throw dae;
+            throw pex;
         }).when(badgeDAO).createBadge(badge);
         
         doAnswer(invocation -> {
-            throw dae;
+            throw pex;
         }).when(badgeDAO).updateBadge(badge);
         
         doAnswer(invocation -> {
-            throw dae;
+            throw pex;
         }).when(badgeDAO).deleteBadge(badge);
         
         assertThatExceptionOfType(DataAccessException.class)

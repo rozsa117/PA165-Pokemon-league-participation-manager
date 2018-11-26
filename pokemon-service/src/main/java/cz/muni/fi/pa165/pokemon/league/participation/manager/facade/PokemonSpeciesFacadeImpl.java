@@ -10,7 +10,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIs
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.PokemonSpeciesService;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.BeanMappingService;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
 import java.util.List;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -69,7 +69,7 @@ public class PokemonSpeciesFacadeImpl implements PokemonSpeciesFacade {
     @Override
     public void changeTyping(ChangeTypingDTO newTyping) throws NoSuchEntityException {
         PokemonSpecies species = getNonNullSpecies(newTyping.getSpeciesId());
-            pokemonSpeciesService.changeTyping(species, newTyping.getPrimaryType(), newTyping.getSecondaryType());
+        pokemonSpeciesService.changeTyping(species, newTyping.getPrimaryType(), newTyping.getSecondaryType());
     }
 
     @Override

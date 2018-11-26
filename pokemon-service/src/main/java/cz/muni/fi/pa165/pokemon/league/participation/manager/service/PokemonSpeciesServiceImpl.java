@@ -32,7 +32,7 @@ public class PokemonSpeciesServiceImpl implements PokemonSpeciesService {
 
     @Override
     public void createPokemonSpecies(PokemonSpecies species) throws EvolutionChainTooLongException {
-        if (species.getEvolvesFrom() != null && evolutionChainNotLongerThan3(species.getEvolvesFrom(), species, true)) {
+        if (species.getEvolvesFrom() != null && !evolutionChainNotLongerThan3(species.getEvolvesFrom(), species, true)) {
             LOGGER.debug("{} as preevolution of {} would make too long evolution chain", species.getEvolvesFrom(), species);
             throw new EvolutionChainTooLongException(String.format("Can't create %s as evolution of %s", species, species.getEvolvesFrom()));
         }
@@ -95,13 +95,13 @@ public class PokemonSpeciesServiceImpl implements PokemonSpeciesService {
 
     private void checkEvolutionChainValidity(PokemonSpecies newPreevolution, PokemonSpecies species) 
             throws EvolutionChainTooLongException, CircularEvolutionChainException {
-        if (!evolutionChainNotLongerThan3(newPreevolution, species, false)) {
-            LOGGER.debug("Joining {} as preevolution of {} would create too long evolution chain", newPreevolution, species);
-            throw new EvolutionChainTooLongException(String.format("Can't add %s as preevolution of %s", newPreevolution, species));
-        }
         if (!evolutionChainNotCircular(newPreevolution, species)) {
             LOGGER.debug("Joining {} as preevolution of {} would create circular evolution chain", newPreevolution, species);
             throw new CircularEvolutionChainException(String.format("Can't add %s as preevolution of %s", newPreevolution, species));
+        }
+        if (!evolutionChainNotLongerThan3(newPreevolution, species, false)) {
+            LOGGER.debug("Joining {} as preevolution of {} would create too long evolution chain", newPreevolution, species);
+            throw new EvolutionChainTooLongException(String.format("Can't add %s as preevolution of %s", newPreevolution, species));
         }
     }
 

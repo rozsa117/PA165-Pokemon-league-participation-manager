@@ -12,7 +12,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIs
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.GymService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.BeanMappingService;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
@@ -94,6 +94,5 @@ public class GymFacadeImpl implements GymFacade {
                 gymService.getAllGyms().stream()
                         .filter((gym) -> gym.getGymLeader().getId().equals(trainerId)).findFirst().get(),
                 GymDTO.class);
-        
     }
 }

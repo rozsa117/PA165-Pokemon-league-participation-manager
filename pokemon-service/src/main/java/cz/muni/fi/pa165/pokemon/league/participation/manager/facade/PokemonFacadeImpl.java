@@ -17,18 +17,21 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.LevelNot
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.PokemonService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.PokemonSpeciesService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.BeanMappingService;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
+import org.springframework.stereotype.Service;
 
 /**
  * Implementation of PokemonFacade.
  *
  * @author Tibor Zauko 433531
  */
+@Service
+@Transactional
 public class PokemonFacadeImpl implements PokemonFacade {
 
     @Inject
