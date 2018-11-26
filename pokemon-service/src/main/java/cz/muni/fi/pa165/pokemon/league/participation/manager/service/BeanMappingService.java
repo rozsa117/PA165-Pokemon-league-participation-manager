@@ -1,9 +1,9 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.service;
 
+import com.github.dozermapper.core.Mapper;
 import java.util.Collection;
 import java.util.List;
 
-import org.dozer.Mapper;
 
 /**
  * Interface of mapping service to map objects in facade layer to another type.

@@ -13,7 +13,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BadgeServic
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.GymService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
-import org.dozer.inject.Inject;
+import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
