@@ -41,7 +41,9 @@ import org.junit.Test;
 import org.junit.Rule;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.MockitoJUnit;
@@ -190,6 +192,33 @@ public class PokemonFacadeTest {
         when(pokemonSpeciesService.findPokemonSpeciesById(raichuSpeciesEntity.getId())).thenReturn(raichuSpeciesEntity);
         when(trainerService.getTrainerWithId(brockDTO.getId())).thenReturn(brockEntity);
         when(pokemonService.findPokemonById(raichuEntity.getId())).thenReturn(raichuEntity);
+    }
+    
+    @Test
+    public void testCreatePokemon() throws NoSuchEntityException {
+        Pokemon fromDTO = new PokemonBuilder()
+                .dateTimeOfCapture(null)
+                .id(20L)
+                .level(50)
+                .nickname("Sparky")
+                .pokemonSpecies(null)
+                .trainer(null)
+                .build();
+        PokemonCreateDTO createDTO = new PokemonCreateDTO();
+        createDTO.setCreatingTrainerId(ashEntity.getId());
+        createDTO.setPokemonSpeciesId(raichuSpeciesEntity.getId());
+        createDTO.setLevel(fromDTO.getLevel());
+        createDTO.setNickname(fromDTO.getNickname());
+        final LocalDateTime NOW = LocalDateTime.now();
+        when(beanMappingService.mapTo(createDTO, Pokemon.class)).thenReturn(fromDTO);
+        doAnswer(invocation -> {
+            assertThat(fromDTO.getDateTimeOfCapture()).isNotNull().isAfter(NOW);
+            assertThat(fromDTO.getSpecies()).isNotNull().isEqualTo(raichuSpeciesEntity);
+            assertThat(fromDTO.getTrainer()).isNotNull().isEqualTo(ashEntity);
+            return null;
+        }).when(pokemonService).createPokemon(fromDTO);
+        assertThat(pokemonFacade.createPokemon(createDTO)).isEqualTo(fromDTO.getId());
+        verify(pokemonService, atLeastOnce()).createPokemon(fromDTO);
     }
     
     @Test
