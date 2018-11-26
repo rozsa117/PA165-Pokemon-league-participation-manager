@@ -6,6 +6,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerChangePa
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerRenameDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.builders.TrainerDTOBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
@@ -120,21 +121,23 @@ public class TrainerFacadeTest {
                 .passwordHash(null)
                 .build();
 
-        adminDTO = new TrainerDTO();
-        adminDTO.setAdmin(admin.isAdmin());
-        adminDTO.setBorn(admin.getBorn());
-        adminDTO.setId(ADMIN_ID);
-        adminDTO.setName(admin.getName());
-        adminDTO.setSurname(admin.getSurname());
-        adminDTO.setUserName(admin.getUserName());
+        adminDTO = new TrainerDTOBuilder()
+                .admin(admin.isAdmin())
+                .born(admin.getBorn())
+                .id(ADMIN_ID)
+                .name(admin.getName())
+                .surname(admin.getSurname())
+                .userName(admin.getUserName())
+                .build();
 
-        trainerDTO = new TrainerDTO();
-        trainerDTO.setAdmin(trainer.isAdmin());
-        trainerDTO.setBorn(trainer.getBorn());
-        trainerDTO.setId(TRAINER_ID);
-        trainerDTO.setName(trainer.getName());
-        trainerDTO.setSurname(trainer.getSurname());
-        trainerDTO.setUserName(trainer.getUserName());
+        trainerDTO = new TrainerDTOBuilder()
+                .admin(trainer.isAdmin())
+                .born(trainer.getBorn())
+                .id(TRAINER_ID)
+                .name(trainer.getName())
+                .surname(trainer.getSurname())
+                .userName(trainer.getUserName())
+                .build();
 
         getAllTrainersList = Arrays.asList(admin, trainer);
 

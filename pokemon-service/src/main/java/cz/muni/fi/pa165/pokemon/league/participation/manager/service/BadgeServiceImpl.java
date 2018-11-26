@@ -5,10 +5,11 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidChallengeStatusChangeException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.DAOExceptionWrapper;
+import java.time.LocalDate;
 
 import javax.inject.Inject;
-import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,8 @@ public class BadgeServiceImpl implements BadgeService {
 
     @Override
     public void createBadge(Badge badge) {
+        badge.setStatus(ChallengeStatus.WAITING_TO_ACCEPT);
+        badge.setDate(LocalDate.now());
         DAOExceptionWrapper.withoutResult((
         ) -> badgeDAO.createBadge(badge), "Creation of the following badge failed: " + badge.toString());
     }
@@ -36,11 +39,18 @@ public class BadgeServiceImpl implements BadgeService {
     }
 
     @Override
-    public void changeBadgeStatus(Badge badge, ChallengeStatus newStatus) {
+    public void changeBadgeStatus(Badge badge, ChallengeStatus newStatus) throws InvalidChallengeStatusChangeException {
+        if (badge.getStatus() == newStatus)
+            return;
+        if (!isValidStatusChange(badge.getStatus(), newStatus)) {
+            throw new InvalidChallengeStatusChangeException("Tried to change status from " + badge.getStatus() + " to "
+                    + newStatus);
+        }
         badge.setStatus(newStatus);
         DAOExceptionWrapper.withoutResult(
                 () -> badgeDAO.updateBadge(badge), "Could not update the following badge: " + badge.toString());
     }
+        
 
     @Override
     public Badge findBadgeById(Long id) {
@@ -58,5 +68,20 @@ public class BadgeServiceImpl implements BadgeService {
     public List<Badge> findBadgesOfGym(Gym gym) {
         return DAOExceptionWrapper.withResult(
                 () -> badgeDAO.findBadgesOfGym(gym), "Could not find the badges of " + gym.toString());
+    }
+        
+    private boolean isValidStatusChange(ChallengeStatus oldStatus, ChallengeStatus newStatus) {
+        switch(oldStatus) {
+            case WON:
+                return ChallengeStatus.REVOKED.equals(newStatus);
+            case LOST:
+                return ChallengeStatus.WAITING_TO_ACCEPT.equals(newStatus);
+            case WAITING_TO_ACCEPT:
+                return ChallengeStatus.WON.equals(newStatus) || ChallengeStatus.LOST.equals(newStatus);
+            case REVOKED:
+                return ChallengeStatus.WON.equals(newStatus);
+            default:
+                throw new IllegalArgumentException("Old status is not valid.");
+        }
     }
 }

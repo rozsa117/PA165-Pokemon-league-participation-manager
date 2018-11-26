@@ -3,6 +3,8 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.facade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.GymBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.TrainerBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.*;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.builders.GymDTOBuilder;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.builders.TrainerDTOBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
@@ -142,33 +144,37 @@ public class GymFacadeTest {
         changeGymLeaderDTO.setGymID(gym.getId());
         changeGymLeaderDTO.setNewGymLeaderID(newGymLeader.getId());
 
-        gymLeaderDTO = new TrainerDTO();
-        gymLeaderDTO.setId(gymLeader.getId());
-        gymLeaderDTO.setAdmin(gymLeader.isAdmin());
-        gymLeaderDTO.setBorn(gymLeader.getBorn());
-        gymLeaderDTO.setName(gymLeader.getName());
-        gymLeaderDTO.setSurname(gymLeader.getSurname());
-        gymLeaderDTO.setUserName(gymLeader.getUserName());
+        gymLeaderDTO = new TrainerDTOBuilder()
+                .id(gymLeader.getId())
+                .admin(gymLeader.isAdmin())
+                .born(gymLeader.getBorn())
+                .name(gymLeader.getName())
+                .surname(gymLeader.getSurname())
+                .userName(gymLeader.getUserName())
+                .build();
+        
+        newGymLeaderDTO = new TrainerDTOBuilder()
+                .id(newGymLeader.getId())
+                .userName(newGymLeader.getUserName())
+                .surname(newGymLeader.getSurname())
+                .name(newGymLeader.getName())
+                .born(newGymLeader.getBorn())
+                .admin(newGymLeader.isAdmin())
+                .build();
 
-        newGymLeaderDTO = new TrainerDTO();
-        newGymLeaderDTO.setId(newGymLeader.getId());
-        newGymLeaderDTO.setUserName(newGymLeader.getUserName());
-        newGymLeaderDTO.setSurname(newGymLeader.getSurname());
-        newGymLeaderDTO.setName(newGymLeader.getName());
-        newGymLeaderDTO.setBorn(newGymLeader.getBorn());
-        newGymLeaderDTO.setAdmin(newGymLeader.isAdmin());
+        gymDTO = new GymDTOBuilder()
+                .id(gym.getId())
+                .gymLeader(gymLeaderDTO)
+                .location(gym.getLocation())
+                .type(gym.getType())
+                .build();
 
-        gymDTO = new GymDTO();
-        gymDTO.setId(gym.getId());
-        gymDTO.setGymLeader(gymLeaderDTO);
-        gymDTO.setLocation(gym.getLocation());
-        gymDTO.setType(gym.getType());
-
-        newGymDTO = new GymDTO();
-        newGymDTO.setId(newGym.getId());
-        newGymDTO.setGymLeader(newGymLeaderDTO);
-        newGymDTO.setType(newGymDTO.getType());
-        newGymDTO.setLocation(newGymDTO.getLocation());
+        newGymDTO = new GymDTOBuilder()
+                .id(newGym.getId())
+                .gymLeader(newGymLeaderDTO)
+                .type(newGym.getType())
+                .location(newGym.getLocation())
+                .build();
 
         getAllGymsList = Arrays.asList(gym, newGym);
 

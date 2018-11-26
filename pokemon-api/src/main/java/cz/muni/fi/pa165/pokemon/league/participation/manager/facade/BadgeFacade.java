@@ -6,6 +6,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeStatusChan
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidChallengeStatusChangeException;
 
 /**
  * Interface for Badge Facade
@@ -45,28 +46,33 @@ public interface BadgeFacade {
      * Revokes the badge from trainer, changes status of badge to @ChallengeStatus.REVOKED
      * @param badge to be revoked
      * @throws InsufficientRightsException in case requesting trainer is not the leader of the gym that gave the badge
+     * @throws InvalidChallengeStatusChangeException in case invalid change of challenge status is required.
      */
-    void revokeBadge(BadgeStatusChangeDTO badge) throws InsufficientRightsException;
+    void revokeBadge(BadgeStatusChangeDTO badge) throws InsufficientRightsException, InvalidChallengeStatusChangeException;
 
     /**
      * A trainer losses a badge
      * @param badge to be lost
-     * @throws InsufficientRightsException in case requesting trainer is not the leader of the gym that gave the badge
+     * @throws InsufficientRightsException in case requesting trainer is not the leader of the gym that gave the 
+     * @throws InvalidChallengeStatusChangeException in case invalid change of challenge status is required.
      */
-    void looseBadge(BadgeStatusChangeDTO badge) throws InsufficientRightsException;
+    void looseBadge(BadgeStatusChangeDTO badge) throws InsufficientRightsException, InvalidChallengeStatusChangeException;
 
     /**
      * A trainer wins a badge
      * @param badge to be won
      * @throws InsufficientRightsException in case requesting trainer is not the leader of the gym that gave the badge
+     * @throws InvalidChallengeStatusChangeException in case invalid change of challenge status is required.
      */
-    void wonBadge(BadgeStatusChangeDTO badge) throws InsufficientRightsException;
+    void wonBadge(BadgeStatusChangeDTO badge) throws InsufficientRightsException, InvalidChallengeStatusChangeException;
 
     /**
      * Reopens a closed challenge for trainer with given id
      * @param trainerId id of trainer to which challenge should be reopen to
      * @param badge of challenge to be reopened
+     * @throws InsufficientRightsException in case requesting trainer is not the trainer who received the badge.
+     * @throws InvalidChallengeStatusChangeException in case invalid change of challenge status is required.
      */
-    void reopenChallenge(Long trainerId, BadgeStatusChangeDTO badge) throws InsufficientRightsException;
+    void reopenChallenge(Long trainerId, BadgeStatusChangeDTO badge) throws InsufficientRightsException, InvalidChallengeStatusChangeException;
 
 }

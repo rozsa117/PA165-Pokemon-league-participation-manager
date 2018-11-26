@@ -9,8 +9,10 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidChallengeStatusChangeException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.inject.Inject;
@@ -28,8 +30,12 @@ import org.mockito.junit.MockitoRule;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
 import org.junit.BeforeClass;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
 
 
 /**
@@ -106,28 +112,29 @@ public class BadgeServiceTest {
                 .gym(gymWithBadges)
                 .trainer(trainer)
                 .build();
-        
-        badgeRevoked = new BadgeBuilder()
-                .id(2L)
-                .status(ChallengeStatus.REVOKED)
-                .date(LocalDate.now().minusDays(1))
-                .gym(gymWithBadges)
-                .trainer(trainer)
-                .build();
-        
-        badge = new BadgeBuilder()
-                .id(3L)
-                .date(LocalDate.now())
-                .gym(gymWithBadges)
-                .status(ChallengeStatus.LOST)
-                .trainer(trainer)
-                .build();
+
         
     }
     
     @Before
     public void setUp() {
-       
+               
+        badgeRevoked = new BadgeBuilder()
+                .id(2L)
+                .date(LocalDate.of(2018, Month.MARCH, 1))
+                .gym(gymWithBadges)
+                .status(ChallengeStatus.REVOKED)
+                .trainer(trainer)
+                .build();
+        
+        badge = new BadgeBuilder()
+                .id(3L)
+                .date(LocalDate.of(2018, Month.MARCH, 1))
+                .gym(gymWithBadges)
+                .status(ChallengeStatus.LOST)
+                .trainer(trainer)
+                .build();
+        
         when(badgeDAO.findBadgeById(badgeWon.getId())).thenReturn(badgeWon);
         when(badgeDAO.findBadgeById(badgeRevoked.getId())).thenReturn(badgeRevoked);
         when(badgeDAO.findBadgesOfTrainer(trainer)).thenReturn(Arrays.asList(new Badge[] {badgeWon, badgeRevoked}));
@@ -179,9 +186,9 @@ public class BadgeServiceTest {
     }
     
     @Test
-    public void testChangeBadgeStatus() {
-        badgeService.changeBadgeStatus(badgeWon, ChallengeStatus.LOST);
-        assertThat(badgeWon.getStatus()).isEqualTo(ChallengeStatus.LOST);
+    public void testChangeBadgeStatus() throws InvalidChallengeStatusChangeException {
+        badgeService.changeBadgeStatus(badgeWon, ChallengeStatus.REVOKED);
+        assertThat(badgeWon.getStatus()).isEqualTo(ChallengeStatus.REVOKED);
     }
     
     @Test
@@ -203,7 +210,14 @@ public class BadgeServiceTest {
     
     @Test
     public void testUpdateadgeWithExceptionThrown() {
-        testExpectedDataAccessException((badgeService) -> badgeService.changeBadgeStatus(badge, ChallengeStatus.WAITING_TO_ACCEPT));
+        testExpectedDataAccessException((badgeService) -> {
+            try {
+                badge.setStatus(ChallengeStatus.LOST);
+                badgeService.changeBadgeStatus(badge, ChallengeStatus.WAITING_TO_ACCEPT);
+            } catch (InvalidChallengeStatusChangeException ex) {
+                throw new RuntimeException("This exception should not happen because of using mock.");
+            }
+        });
     }
     
     @Test
@@ -247,5 +261,94 @@ public class BadgeServiceTest {
         
         assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> operation.accept(badgeService));
+    }
+    
+    @Test
+    public void testChangeStatusFromWONToLOST() {
+        badge.setStatus(ChallengeStatus.WON);
+        assertThatExceptionOfType(InvalidChallengeStatusChangeException.class)
+                .isThrownBy(() -> badgeService.changeBadgeStatus(badge, ChallengeStatus.LOST));
+    }
+    
+    @Test
+    public void testChangeStatusFromWONToWAITING_TO_ACCEPT() {
+        badge.setStatus(ChallengeStatus.WON);
+        assertThatExceptionOfType(InvalidChallengeStatusChangeException.class)
+                .isThrownBy(() -> badgeService.changeBadgeStatus(badge, ChallengeStatus.WAITING_TO_ACCEPT));
+    }
+    
+    @Test
+    public void testChangeStatusFromWONToREVOKED() throws InvalidChallengeStatusChangeException {
+        badge.setStatus(ChallengeStatus.WON);
+        badgeService.changeBadgeStatus(badge, ChallengeStatus.REVOKED);
+        badgeRevoked.setStatus(ChallengeStatus.REVOKED);
+        verify(badgeDAO, atLeastOnce()).updateBadge(badgeRevoked);
+    }
+    
+    @Test
+    public void testChangeStatusFromREVOKEDToWON() throws InvalidChallengeStatusChangeException {
+        badge.setStatus(ChallengeStatus.REVOKED);
+        badgeService.changeBadgeStatus(badge, ChallengeStatus.WON);
+        badgeRevoked.setStatus(ChallengeStatus.WON);
+        verify(badgeDAO, atLeastOnce()).updateBadge(badgeRevoked);
+    }
+    
+    @Test
+    public void testChangeStatusFromREVOKEDToLOST() {
+        badge.setStatus(ChallengeStatus.REVOKED);
+        assertThatExceptionOfType(InvalidChallengeStatusChangeException.class)
+                .isThrownBy(() -> badgeService.changeBadgeStatus(badge, ChallengeStatus.LOST));
+    }
+    
+    @Test
+    public void testChangeStatusFromREVOKEDToWAITING_TO_ACCEPT() {
+        badge.setStatus(ChallengeStatus.REVOKED);
+        assertThatExceptionOfType(InvalidChallengeStatusChangeException.class)
+                .isThrownBy(() -> badgeService.changeBadgeStatus(badge, ChallengeStatus.WAITING_TO_ACCEPT));
+    }
+        
+    @Test
+    public void testChangeStatusFromLOSTToWON() {
+        badge.setStatus(ChallengeStatus.LOST);
+        assertThatExceptionOfType(InvalidChallengeStatusChangeException.class)
+                .isThrownBy(() -> badgeService.changeBadgeStatus(badge, ChallengeStatus.WON));
+    }
+    
+    @Test
+    public void testChangeStatusFromLOSTToREVOKED() {
+        badge.setStatus(ChallengeStatus.LOST);
+        assertThatExceptionOfType(InvalidChallengeStatusChangeException.class)
+                .isThrownBy(() -> badgeService.changeBadgeStatus(badge, ChallengeStatus.REVOKED));
+    }
+    
+    @Test
+    public void testChangeStatusFromLOSTToWAITING_TO_ACCEPT() throws InvalidChallengeStatusChangeException {
+        badge.setStatus(ChallengeStatus.LOST);
+        badgeService.changeBadgeStatus(badge, ChallengeStatus.WAITING_TO_ACCEPT);
+        badgeRevoked.setStatus(ChallengeStatus.WAITING_TO_ACCEPT);
+        verify(badgeDAO, atLeastOnce()).updateBadge(badgeRevoked);
+    }
+    
+    @Test
+    public void testChangeStatusFromWAITING_TOACCEPTToWON() throws InvalidChallengeStatusChangeException {
+        badge.setStatus(ChallengeStatus.WAITING_TO_ACCEPT);
+        badgeService.changeBadgeStatus(badge, ChallengeStatus.WON);
+        badgeRevoked.setStatus(ChallengeStatus.WON);
+        verify(badgeDAO, atLeastOnce()).updateBadge(badgeRevoked);
+    }
+    
+    @Test
+    public void testChangeStatusFromWAITING_TOACCEPTToLOST() throws InvalidChallengeStatusChangeException {
+        badge.setStatus(ChallengeStatus.WAITING_TO_ACCEPT);
+        badgeService.changeBadgeStatus(badge, ChallengeStatus.LOST);
+        badgeRevoked.setStatus(ChallengeStatus.LOST);
+        verify(badgeDAO, atLeastOnce()).updateBadge(badgeRevoked);
+    }
+    
+    @Test
+    public void testChangeStatusFromWAITING_TOACCEPTToREVOKED() {
+        badge.setStatus(ChallengeStatus.WAITING_TO_ACCEPT);
+        assertThatExceptionOfType(InvalidChallengeStatusChangeException.class)
+                .isThrownBy(() -> badgeService.changeBadgeStatus(badge, ChallengeStatus.REVOKED));
     }
 }

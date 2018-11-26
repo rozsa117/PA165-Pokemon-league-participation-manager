@@ -9,6 +9,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidChallengeStatusChangeException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BadgeService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.GymService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
@@ -28,9 +29,6 @@ public class BadgeFacadeImpl implements BadgeFacade {
 
     @Inject
     private BadgeService badgeService;
-
-    @Inject
-    private GymService gymService;
 
     @Inject
     private TrainerService trainerService;
@@ -59,23 +57,26 @@ public class BadgeFacadeImpl implements BadgeFacade {
     }
 
     @Override
-    public void revokeBadge(BadgeStatusChangeDTO badge) throws InsufficientRightsException  {
+    public void revokeBadge(BadgeStatusChangeDTO badge)
+            throws InsufficientRightsException, InvalidChallengeStatusChangeException {
         updateBadgeStatus(badge.getTrainerId(), badge, ChallengeStatus.REVOKED);
     }
 
     @Override
-    public void looseBadge(BadgeStatusChangeDTO badge) throws InsufficientRightsException  {
+    public void looseBadge(BadgeStatusChangeDTO badge)
+            throws InsufficientRightsException, InvalidChallengeStatusChangeException {
         updateBadgeStatus(badge.getTrainerId(), badge, ChallengeStatus.LOST);
     }
 
     @Override
-    public void wonBadge(BadgeStatusChangeDTO badge) throws InsufficientRightsException {
+    public void wonBadge(BadgeStatusChangeDTO badge)
+            throws InsufficientRightsException, InvalidChallengeStatusChangeException {
         updateBadgeStatus(badge.getTrainerId(), badge, ChallengeStatus.WON);
     }
     
     @Override
     public void reopenChallenge(Long trainerId, BadgeStatusChangeDTO badge)
-            throws InsufficientRightsException {
+            throws InsufficientRightsException, InvalidChallengeStatusChangeException{
         if (!trainerId.equals(badge.getTrainerId()) ||
                 !badgeService.findBadgeById(badge.getBadgeId()).getStatus().equals(ChallengeStatus.LOST)) {
             throw new InsufficientRightsException("Trainer " + trainerId + " tried to reopen badge not belonging to him"
@@ -86,7 +87,7 @@ public class BadgeFacadeImpl implements BadgeFacade {
     }
 
     private void updateBadgeStatus(Long trainerId, BadgeStatusChangeDTO badge, ChallengeStatus status)
-            throws InsufficientRightsException {
+            throws InsufficientRightsException, InvalidChallengeStatusChangeException {
         Gym gym = badgeService.findBadgeById(badge.getBadgeId()).getGym();
 
         if (!gym.getGymLeader().equals(trainerService.getTrainerWithId(trainerId))) {
