@@ -16,3 +16,15 @@ Java version 8 is recommended for running this project. Java version 11 should a
 ```
 mvn clean install
 ```
+
+On some platforms, surefire plugin may fail with the following error:
+
+```
+Error: Could not find or load main class org.apache.maven.surefire.booter.ForkedBooter
+```
+
+In that case, try adding **-Dsurefire.useSystemClassLoader=false** to the command invocation:
+
+```
+mvn clean install -Dsurefire.useSystemClassLoader=false
+```
