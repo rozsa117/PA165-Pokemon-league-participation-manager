@@ -117,7 +117,9 @@ public class PokemonSpeciesFacadeTest {
         rockSpecies.setSpeciesName("Rock");
         rockSpecies.setPrimaryType(PokemonType.ROCK);
         rockSpecies.setSecondaryType(PokemonType.GROUND);
-        pokemonSpeciesFacade.createPokemonSpecies(rockSpecies);
+        when(beanMappingService.mapTo(rockSpecies, PokemonSpecies.class)).thenReturn(rockEntity);
+        assertThat(pokemonSpeciesFacade.createPokemonSpecies(rockSpecies))
+                .isEqualTo(rockEntity.getId());
         verify(pokemonSpeciesService, atLeastOnce()).createPokemonSpecies(rockEntity);
     }
     

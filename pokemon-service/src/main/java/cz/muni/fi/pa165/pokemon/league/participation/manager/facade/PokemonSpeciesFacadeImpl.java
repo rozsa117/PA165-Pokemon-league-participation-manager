@@ -34,10 +34,7 @@ public class PokemonSpeciesFacadeImpl implements PokemonSpeciesFacade {
 
     @Override
     public Long createPokemonSpecies(PokemonSpeciesCreateDTO species) throws EvolutionChainTooLongException {
-        PokemonSpecies speciesEntity = new PokemonSpecies();
-        speciesEntity.setSpeciesName(species.getSpeciesName());
-        speciesEntity.setPrimaryType(species.getPrimaryType());
-        speciesEntity.setSecondaryType(species.getSecondaryType());
+        PokemonSpecies speciesEntity = beanMappingService.mapTo(species, PokemonSpecies.class);
         speciesEntity.setEvolvesFrom(
                 species.getPreevolutionId() == null
                 ? null

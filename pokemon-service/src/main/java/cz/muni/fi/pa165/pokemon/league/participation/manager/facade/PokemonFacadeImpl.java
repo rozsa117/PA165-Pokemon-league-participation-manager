@@ -62,11 +62,9 @@ public class PokemonFacadeImpl implements PokemonFacade {
                     + " doesn't exist"
             );   
         }
-        Pokemon pokemonEntity = new Pokemon();
+        Pokemon pokemonEntity = beanMappingService.mapTo(pokemon, Pokemon.class);
         pokemonEntity.setSpecies(species);
         pokemonEntity.setDateTimeOfCapture(LocalDateTime.now());
-        pokemonEntity.setLevel(pokemon.getLevel());
-        pokemonEntity.setNickname(pokemon.getNickname());
         pokemonEntity.setTrainer(trainer);
         pokemonService.createPokemon(pokemonEntity);
         return pokemonEntity.getId();
