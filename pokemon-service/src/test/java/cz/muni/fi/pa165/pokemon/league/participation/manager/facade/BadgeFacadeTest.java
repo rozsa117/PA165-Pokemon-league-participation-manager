@@ -35,6 +35,7 @@ import org.junit.Rule;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.MockitoJUnit;
@@ -137,7 +138,6 @@ public class BadgeFacadeTest {
                 .gym(gymDTO)
                 .status(ChallengeStatus.LOST)
                 .trainer(ashDTO)
-                .id(1000L)
                 .build();
         
         badgeEntity = new BadgeBuilder()
@@ -145,7 +145,6 @@ public class BadgeFacadeTest {
                 .gym(gymEntity)
                 .status(ChallengeStatus.LOST)
                 .trainer(ashEntity)
-                .id(1000L)
                 .build();
         
         revoke.setBadgeId(badgeDTO.getId());
@@ -163,11 +162,23 @@ public class BadgeFacadeTest {
     @Test
     public void testCreateBadge() throws NoSuchEntityException, EntityIsUsedException {
         BadgeCreateDTO create = new BadgeCreateDTO();
+        Badge newBadge = new Badge(); /* All nulls. */
+        final LocalDate NOW = LocalDate.now();
         create.setGymId(gymDTO.getId());
         create.setTrainerId(ashDTO.getId());
-        when(beanMappingService.mapTo(create, Badge.class)).thenReturn(badgeEntity);
-        assertThat(badgeFacade.createBadge(create)).isEqualTo(badgeEntity.getId());
-        verify(badgeService, atLeastOnce()).createBadge(badgeEntity);
+        when(beanMappingService.mapTo(create, Badge.class)).thenReturn(newBadge);
+        badgeEntity.setId(null);
+        doAnswer(invocation -> {
+            assertThat(newBadge.getStatus()).isEqualTo(ChallengeStatus.WAITING_TO_ACCEPT);
+            assertThat(newBadge.getId()).isNull();
+            assertThat(newBadge.getDate()).isNotNull().isAfterOrEqualTo(NOW);
+            assertThat(newBadge.getGym()).isNotNull().isEqualTo(gymEntity);
+            assertThat(newBadge.getTrainer()).isNotNull().isEqualTo(ashEntity);
+            newBadge.setId(1000L);
+            return null;
+        }).when(badgeService).createBadge(newBadge);
+        assertThat(badgeFacade.createBadge(create)).isEqualTo(1000L);
+        verify(badgeService, atLeastOnce()).createBadge(newBadge);
     }
     
     @Test

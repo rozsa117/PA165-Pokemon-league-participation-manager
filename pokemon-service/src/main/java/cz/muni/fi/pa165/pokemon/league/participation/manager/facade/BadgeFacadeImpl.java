@@ -59,6 +59,7 @@ public class BadgeFacadeImpl implements BadgeFacade {
         newBadge.setDate(LocalDate.now());
         newBadge.setStatus(ChallengeStatus.WAITING_TO_ACCEPT);
         newBadge.setTrainer(challenger);
+        newBadge.setGym(gym);
         badgeService.createBadge(newBadge);
         return newBadge.getId();
     }
