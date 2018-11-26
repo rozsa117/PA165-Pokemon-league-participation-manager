@@ -26,7 +26,7 @@ public interface GymFacade {
      * @param gym DTO of gym to create.
      * @throws EntityIsUsedException in case the gym already exists.
      */
-    public void createGym(@Valid GymCreateDTO gym) throws EntityIsUsedException;
+    public Long createGym(@Valid GymCreateDTO gym) throws EntityIsUsedException;
     
     /**
      * Updates the location of an existing gym.

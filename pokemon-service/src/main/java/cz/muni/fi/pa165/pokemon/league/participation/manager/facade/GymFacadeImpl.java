@@ -39,8 +39,10 @@ public class GymFacadeImpl implements GymFacade {
     private BeanMappingService beanMappingService;
     
     @Override
-    public void createGym(GymCreateDTO gym) throws EntityIsUsedException {
-        gymService.createGym(beanMappingService.mapTo(gym, Gym.class));
+    public Long createGym(GymCreateDTO gym) throws EntityIsUsedException {
+        Gym gymEntity = beanMappingService.mapTo(gym, Gym.class);
+        gymService.createGym(gymEntity);
+        return gymEntity.getId();
     }
 
     @Override
