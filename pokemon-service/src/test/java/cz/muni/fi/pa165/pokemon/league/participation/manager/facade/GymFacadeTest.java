@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.pokemon.league.participation.manager.service.facade;
+package cz.muni.fi.pa165.pokemon.league.participation.manager.facade;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.GymBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.TrainerBuilder;
@@ -8,11 +8,10 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.GymFacadeImpl;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.GymService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.BeanMappingService;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -147,17 +146,13 @@ public class GymFacadeTest {
         gymLeaderDTO.setId(gymLeader.getId());
         gymLeaderDTO.setAdmin(gymLeader.isAdmin());
         gymLeaderDTO.setBorn(gymLeader.getBorn());
-        gymLeaderDTO.setGymLeader(true);
         gymLeaderDTO.setName(gymLeader.getName());
         gymLeaderDTO.setSurname(gymLeader.getSurname());
-        gymLeaderDTO.setPasswordHash(gymLeader.getPasswordHash());
         gymLeaderDTO.setUserName(gymLeader.getUserName());
 
         newGymLeaderDTO = new TrainerDTO();
         newGymLeaderDTO.setId(newGymLeader.getId());
         newGymLeaderDTO.setUserName(newGymLeader.getUserName());
-        newGymLeaderDTO.setGymLeader(true);
-        newGymLeaderDTO.setPasswordHash(newGymLeader.getPasswordHash());
         newGymLeaderDTO.setSurname(newGymLeader.getSurname());
         newGymLeaderDTO.setName(newGymLeader.getName());
         newGymLeaderDTO.setBorn(newGymLeader.getBorn());

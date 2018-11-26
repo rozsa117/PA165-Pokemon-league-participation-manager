@@ -59,34 +59,40 @@ public class BadgeFacadeImpl implements BadgeFacade {
     }
 
     @Override
-    public void revokeBadge(BadgeStatusChangeDTO badge) {
-        badgeService.changeBadgeStatus(badgeService.findBadgeById(badge.getBadgeId()), ChallengeStatus.REVOKED);
+    public void revokeBadge(BadgeStatusChangeDTO badge) throws InsufficientRightsException  {
+        updateBadgeStatus(badge.getTrainerId(), badge, ChallengeStatus.REVOKED);
     }
 
     @Override
-    public void issueBadgeToTrainer(Long trainerId, BadgeDTO badge) {
-        badge.setTrainer(beanMappingService.mapTo(trainerService.getTrainerWithId(trainerId), TrainerDTO.class));
+    public void looseBadge(BadgeStatusChangeDTO badge) throws InsufficientRightsException  {
+        updateBadgeStatus(badge.getTrainerId(), badge, ChallengeStatus.LOST);
     }
 
+    @Override
+    public void wonBadge(BadgeStatusChangeDTO badge) throws InsufficientRightsException {
+        updateBadgeStatus(badge.getTrainerId(), badge, ChallengeStatus.WON);
+    }
+    
     @Override
     public void reopenChallenge(Long trainerId, BadgeStatusChangeDTO badge)
             throws InsufficientRightsException {
-        if (trainerId.equals(badge.getTrainerId()) ||
+        if (!trainerId.equals(badge.getTrainerId()) ||
                 !badgeService.findBadgeById(badge.getBadgeId()).getStatus().equals(ChallengeStatus.LOST)) {
-            throw new InsufficientRightsException("Trainer " + trainerId + " tried to reopen badge not belonging to him");
+            throw new InsufficientRightsException("Trainer " + trainerId + " tried to reopen badge not belonging to him"
+                    + "or the status is not lost");
         }
 
         badgeService.changeBadgeStatus(badgeService.findBadgeById(badge.getBadgeId()), ChallengeStatus.WAITING_TO_ACCEPT);
     }
 
-    @Override
-    public void updateBadgeStatus(Long trainerId, BadgeStatusChangeDTO badge) throws InsufficientRightsException {
+    private void updateBadgeStatus(Long trainerId, BadgeStatusChangeDTO badge, ChallengeStatus status)
+            throws InsufficientRightsException {
         Gym gym = badgeService.findBadgeById(badge.getBadgeId()).getGym();
 
         if (!gym.getGymLeader().equals(trainerService.getTrainerWithId(trainerId))) {
             throw new InsufficientRightsException("Trainer " + trainerId + " is not leader of gym " + gym.getId());
         }
 
-        badgeService.changeBadgeStatus(badgeService.findBadgeById(badge.getBadgeId()), badge.getNewStatus());
+        badgeService.changeBadgeStatus(badgeService.findBadgeById(badge.getBadgeId()), status);
     }
 }

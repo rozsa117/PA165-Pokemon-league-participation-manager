@@ -44,15 +44,23 @@ public interface BadgeFacade {
     /**
      * Revokes the badge from trainer, changes status of badge to @ChallengeStatus.REVOKED
      * @param badge to be revoked
+     * @throws InsufficientRightsException in case requesting trainer is not the leader of the gym that gave the badge
      */
-    void revokeBadge(BadgeStatusChangeDTO badge);
+    void revokeBadge(BadgeStatusChangeDTO badge) throws InsufficientRightsException;
 
     /**
-     * Issues badge to trainer with given ID
-     * @param trainerId id of trainer to which badge should be issued
-     * @param badge to be issued to
+     * A trainer losses a badge
+     * @param badge to be lost
+     * @throws InsufficientRightsException in case requesting trainer is not the leader of the gym that gave the badge
      */
-    void issueBadgeToTrainer(Long trainerId, BadgeDTO badge);
+    void looseBadge(BadgeStatusChangeDTO badge) throws InsufficientRightsException;
+
+    /**
+     * A trainer wins a badge
+     * @param badge to be won
+     * @throws InsufficientRightsException in case requesting trainer is not the leader of the gym that gave the badge
+     */
+    void wonBadge(BadgeStatusChangeDTO badge) throws InsufficientRightsException;
 
     /**
      * Reopens a closed challenge for trainer with given id
@@ -60,11 +68,5 @@ public interface BadgeFacade {
      * @param badge of challenge to be reopened
      */
     void reopenChallenge(Long trainerId, BadgeStatusChangeDTO badge) throws InsufficientRightsException;
-
-    /**
-     * Gym leader with given trainerId updates the status on badge
-     * @param badge to be updated
-     */
-    void updateBadgeStatus(Long trainerId, BadgeStatusChangeDTO badge) throws InsufficientRightsException;
 
 }
