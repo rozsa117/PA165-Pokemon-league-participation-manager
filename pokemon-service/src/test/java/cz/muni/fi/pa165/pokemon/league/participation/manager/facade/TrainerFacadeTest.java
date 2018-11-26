@@ -10,7 +10,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.BeanMappingService;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
@@ -123,7 +123,6 @@ public class TrainerFacadeTest {
         adminDTO = new TrainerDTO();
         adminDTO.setAdmin(admin.isAdmin());
         adminDTO.setBorn(admin.getBorn());
-        adminDTO.setGymLeader(true);
         adminDTO.setId(ADMIN_ID);
         adminDTO.setName(admin.getName());
         adminDTO.setSurname(admin.getSurname());
@@ -132,7 +131,6 @@ public class TrainerFacadeTest {
         trainerDTO = new TrainerDTO();
         trainerDTO.setAdmin(trainer.isAdmin());
         trainerDTO.setBorn(trainer.getBorn());
-        trainerDTO.setGymLeader(false);
         trainerDTO.setId(TRAINER_ID);
         trainerDTO.setName(trainer.getName());
         trainerDTO.setSurname(trainer.getSurname());

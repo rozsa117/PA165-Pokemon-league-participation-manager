@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.DAOExceptionWrapper;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
@@ -24,32 +25,38 @@ public class BadgeServiceImpl implements BadgeService {
 
     @Override
     public void createBadge(Badge badge) {
-        badgeDAO.createBadge(badge);
+        DAOExceptionWrapper.withoutResult((
+        ) -> badgeDAO.createBadge(badge), "Creation of the following badge failed: " + badge.toString());
     }
 
     @Override
     public void removeBadge(Badge badge) {
-        badgeDAO.deleteBadge(badge);
+        DAOExceptionWrapper.withoutResult(
+                () -> badgeDAO.deleteBadge(badge), "Could not remove the follwoing badge: " + badge.toString());
     }
 
     @Override
     public void changeBadgeStatus(Badge badge, ChallengeStatus newStatus) {
         badge.setStatus(newStatus);
-        badgeDAO.updateBadge(badge);
+        DAOExceptionWrapper.withoutResult(
+                () -> badgeDAO.updateBadge(badge), "Could not update the following badge: " + badge.toString());
     }
 
     @Override
     public Badge findBadgeById(Long id) {
-        return badgeDAO.findBadgeById(id);
+        return DAOExceptionWrapper.withResult(
+                () -> badgeDAO.findBadgeById(id), "Could not find the badge with id " + id);
     }
 
     @Override
     public List<Badge> findBadgesOfTrainer(Trainer trainer) {
-        return badgeDAO.findBadgesOfTrainer(trainer);
+        return DAOExceptionWrapper.withResult(
+                () -> badgeDAO.findBadgesOfTrainer(trainer), "Could not find the badges of " + trainer.toString());
     }
 
     @Override
     public List<Badge> findBadgesOfGym(Gym gym) {
-        return badgeDAO.findBadgesOfGym(gym);
+        return DAOExceptionWrapper.withResult(
+                () -> badgeDAO.findBadgesOfGym(gym), "Could not find the badges of " + gym.toString());
     }
 }

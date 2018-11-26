@@ -24,8 +24,6 @@ public class TrainerDTO {
 
     private boolean admin;
 
-    private boolean gymLeader;
-
     public String getUserName() {
         return userName;
     }
@@ -64,14 +62,6 @@ public class TrainerDTO {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
-    }
-
-    public boolean isGymLeader() {
-        return gymLeader;
-    }
-
-    public void setGymLeader(boolean gymLeader) {
-        this.gymLeader = gymLeader;
     }
 
     public Long getId() {

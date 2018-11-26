@@ -10,7 +10,7 @@ import java.util.Objects;
  */
 public class PokemonSpeciesDTO {
 
-    private Long speciesId;
+    private Long id;
 
     private String speciesName;
 
@@ -18,14 +18,14 @@ public class PokemonSpeciesDTO {
 
     private PokemonType secondaryType;
 
-    private PokemonSpeciesDTO preevolution;
+    private PokemonSpeciesDTO evolvesFrom;
 
-    public Long getSpeciesId() {
-        return speciesId;
+    public Long getId() {
+        return id;
     }
 
-    public void setSpeciesId(Long speciesId) {
-        this.speciesId = speciesId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getSpeciesName() {
@@ -52,22 +52,22 @@ public class PokemonSpeciesDTO {
         this.secondaryType = secondaryType;
     }
 
-    public PokemonSpeciesDTO getPreevolution() {
-        return preevolution;
+    public PokemonSpeciesDTO getEvolvesFrom() {
+        return evolvesFrom;
     }
 
-    public void setPreevolution(PokemonSpeciesDTO preevolution) {
-        this.preevolution = preevolution;
+    public void setEvolvesFrom(PokemonSpeciesDTO evolvesFrom) {
+        this.evolvesFrom = evolvesFrom;
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.speciesId);
+        hash = 97 * hash + Objects.hashCode(this.id);
         hash = 97 * hash + Objects.hashCode(this.speciesName);
         hash = 97 * hash + Objects.hashCode(this.primaryType);
         hash = 97 * hash + Objects.hashCode(this.secondaryType);
-        hash = 97 * hash + Objects.hashCode(this.preevolution);
+        hash = 97 * hash + Objects.hashCode(this.evolvesFrom);
         return hash;
     }
 
@@ -86,7 +86,7 @@ public class PokemonSpeciesDTO {
         if (!Objects.equals(this.speciesName, other.speciesName)) {
             return false;
         }
-        if (!Objects.equals(this.speciesId, other.speciesId)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (this.primaryType != other.primaryType) {
@@ -95,12 +95,12 @@ public class PokemonSpeciesDTO {
         if (this.secondaryType != other.secondaryType) {
             return false;
         }
-        return Objects.equals(this.preevolution, other.preevolution);
+        return Objects.equals(this.evolvesFrom, other.evolvesFrom);
     }
 
     @Override
     public String toString() {
-        return "PokemonSpeciesDTO{" + "speciesId=" + speciesId + ", speciesName=" + speciesName + ", primaryType=" + primaryType + ", secondaryType=" + secondaryType + ", preevolution=" + preevolution + '}';
+        return "PokemonSpeciesDTO{" + "id=" + id + ", speciesName=" + speciesName + ", primaryType=" + primaryType + ", secondaryType=" + secondaryType + ", evolvesFrom=" + evolvesFrom + '}';
     }
     
 }
