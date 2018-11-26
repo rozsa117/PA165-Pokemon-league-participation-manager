@@ -10,7 +10,7 @@ import java.util.Objects;
  */
 public class GymDTO {
     
-    private Long id;;
+    private Long id;
     
     private String location;
     

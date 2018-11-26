@@ -18,8 +18,6 @@ public class BadgeStatusChangeDTO {
     @NotNull
     private Long trainerId;
 
-    private ChallengeStatus newStatus;
-
     public Long getBadgeId() {
         return badgeId;
     }
@@ -36,28 +34,19 @@ public class BadgeStatusChangeDTO {
         this.trainerId = trainerId;
     }
 
-    public ChallengeStatus getNewStatus() {
-        return newStatus;
-    }
-
-    public void setNewStatus(ChallengeStatus newStatus) {
-        this.newStatus = newStatus;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BadgeStatusChangeDTO that = (BadgeStatusChangeDTO) o;
         return Objects.equals(badgeId, that.badgeId) &&
-                Objects.equals(trainerId, that.trainerId) &&
-                Objects.equals(newStatus, that.newStatus);
+                Objects.equals(trainerId, that.trainerId);
     }
 
     @Override
     public int hashCode() {
         int hash = 13;
-        hash = 29 * Objects.hashCode(trainerId) * Objects.hashCode(badgeId) * Objects.hashCode(newStatus);
+        hash = 29 * Objects.hashCode(trainerId) * Objects.hashCode(badgeId);
         return hash;
     }
 
@@ -66,7 +55,6 @@ public class BadgeStatusChangeDTO {
         return "BadgeStatusChangeDTO{" +
                 "badgeId=" + badgeId +
                 ", trainerId=" + trainerId +
-                ", newStatus=" + newStatus +
                 '}';
     }
 }
