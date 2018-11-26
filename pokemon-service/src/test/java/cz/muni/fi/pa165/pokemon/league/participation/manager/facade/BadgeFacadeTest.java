@@ -226,22 +226,5 @@ public class BadgeFacadeTest {
         assertThatExceptionOfType(InsufficientRightsException.class)
                 .isThrownBy(() -> badgeFacade.reopenChallenge(reopen));
     }
-    
-    @Test
-    public void testReopenChallengeThrowstInsufficientRightsExceptionBadgeIsNotLost() {
-        BadgeStatusChangeDTO reopen = revoke;
-        revoke.setTrainerId(ashDTO.getId());
-        when(badgeService.findBadgeById(badgeDTO.getId()))
-                .thenReturn(
-                        new BadgeBuilder()
-                            .id(1000L)
-                            .date(LocalDate.now())
-                            .gym(gymEntity)
-                            .status(ChallengeStatus.WON)
-                            .trainer(ashEntity)
-                            .build()
-                );
-        assertThatExceptionOfType(InsufficientRightsException.class)
-                .isThrownBy(() -> badgeFacade.reopenChallenge(reopen));
-    }
+
 }
