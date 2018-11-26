@@ -36,9 +36,9 @@ public interface GymService {
      * Changes the type of an existing gym.
      *
      * @param gym Gym to be updated.
-     * @param trainer changin Trainer
+     * @param trainer changing Trainer
      * @param newType New type of the gym.
-     * @throws InsufficientRightsException when other trainer then Gym Leader tries
+     * @throws InsufficientRightsException when other trainer than Gym Leader tries
      * to change Gym Type
      */
     public void changeGymType(Gym gym, Trainer trainer, PokemonType newType) 

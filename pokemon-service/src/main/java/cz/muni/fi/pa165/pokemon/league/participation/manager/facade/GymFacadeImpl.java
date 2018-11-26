@@ -45,24 +45,24 @@ public class GymFacadeImpl implements GymFacade {
 
     @Override
     public void updateGymLocation(UpdateGymLocationDTO gym) {
-        gymService.updateGymLocation(beanMappingService.mapTo(gym, Gym.class), gym.getNewLocation());
+        gymService.updateGymLocation(beanMappingService.mapTo(findGymById(gym.getGymID()), Gym.class), gym.getNewLocation());
     }
 
     @Override
     public void changeGymType(ChangeGymTypeDTO gym) throws InsufficientRightsException {
-        gymService.changeGymType(beanMappingService.mapTo(gym, Gym.class),
+        gymService.changeGymType(beanMappingService.mapTo(findGymById(gym.getGymId()), Gym.class),
                 trainerService.getTrainerWithId(gym.getTrainerId()), gym.getNewGymType());
     }
 
     @Override
-    public void changeGymLeader(ChangeGymLeaderDTO gym)  throws EntityIsUsedException  {
-        gymService.changeGymLeader(beanMappingService.mapTo(gym, Gym.class), 
+    public void changeGymLeader(ChangeGymLeaderDTO gym) throws EntityIsUsedException {
+        gymService.changeGymLeader(beanMappingService.mapTo(findGymById(gym.getGymID()), Gym.class),
                 trainerService.getTrainerWithId(gym.getNewGymLeaderID()));
     }
 
     @Override
-    public void removeGym(@NotNull Long gymId)  throws EntityIsUsedException  {
-        gymService.removeGym(beanMappingService.mapTo(gymService.findGymById(gymId), Gym.class));
+    public void removeGym(@NotNull Long gymId) throws EntityIsUsedException {
+        gymService.removeGym(beanMappingService.mapTo(findGymById(gymId), Gym.class));
     }
 
     @Override
