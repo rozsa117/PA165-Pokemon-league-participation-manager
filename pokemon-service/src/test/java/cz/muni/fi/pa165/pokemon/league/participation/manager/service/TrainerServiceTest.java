@@ -145,13 +145,11 @@ public class TrainerServiceTest {
         // Set up create specific environment:
         admin.setId(null);
         trainer.setId(null);
-        exceptionalTrainer.setId(null);
         when(trainerDao.getAdminCount()).thenReturn(0l);
         doAnswer(invocation -> {
             when(trainerDao.getAdminCount()).thenReturn(1l);
             return null;
         }).when(trainerDao).createTrainer(admin);
-        doThrow(PE).when(trainerDao).createTrainer(exceptionalTrainer);
 
         assertThatExceptionOfType(NoAdministratorException.class)
                 .isThrownBy(() -> trainerService.createTrainer(trainer, PASSWD));
@@ -161,6 +159,22 @@ public class TrainerServiceTest {
         assertThat(trainerService.createTrainer(trainer, PASSWD))
                 .matches((t) -> !PASSWD.equals(t.getPasswordHash()));
         verify(trainerDao, atLeastOnce()).createTrainer(trainer);
+    }
+
+    @Test
+    public void testCreateTrainerWithNoAdministrator() throws NoAdministratorException {
+        // Set up create specific environment:
+        trainer.setId(null);
+        when(trainerDao.getAdminCount()).thenReturn(0l);
+
+        assertThatExceptionOfType(NoAdministratorException.class)
+                .isThrownBy(() -> trainerService.createTrainer(trainer, PASSWD));
+    }
+    
+    @Test
+    public void testCreateTrainerWithDAOThrownException() {
+        exceptionalTrainer.setId(null);
+        doThrow(PE).when(trainerDao).createTrainer(exceptionalTrainer);
         assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> trainerService.createTrainer(exceptionalTrainer, PASSWD));
     }
@@ -169,6 +183,10 @@ public class TrainerServiceTest {
     public void testRenameTrainer() {
         trainerService.renameTrainer(trainer, "Hash", "Ketchum");
         verify(trainerDao, atLeastOnce()).updateTrainer(trainer);
+    }
+    
+    @Test
+    public void testRenameTrainerWithDAOThrownException() {
         assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> trainerService.renameTrainer(exceptionalTrainer, "No Cheats", "I Promise"));
     }
@@ -177,6 +195,10 @@ public class TrainerServiceTest {
     public void testGetAllTrainers() {
         assertThat(trainerService.getAllTrainers())
                 .containsExactlyInAnyOrderElementsOf(trainerDao.getAllTrainers());
+    }
+    
+    @Test
+    public void testGetAllTrainersWithDAOThrownException() {
         when(trainerDao.getAllTrainers()).thenThrow(PE);
         assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> trainerService.getAllTrainers());
@@ -188,6 +210,10 @@ public class TrainerServiceTest {
             assertThat(trainerService.getTrainerWithId(t.getId()))
                     .isEqualTo(t);
         });
+    }
+    
+    @Test
+    public void testGetAllTrainerWithIdWithDAOThrownException() {
         assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> trainerService.getTrainerWithId(exceptionalTrainer.getId()));
     }
@@ -213,9 +239,6 @@ public class TrainerServiceTest {
 
     @Test
     public void testSetAdmin() throws NoAdministratorException {
-        assertThatExceptionOfType(NoAdministratorException.class)
-                .isThrownBy(() -> trainerService.setAdmin(admin, false));
-
         // Set up mock to check whether setAdmin updates admin when updating:
         doAnswer(invocation -> {
             assertThat(trainer.isAdmin())
@@ -233,6 +256,16 @@ public class TrainerServiceTest {
         when(trainerDao.getAdminCount()).thenReturn(2l);
         trainerService.setAdmin(trainer, false);
         verify(trainerDao, atLeast(2)).updateTrainer(trainer);
+    }
+
+    @Test
+    public void testSetAdminWithNoAdministrator() throws NoAdministratorException {
+        assertThatExceptionOfType(NoAdministratorException.class)
+                .isThrownBy(() -> trainerService.setAdmin(admin, false));
+    }
+
+    @Test
+    public void testSetAdminWithDAOThrownException() throws NoAdministratorException {
         assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> trainerService.setAdmin(exceptionalTrainer, true));
     }
@@ -241,7 +274,6 @@ public class TrainerServiceTest {
     public void testChangePassword() throws NoAdministratorException {
         // Make sure the password hash is computed:
         trainerService.createTrainer(trainer, PASSWD);
-        trainerService.createTrainer(exceptionalTrainer, PASSWD);
 
         String newPasswd = "new" + PASSWD;
         final String oldPasswdHash = trainer.getPasswordHash();
@@ -256,6 +288,14 @@ public class TrainerServiceTest {
         verify(trainerDao, atLeastOnce()).updateTrainer(trainer);
         assertThat(trainerService.changePassword(trainer, PASSWD, newPasswd))
                 .isFalse();
+    }
+
+    @Test
+    public void testChangePasswordWithDAOThrownException() throws NoAdministratorException {
+        // Make sure the password hash is computed:
+        trainerService.createTrainer(exceptionalTrainer, PASSWD);
+        
+        String newPasswd = "new" + PASSWD;
         assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> trainerService.changePassword(exceptionalTrainer, PASSWD, newPasswd));
     }
