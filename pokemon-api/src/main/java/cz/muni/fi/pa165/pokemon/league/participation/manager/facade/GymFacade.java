@@ -22,7 +22,7 @@ public interface GymFacade {
      * Create a new Gym.
      * 
      * @param gym DTO of gym to create.
-     * @throws IllegalArgumentException in case the gym already exists.
+     * @throws EntityIsUsedException in case the gym already exists.
      */
     public void createGym(GymCreateDTO gym) throws EntityIsUsedException ;
     
