@@ -143,6 +143,6 @@ public class TrainerDAOTest {
         trainerDAO.createTrainer(ashTrainer);
         trainerDAO.createTrainer(adminTrainer);
 
-        assertThat(trainerDAO.getAdminCount()).isEqualTo(1);
+        assertThat(trainerDAO.getAdminCount()).isEqualTo(1L);
     }
 }

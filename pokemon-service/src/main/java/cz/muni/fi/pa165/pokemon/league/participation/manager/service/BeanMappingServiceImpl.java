@@ -1,11 +1,11 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.service;
 
+import com.github.dozermapper.core.Mapper;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 
-import org.dozer.Mapper;
 import org.springframework.stereotype.Service;
 
 /**

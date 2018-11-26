@@ -1,8 +1,8 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.service.config;
 
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.common.PersistenceApplicationContext;
-import org.dozer.DozerBeanMapper;
-import org.dozer.Mapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,6 @@ public class ServiceConfiguration {
     
     @Bean
     public Mapper dozer(){
-        DozerBeanMapper mapper = new DozerBeanMapper();
-        return mapper;
+        return DozerBeanMapperBuilder.buildDefault();
     }
 }

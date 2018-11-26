@@ -10,7 +10,6 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.DataAcce
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
-import org.dozer.inject.Inject;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,6 +23,7 @@ import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import javax.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
