@@ -137,6 +137,7 @@ public class BadgeFacadeTest {
                 .gym(gymDTO)
                 .status(ChallengeStatus.LOST)
                 .trainer(ashDTO)
+                .id(1000L)
                 .build();
         
         badgeEntity = new BadgeBuilder()
@@ -144,6 +145,7 @@ public class BadgeFacadeTest {
                 .gym(gymEntity)
                 .status(ChallengeStatus.LOST)
                 .trainer(ashEntity)
+                .id(1000L)
                 .build();
         
         revoke.setBadgeId(badgeDTO.getId());
@@ -164,7 +166,7 @@ public class BadgeFacadeTest {
         create.setGymId(gymDTO.getId());
         create.setTrainerId(ashDTO.getId());
         when(beanMappingService.mapTo(create, Badge.class)).thenReturn(badgeEntity);
-        badgeFacade.createBadge(create);
+        assertThat(badgeFacade.createBadge(create)).isEqualTo(badgeEntity.getId());
         verify(badgeService, atLeastOnce()).createBadge(badgeEntity);
     }
     
