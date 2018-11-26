@@ -11,7 +11,7 @@ For detailed information visit the wiki page of the project.
 
 ## Building and installation
 
-Install with command using java version 8.
+Java version 8 is recommended for running this project. Java version 11 should also work, but the developers take absolutely no guarantee that you will be able to run the project successfully.
 
 ```
 mvn clean install
