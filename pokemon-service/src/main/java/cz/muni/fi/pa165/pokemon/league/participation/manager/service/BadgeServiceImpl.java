@@ -6,6 +6,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidChallengeStatusChangeException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.DAOExceptionWrapper;
 import java.time.LocalDate;
 
@@ -25,9 +26,10 @@ public class BadgeServiceImpl implements BadgeService {
     private BadgeDAO badgeDAO;
 
     @Override
-    public void createBadge(Badge badge) {
-        badge.setStatus(ChallengeStatus.WAITING_TO_ACCEPT);
-        badge.setDate(LocalDate.now());
+    public void createBadge(Badge badge) throws EntityIsUsedException {
+        if (badge.getGym().getGymLeader().equals(badge.getTrainer())) {
+            throw new EntityIsUsedException("Challenger is gym leader");
+        }
         DAOExceptionWrapper.withoutResult((
         ) -> badgeDAO.createBadge(badge), "Creation of the following badge failed: " + badge.toString());
     }

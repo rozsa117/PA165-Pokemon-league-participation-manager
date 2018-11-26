@@ -1,7 +1,6 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dto;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -16,9 +15,6 @@ public class BadgeCreateDTO {
 
     @NotNull
     private Long gymId;
-
-    @NotNull
-    private LocalDate date;
 
     public Long getTrainerId() {
         return trainerId;
@@ -36,28 +32,19 @@ public class BadgeCreateDTO {
         this.gymId = gymId;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BadgeCreateDTO that = (BadgeCreateDTO) o;
         return Objects.equals(trainerId, that.trainerId) &&
-                Objects.equals(gymId, that.gymId) &&
-                Objects.equals(date, that.date);
+                Objects.equals(gymId, that.gymId);
     }
 
     @Override
     public int hashCode() {
         int hash = 13;
-        hash = 29 * hash * Objects.hashCode(this.trainerId) * Objects.hashCode(this.gymId) * Objects.hashCode(this.date);
+        hash = 29 * hash * Objects.hashCode(this.trainerId) * Objects.hashCode(this.gymId);
         return hash;
     }
 
@@ -66,7 +53,6 @@ public class BadgeCreateDTO {
         return "BadgeCreateDTO{" +
                 "trainerId=" + trainerId +
                 ", gymId=" + gymId +
-                ", date=" + date +
                 '}';
     }
 }

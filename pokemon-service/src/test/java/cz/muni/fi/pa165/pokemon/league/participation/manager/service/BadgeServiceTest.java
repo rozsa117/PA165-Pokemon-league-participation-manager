@@ -9,6 +9,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidChallengeStatusChangeException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
 import java.time.LocalDate;
@@ -33,8 +34,10 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
+import org.assertj.core.api.ThrowableAssertAlternative;
 import org.junit.BeforeClass;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
 
@@ -192,9 +195,21 @@ public class BadgeServiceTest {
     }
     
     @Test
-    public void testCreatebadge() {
+    public void testCreateBadge() throws EntityIsUsedException {
         badgeService.createBadge(badge);
         assertThat(badgeRevoked).isEqualToComparingFieldByField(badge);
+    }
+    
+    @Test
+    public void testCreateBadgeWithGymLeaderChallenger() {
+        Badge badBadge = new BadgeBuilder()
+                .date(LocalDate.now())
+                .gym(gymWithBadges)
+                .status(ChallengeStatus.WAITING_TO_ACCEPT)
+                .trainer(gymWithBadges.getGymLeader())
+                .build();
+        assertThatExceptionOfType(EntityIsUsedException.class)
+                .isThrownBy(() -> badgeService.createBadge(badBadge));
     }
     
     @Test
@@ -205,15 +220,15 @@ public class BadgeServiceTest {
 
     @Test
     public void testCreateBadgeWithExceptionThrown() {
-        testExpectedDataAccessException((badgeService) -> badgeService.createBadge(badge));
+        testExpectedDataAccessException((bs) -> bs.createBadge(badge));
     }
     
     @Test
     public void testUpdateadgeWithExceptionThrown() {
-        testExpectedDataAccessException((badgeService) -> {
+        testExpectedDataAccessException((bs) -> {
             try {
                 badge.setStatus(ChallengeStatus.LOST);
-                badgeService.changeBadgeStatus(badge, ChallengeStatus.WAITING_TO_ACCEPT);
+                bs.changeBadgeStatus(badge, ChallengeStatus.WAITING_TO_ACCEPT);
             } catch (InvalidChallengeStatusChangeException ex) {
                 throw new RuntimeException("This exception should not happen because of using mock.");
             }
@@ -222,42 +237,36 @@ public class BadgeServiceTest {
     
     @Test
     public void testRemoveBadgeWithExceptionThrown() {
-        testExpectedDataAccessException((badgeService) -> badgeService.removeBadge(badge));
+        testExpectedDataAccessException((bs) -> bs.removeBadge(badge));
     }
     
     @Test
     public void testFindByIdWithExceptionThrown() {
-        testExpectedDataAccessException((badgeService) -> badgeService.findBadgeById(badge.getId()));
+        testExpectedDataAccessException((bs) -> bs.findBadgeById(badge.getId()));
     }
     
     @Test
     public void testFindBadgesOfTraierWithExceptionThrown() {
-        testExpectedDataAccessException((badgeService) -> badgeService.findBadgesOfTrainer(trainerLeader));
+        testExpectedDataAccessException((bs) -> bs.findBadgesOfTrainer(trainerLeader));
     }
     
     @Test
     public void testFindBadgesOfGymWithExceptionThrown() {
-        testExpectedDataAccessException((badgeService) -> badgeService.findBadgesOfGym(gymWithoutBadges));
+        testExpectedDataAccessException((bs) -> bs.findBadgesOfGym(gymWithoutBadges));
     }
         
-    private void testExpectedDataAccessException(Consumer<BadgeService> operation) {
+    private void testExpectedDataAccessException(ThrowingConsumer<BadgeService> operation) {
         PersistenceException pex = new PersistenceException("throw");
         
         when(badgeDAO.findBadgeById(badge.getId())).thenThrow(pex);
         when(badgeDAO.findBadgesOfTrainer(trainerLeader)).thenThrow(pex);
         when(badgeDAO.findBadgesOfGym(gymWithoutBadges)).thenThrow(pex);
             
-        doAnswer(invocation -> {
-            throw pex;
-        }).when(badgeDAO).createBadge(badge);
+        doThrow(pex).when(badgeDAO).createBadge(badge);
         
-        doAnswer(invocation -> {
-            throw pex;
-        }).when(badgeDAO).updateBadge(badge);
+        doThrow(pex).when(badgeDAO).updateBadge(badge);
         
-        doAnswer(invocation -> {
-            throw pex;
-        }).when(badgeDAO).deleteBadge(badge);
+        doThrow(pex).when(badgeDAO).deleteBadge(badge);
         
         assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> operation.accept(badgeService));
@@ -350,5 +359,12 @@ public class BadgeServiceTest {
         badge.setStatus(ChallengeStatus.WAITING_TO_ACCEPT);
         assertThatExceptionOfType(InvalidChallengeStatusChangeException.class)
                 .isThrownBy(() -> badgeService.changeBadgeStatus(badge, ChallengeStatus.REVOKED));
+    }
+
+    @FunctionalInterface
+    private static interface ThrowingConsumer<T> {
+        
+        public void accept(T t) throws Exception;
+        
     }
 }
