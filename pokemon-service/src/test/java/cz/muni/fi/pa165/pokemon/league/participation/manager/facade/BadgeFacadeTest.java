@@ -17,6 +17,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidChallengeStatusChangeException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BadgeServiceImpl;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerServiceImpl;
@@ -183,19 +184,19 @@ public class BadgeFacadeTest {
     }
     
     @Test
-    public void testRevokeBadge() throws InsufficientRightsException {
+    public void testRevokeBadge() throws InsufficientRightsException, InvalidChallengeStatusChangeException {
         badgeFacade.revokeBadge(revoke);
         verify(badgeService, atLeastOnce()).changeBadgeStatus(badgeEntity, ChallengeStatus.REVOKED);
     }
     
     @Test
-    public void testLooseBadge() throws InsufficientRightsException {
+    public void testLooseBadge() throws InsufficientRightsException, InvalidChallengeStatusChangeException {
         badgeFacade.looseBadge(revoke);
         verify(badgeService, atLeastOnce()).changeBadgeStatus(badgeEntity, ChallengeStatus.LOST);
     }
     
     @Test
-    public void testWinBadge() throws InsufficientRightsException {
+    public void testWinBadge() throws InsufficientRightsException, InvalidChallengeStatusChangeException {
         badgeFacade.wonBadge(revoke);
         verify(badgeService, atLeastOnce()).changeBadgeStatus(badgeEntity, ChallengeStatus.WON);
     }
@@ -208,7 +209,7 @@ public class BadgeFacadeTest {
     }
     
     @Test
-    public void testReopenChallenge() throws InsufficientRightsException {
+    public void testReopenChallenge() throws InsufficientRightsException, InvalidChallengeStatusChangeException {
         BadgeStatusChangeDTO reopen = revoke;
         revoke.setTrainerId(ashDTO.getId());
         badgeFacade.reopenChallenge(ashDTO.getId(), reopen);

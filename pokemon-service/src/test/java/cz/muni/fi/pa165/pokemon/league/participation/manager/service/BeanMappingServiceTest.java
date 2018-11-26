@@ -1,9 +1,12 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.service;
 
+import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.BadgeBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.GymBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.PokemonBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.PokemonSpeciesBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.TrainerBuilder;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeCreateDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonCreateDTO;
@@ -12,13 +15,17 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesC
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.builders.BadgeDTOBuilder;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.builders.GymDTOBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.builders.PokemonDTOBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.builders.PokemonSpeciesDTOBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.builders.TrainerDTOBuilder;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
 import java.time.LocalDate;
@@ -54,7 +61,7 @@ public class BeanMappingServiceTest {
     private static PokemonSpecies expectedSpecies;
     private static PokemonSpecies nestedSpecies;
     private static Pokemon sourcePokemon;
-    private static Pokemon expectedPokemon;
+    private static Pokemon expectedPokemon; 
     
     private static TrainerCreateDTO sourceTrainerCreateDTO;
     private static TrainerDTO expectedTrainerDTO;
@@ -137,11 +144,12 @@ public class BeanMappingServiceTest {
         sourceGymCreateDTO.setGymLeaderID(-100L); /* Set to something so that we fail if it maps to something. */
         sourceGymCreateDTO.setLocation(expectedGym.getLocation());
         sourceGymCreateDTO.setType(expectedGym.getType());
-        expectedGymDTO = new GymDTO();
-        expectedGymDTO.setGymLeader(expectedTrainerDTO);
-        expectedGymDTO.setId(sourceGym.getId());
-        expectedGymDTO.setLocation(sourceGym.getLocation());
-        expectedGymDTO.setType(sourceGym.getType());
+        expectedGymDTO = new GymDTOBuilder()
+                .gymLeader(expectedTrainerDTO)
+                .id(sourceGym.getId())
+                .location(sourceGym.getLocation())
+                .type(sourceGym.getType())
+                .build();
         
         nestedSpeciesDTO = new PokemonSpeciesDTOBuilder()
                 .evolvesFrom(null)
@@ -201,7 +209,7 @@ public class BeanMappingServiceTest {
         assertThat(bms.mapTo(sourcePokemonCreateDTO, Pokemon.class))
                 .isEqualToComparingFieldByField(expectedPokemon);
     }
-
+    
     @Test
     public void testMapTrainerToTrainerDTO() {
         assertThat(bms.mapTo(sourceTrainer, TrainerDTO.class))
@@ -225,7 +233,7 @@ public class BeanMappingServiceTest {
         assertThat(bms.mapTo(sourcePokemon, PokemonDTO.class))
                 .isEqualToComparingFieldByField(expectedPokemonDTO);
     }
-
+    
     @Test
     public void testMapCollection() {
         assertThat(bms.mapTo(Arrays.asList(nestedSpecies, sourceSpecies), PokemonSpeciesDTO.class))

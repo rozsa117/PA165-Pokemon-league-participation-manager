@@ -196,6 +196,7 @@ public class PokemonFacadeTest {
     
     @Test
     public void testCreatePokemon() throws NoSuchEntityException {
+        final LocalDateTime NOW = LocalDateTime.now();
         Pokemon fromDTO = new PokemonBuilder()
                 .dateTimeOfCapture(null)
                 .id(20L)
@@ -209,7 +210,6 @@ public class PokemonFacadeTest {
         createDTO.setPokemonSpeciesId(raichuSpeciesEntity.getId());
         createDTO.setLevel(fromDTO.getLevel());
         createDTO.setNickname(fromDTO.getNickname());
-        final LocalDateTime NOW = LocalDateTime.now();
         when(beanMappingService.mapTo(createDTO, Pokemon.class)).thenReturn(fromDTO);
         doAnswer(invocation -> {
             assertThat(fromDTO.getDateTimeOfCapture()).isNotNull().isAfter(NOW);

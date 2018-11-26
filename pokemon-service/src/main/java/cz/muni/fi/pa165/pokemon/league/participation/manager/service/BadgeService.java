@@ -4,10 +4,9 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidChallengeStatusChangeException;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Interface of Badge Service
@@ -32,8 +31,11 @@ public interface BadgeService {
      * Changes status on badge
      * @param badge to be changed
      * @param newStatus new status of badge
+     * @throws InvalidChallengeStatusChangeException In case invalid status change is requested.
+     * The following changes are valid(from-to) WON - REVOKED, LOST - WAITING_TO_ACCEPT, WITING_TO_ACCEPT - WON || LOST,
+     * REVOKED - WON
      */
-    void changeBadgeStatus(Badge badge, ChallengeStatus newStatus);
+    void changeBadgeStatus(Badge badge, ChallengeStatus newStatus) throws InvalidChallengeStatusChangeException;
 
     /**
      * Find the badge with given id
