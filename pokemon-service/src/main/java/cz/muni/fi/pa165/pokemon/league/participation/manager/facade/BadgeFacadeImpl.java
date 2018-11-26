@@ -7,14 +7,20 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidChallengeStatusChangeException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BadgeService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.GymService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
+import java.time.LocalDate;
 import javax.inject.Inject;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,39 +38,55 @@ public class BadgeFacadeImpl implements BadgeFacade {
 
     @Inject
     private TrainerService trainerService;
+    
+    @Inject
+    private GymService gymService;
 
     @Inject
     private BeanMappingService beanMappingService;
 
     @Override
-    public void createBadge(BadgeCreateDTO badge) {
-        badgeService.createBadge(beanMappingService.mapTo(badge, Badge.class));
+    public Long createBadge(@Valid BadgeCreateDTO badge) throws NoSuchEntityException, EntityIsUsedException {
+        Trainer challenger = trainerService.getTrainerWithId(badge.getTrainerId());
+        if (challenger == null) {
+            throw new NoSuchEntityException("The given trainer for the badge doesn't exist");
+        }
+        Gym gym = gymService.findGymById(badge.getGymId());
+        if (gym == null) {
+            throw new NoSuchEntityException("The given gym for the badge doesn't exist");
+        }
+        Badge newBadge = beanMappingService.mapTo(badge, Badge.class);
+        newBadge.setDate(LocalDate.now());
+        newBadge.setStatus(ChallengeStatus.WAITING_TO_ACCEPT);
+        newBadge.setTrainer(challenger);
+        badgeService.createBadge(newBadge);
+        return newBadge.getId();
     }
 
     @Override
-    public BadgeDTO findBadgeById(Long id) {
+    public BadgeDTO findBadgeById(@NotNull Long id) {
         return beanMappingService.mapTo(badgeService.findBadgeById(id), BadgeDTO.class);
     }
 
     @Override
-    public GymDTO getGymOfBadge(Long id) {
+    public GymDTO getGymOfBadge(@NotNull Long id) {
         return beanMappingService.mapTo(badgeService.findBadgeById(id).getGym(), GymDTO.class);
     }
 
     @Override
-    public TrainerDTO getTrainerOfBadge(Long id) {
+    public TrainerDTO getTrainerOfBadge(@NotNull Long id) {
         return beanMappingService.mapTo(badgeService.findBadgeById(id).getTrainer(), TrainerDTO.class);
     }
 
     @Override
-    public void revokeBadge(BadgeStatusChangeDTO badge)
-            throws InsufficientRightsException, InvalidChallengeStatusChangeException {
+    public void revokeBadge(@Valid BadgeStatusChangeDTO badge)
+            throws InsufficientRightsException, InvalidChallengeStatusChangeException  {
         updateBadgeStatus(badge.getTrainerId(), badge, ChallengeStatus.REVOKED);
     }
 
     @Override
-    public void looseBadge(BadgeStatusChangeDTO badge)
-            throws InsufficientRightsException, InvalidChallengeStatusChangeException {
+    public void loseBadge(@Valid BadgeStatusChangeDTO badge)
+            throws InsufficientRightsException, InvalidChallengeStatusChangeException  {
         updateBadgeStatus(badge.getTrainerId(), badge, ChallengeStatus.LOST);
     }
 
@@ -75,12 +97,15 @@ public class BadgeFacadeImpl implements BadgeFacade {
     }
     
     @Override
-    public void reopenChallenge(Long trainerId, BadgeStatusChangeDTO badge)
-            throws InsufficientRightsException, InvalidChallengeStatusChangeException{
-        if (!trainerId.equals(badge.getTrainerId()) ||
-                !badgeService.findBadgeById(badge.getBadgeId()).getStatus().equals(ChallengeStatus.LOST)) {
-            throw new InsufficientRightsException("Trainer " + trainerId + " tried to reopen badge not belonging to him"
-                    + "or the status is not lost");
+    public void reopenChallenge(@Valid BadgeStatusChangeDTO badge)
+            throws InsufficientRightsException, NoSuchEntityException, InvalidChallengeStatusChangeException {
+        Badge badgeEntity = badgeService.findBadgeById(badge.getBadgeId());
+        if (badgeEntity == null) {
+            throw new NoSuchEntityException("The requested badge doesn't exist");
+        }
+        if (!badgeEntity.getTrainer().getId().equals(badge.getTrainerId())) {
+            throw new InsufficientRightsException("Trainer " + badge.getTrainerId() 
+                    + " tried to reopen badge challenge not belonging to him");
         }
 
         badgeService.changeBadgeStatus(badgeService.findBadgeById(badge.getBadgeId()), ChallengeStatus.WAITING_TO_ACCEPT);

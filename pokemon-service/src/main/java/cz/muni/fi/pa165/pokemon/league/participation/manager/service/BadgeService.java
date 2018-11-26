@@ -5,7 +5,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidChallengeStatusChangeException;
-
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import java.util.List;
 
 /**
@@ -18,8 +18,9 @@ public interface BadgeService {
     /**
      * Creates new Badge
      * @param badge to be created
+     * @throws EntityIsUsedException when challenging trainer is the leader of the challenged gym.
      */
-    void createBadge(Badge badge);
+    void createBadge(Badge badge) throws EntityIsUsedException;
 
     /**
      * Removes badge from trainer (deleted badge)

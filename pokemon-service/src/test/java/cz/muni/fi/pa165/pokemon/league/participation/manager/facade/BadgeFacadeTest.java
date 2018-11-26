@@ -16,21 +16,21 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidChallengeStatusChangeException;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BadgeServiceImpl;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BadgeService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerServiceImpl;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.GymService;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
 import java.time.LocalDate;
 import java.time.Month;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Rule;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -48,10 +48,13 @@ import org.mockito.junit.MockitoRule;
 public class BadgeFacadeTest {
     
     @Mock
-    private BadgeServiceImpl badgeService;
+    private BadgeService badgeService;
     
     @Mock
-    private TrainerServiceImpl trainerService;
+    private TrainerService trainerService;
+    
+    @Mock
+    private GymService gymService;
     
     @Mock
     private BeanMappingService beanMappingService;
@@ -152,14 +155,14 @@ public class BadgeFacadeTest {
         when(badgeService.findBadgeById(badgeDTO.getId())).thenReturn(badgeEntity);
         when(trainerService.getTrainerWithId(ashDTO.getId())).thenReturn(ashEntity);
         when(trainerService.getTrainerWithId(gymLeaderDTO.getId())).thenReturn(gymLeaderEntity);
+        when(gymService.findGymById(gymEntity.getId())).thenReturn(gymEntity);
     }
     
     @Test
-    public void testCreateBadge() {
+    public void testCreateBadge() throws NoSuchEntityException, EntityIsUsedException {
         BadgeCreateDTO create = new BadgeCreateDTO();
         create.setGymId(gymDTO.getId());
         create.setTrainerId(ashDTO.getId());
-        create.setDate(LocalDate.of(2018, Month.JANUARY, 20));
         when(beanMappingService.mapTo(create, Badge.class)).thenReturn(badgeEntity);
         badgeFacade.createBadge(create);
         verify(badgeService, atLeastOnce()).createBadge(badgeEntity);
@@ -190,8 +193,8 @@ public class BadgeFacadeTest {
     }
     
     @Test
-    public void testLooseBadge() throws InsufficientRightsException, InvalidChallengeStatusChangeException {
-        badgeFacade.looseBadge(revoke);
+    public void testLoseBadge() throws InsufficientRightsException, InvalidChallengeStatusChangeException {
+        badgeFacade.loseBadge(revoke);
         verify(badgeService, atLeastOnce()).changeBadgeStatus(badgeEntity, ChallengeStatus.LOST);
     }
     
@@ -209,10 +212,11 @@ public class BadgeFacadeTest {
     }
     
     @Test
-    public void testReopenChallenge() throws InsufficientRightsException, InvalidChallengeStatusChangeException {
+    public void testReopenChallenge() throws InsufficientRightsException, NoSuchEntityException, InvalidChallengeStatusChangeException {
+        badgeEntity.setStatus(ChallengeStatus.LOST);
         BadgeStatusChangeDTO reopen = revoke;
-        revoke.setTrainerId(ashDTO.getId());
-        badgeFacade.reopenChallenge(ashDTO.getId(), reopen);
+        reopen.setTrainerId(ashDTO.getId());
+        badgeFacade.reopenChallenge(reopen);
         verify(badgeService, atLeastOnce()).changeBadgeStatus(badgeEntity, ChallengeStatus.WAITING_TO_ACCEPT);
     }
     
@@ -220,7 +224,7 @@ public class BadgeFacadeTest {
     public void testReopenChallengeThrowstInsufficientRightsExceptionWrongTrainerId() {
         BadgeStatusChangeDTO reopen = revoke;
         assertThatExceptionOfType(InsufficientRightsException.class)
-                .isThrownBy(() -> badgeFacade.reopenChallenge(ashDTO.getId(), reopen));
+                .isThrownBy(() -> badgeFacade.reopenChallenge(reopen));
     }
     
     @Test
@@ -238,6 +242,6 @@ public class BadgeFacadeTest {
                             .build()
                 );
         assertThatExceptionOfType(InsufficientRightsException.class)
-                .isThrownBy(() -> badgeFacade.reopenChallenge(ashDTO.getId(), reopen));
+                .isThrownBy(() -> badgeFacade.reopenChallenge(reopen));
     }
 }
