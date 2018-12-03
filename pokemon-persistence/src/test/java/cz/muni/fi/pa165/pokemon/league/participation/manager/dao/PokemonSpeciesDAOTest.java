@@ -16,7 +16,6 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.runner.RunWith;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -135,15 +134,15 @@ public class PokemonSpeciesDAOTest {
     /**
      * Tests whether invalid species does get rejected (case null species).
      */
-    @Test(expected = InvalidDataAccessApiUsageException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testCreateNullPokemonSpecies() {
         dao.createPokemonSpecies(null);
     }
 
     /**
      * Tests whether invalid species does get rejected (case non null id).
-     *//*
-    @Test(expected = InvalidDataAccessApiUsageException.class)
+     */
+    @Test(expected = PersistenceException.class)
     public void testCreatePokemonSpeciesWithNonNullId() {
         PokemonSpecies species = bulbasaurBuilder()
                 .id(10L)
@@ -151,7 +150,7 @@ public class PokemonSpeciesDAOTest {
 
         dao.createPokemonSpecies(species);
     }
-*/
+
     /**
      * Tests whether invalid species does get rejected (case null species name).
      */
@@ -222,7 +221,7 @@ public class PokemonSpeciesDAOTest {
     /**
      * Tests whether invalid updated species gets rejected (case null species).
      */
-    @Test(expected = InvalidDataAccessApiUsageException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testUpdateNullPokemonSpecies() {
         dao.updatePokemonSpecies(null);
     }
@@ -272,7 +271,7 @@ public class PokemonSpeciesDAOTest {
     /**
      * Test of deletePokemonSpecies method.
      */
-    @Test(expected = InvalidDataAccessApiUsageException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testDeleteNullPokemonSpecies() {
         dao.deletePokemonSpecies(null);
     }
@@ -305,7 +304,7 @@ public class PokemonSpeciesDAOTest {
     /**
      * Test of findPokemonSpeciesById method when given null ID.
      */
-    @Test(expected = InvalidDataAccessApiUsageException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testFindNonexistentPokemonSpeciesByNullId() {
         dao.findPokemonSpeciesById(null);
     }
@@ -313,7 +312,7 @@ public class PokemonSpeciesDAOTest {
     /**
      * Test whether correct expection is thrown for invalid arguments.
      */
-    @Test(expected = InvalidDataAccessApiUsageException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testFindPokemonSpeciesByIdWithNullId() {
         dao.findPokemonSpeciesById(null);
     }
@@ -382,7 +381,7 @@ public class PokemonSpeciesDAOTest {
     /**
      * Test whether correct expection is thrown for invalid arguments.
      */
-    @Test(expected = InvalidDataAccessApiUsageException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testGetAllEvolutionsOfNullPokemonSpecies() {
         dao.getAllEvolutionsOfPokemonSpecies(null);
     }

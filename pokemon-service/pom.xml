@@ -22,15 +22,9 @@
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
-          <groupId>net.sf.dozer</groupId>
-          <artifactId>dozer</artifactId>
-          <version>5.5.1</version>
+            <groupId>com.github.dozermapper</groupId>
+            <artifactId>dozer-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.craftsman</groupId>
-            <artifactId>dozer-jdk8-support</artifactId>
-            <version>1.0.2</version>
-          </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

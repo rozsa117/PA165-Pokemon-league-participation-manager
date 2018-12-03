@@ -18,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -100,22 +99,22 @@ public class GymDAOTest {
     
     @Test
     public void createNullGym() {
-        assertThatExceptionOfType(InvalidDataAccessApiUsageException.class).isThrownBy(() -> gymDao.createGym(null));
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> gymDao.createGym(null));
     }
     
     @Test
     public void updateNullGym() {
-        assertThatExceptionOfType(InvalidDataAccessApiUsageException.class).isThrownBy(() -> gymDao.updateGym(null));
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> gymDao.updateGym(null));
     }
     
     @Test
     public void deleteNullGym() {
-        assertThatExceptionOfType(InvalidDataAccessApiUsageException.class).isThrownBy(() -> gymDao.deleteGym(null));
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> gymDao.deleteGym(null));
     }
     
     @Test
     public void findGymWithNullID() {
-        assertThatExceptionOfType(InvalidDataAccessApiUsageException.class).isThrownBy(() -> gymDao.findGymById(null));
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> gymDao.findGymById(null));
     }
     
     @Test
@@ -132,8 +131,8 @@ public class GymDAOTest {
                 .usingFieldByFieldElementComparator()
                 .containsExactlyInAnyOrder(gym, gymInBrno, finalGym);
     }
-    /*
-    @Test(expected = InvalidDataAccessApiUsageException.class)
+    
+    @Test(expected = PersistenceException.class)
     public void testCreateWithSetId() {
         Gym gym = new GymBuilder()
                 .id(10L)
@@ -142,7 +141,7 @@ public class GymDAOTest {
                 .type(PokemonType.FIRE)
                 .build();
         gymDao.createGym(gym);
-    }*/
+    }
     
     @Test
     public void findByIDExistingGym() {
