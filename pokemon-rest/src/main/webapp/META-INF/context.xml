@@ -1,6 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app>
-  <display-name>Rest interface</display-name>
-
-</web-app>
+<Context path="/pa165/rest" />

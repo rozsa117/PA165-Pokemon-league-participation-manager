@@ -26,6 +26,11 @@
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>pokemon-sample-data</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <type>jar</type>

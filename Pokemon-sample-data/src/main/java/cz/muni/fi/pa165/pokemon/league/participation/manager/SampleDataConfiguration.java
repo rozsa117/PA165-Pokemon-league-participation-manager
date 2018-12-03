@@ -3,8 +3,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
-import java.io.IOException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.slf4j.Logger;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @author Tamás Rózsa 445653
  */
 @Component
-@Import(BeanMappingService.class)
+@Import(ServiceConfiguration.class)
 @ComponentScan(basePackageClasses = {SampleDataLoadingFacadeImpl.class})
 public class SampleDataConfiguration {
     
