@@ -126,7 +126,6 @@ public class PokemonSpeciesController {
     }
     
     @RequestMapping(
-            value = "",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -141,7 +140,7 @@ public class PokemonSpeciesController {
     }
     
     @RequestMapping(
-            value = "/evolutionsofpokemonspecie",
+            value = "/evolutionsofpokemonspecies",
             method = RequestMethod.GET,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE

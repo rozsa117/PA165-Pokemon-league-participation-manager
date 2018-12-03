@@ -18,6 +18,7 @@ import javax.validation.ConstraintViolationException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import org.junit.Assert;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -129,7 +130,7 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
     @Test
     public void testCreateNullPokemon() {
 
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> pokemonDao.createPokemon(null));
+        assertThatExceptionOfType(InvalidDataAccessApiUsageException.class).isThrownBy(() -> pokemonDao.createPokemon(null));
 
     }
 
@@ -154,7 +155,7 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
     @Test
     public void testUpdateNullPokemon() {
 
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> pokemonDao.updatePokemon(null));
+        assertThatExceptionOfType(InvalidDataAccessApiUsageException.class).isThrownBy(() -> pokemonDao.updatePokemon(null));
 
     }
 
@@ -175,7 +176,7 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
     @Test
     public void testDeleteNullPokemon() {
 
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> pokemonDao.deletePokemon(null));
+        assertThatExceptionOfType(InvalidDataAccessApiUsageException.class).isThrownBy(() -> pokemonDao.deletePokemon(null));
 
     }
 
@@ -230,7 +231,7 @@ public class PokemonDAOTest extends AbstractTestNGSpringContextTests {
                 .isEmpty();
     }
 
-    @Test(expectedExceptions = {IllegalArgumentException.class})
+    @Test(expectedExceptions = {InvalidDataAccessApiUsageException.class})
     public void testGetAllPokemonOfNullSpecies() {
         pokemonDao.getAllPokemonOfSpecies(null);
     }

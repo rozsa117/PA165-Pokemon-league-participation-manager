@@ -20,6 +20,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 /**
  * Unit tests to Trainer data access object
@@ -64,7 +65,7 @@ public class TrainerDAOTest {
 
     @Test
     public void createNullTrainerTest() {
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> trainerDAO.createTrainer(null));
+        assertThatExceptionOfType(InvalidDataAccessApiUsageException.class).isThrownBy(() -> trainerDAO.createTrainer(null));
     }
 
     @Test
@@ -76,7 +77,7 @@ public class TrainerDAOTest {
 
     @Test
     public void updateNullTrainerTest() {
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> trainerDAO.updateTrainer(null));
+        assertThatExceptionOfType(InvalidDataAccessApiUsageException.class).isThrownBy(() -> trainerDAO.updateTrainer(null));
     }
 
     @Test
@@ -91,7 +92,7 @@ public class TrainerDAOTest {
 
     @Test
     public void deleteNullTrainerTest() {
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> trainerDAO.deleteTrainer(null));
+        assertThatExceptionOfType(InvalidDataAccessApiUsageException.class).isThrownBy(() -> trainerDAO.deleteTrainer(null));
     }
 
     @Test
@@ -105,7 +106,7 @@ public class TrainerDAOTest {
 
     @Test
     public void findTrainerByNullIdTest() {
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> trainerDAO.findTrainerById(null));
+        assertThatExceptionOfType(InvalidDataAccessApiUsageException.class).isThrownBy(() -> trainerDAO.findTrainerById(null));
     }
 
     @Test
