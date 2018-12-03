@@ -211,7 +211,7 @@ public class PokemonFacadeTest {
         createDTO.setNickname(fromDTO.getNickname());
         when(beanMappingService.mapTo(createDTO, Pokemon.class)).thenReturn(fromDTO);
         doAnswer(invocation -> {
-            assertThat(fromDTO.getDateTimeOfCapture()).isNotNull().isAfter(NOW);
+            assertThat(fromDTO.getDateTimeOfCapture()).isNotNull().isAfterOrEqualTo(NOW);
             assertThat(fromDTO.getSpecies()).isNotNull().isEqualTo(raichuSpeciesEntity);
             assertThat(fromDTO.getTrainer()).isNotNull().isEqualTo(ashEntity);
             return null;
