@@ -167,5 +167,6 @@
         <module>pokemon-api</module>
     <module>pokemon-rest</module>
     <module>pokemon-spring-mvc</module>
-  </modules>
+        <module>Pokemon-sample-data</module>
+    </modules>
 </project>
