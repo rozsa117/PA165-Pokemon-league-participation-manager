@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
+ * The main controller of the rest application.
+ * 
  * @author Tamás Rózsa 445653
  */
 @RestController

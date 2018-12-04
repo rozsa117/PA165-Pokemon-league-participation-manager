@@ -6,5 +6,5 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager;
  * @author Tamás Rózsa 445653
  */
 public abstract class ApiUris {
-    public static final String POKEMON_SPECIES_URI = "/Pokemon_Species";
+    public static final String POKEMON_SPECIES_URI = "/pokemonSpecies";
 }

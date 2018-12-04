@@ -26,12 +26,16 @@ import java.time.Month;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementation for interface SampleDataLoadingFacade.
  * 
  * @author Tamás Rózsa 445653
  */
+@Component
+@Transactional
 public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
 
     final static Logger log = LoggerFactory.getLogger(SampleDataLoadingFacadeImpl.class);
@@ -66,16 +70,21 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
                 .evolvesFrom(pikachuSpecies)
                 .build();
         
-        
         PokemonSpecies onixSpecies = new PokemonSpeciesBuilder()
                 .primaryType(PokemonType.GROUND)
                 .secondaryType(PokemonType.ROCK)
                 .speciesName("Onix")
                 .build();
         
+        PokemonSpecies bulbassaurSpecies = new PokemonSpeciesBuilder()
+                .primaryType(PokemonType.GRASS)
+                .speciesName("Bulbassaur")
+                .build();
+        
         pokemonSpeciesService.createPokemonSpecies(pikachuSpecies);
         pokemonSpeciesService.createPokemonSpecies(raichuSpecies);
         pokemonSpeciesService.createPokemonSpecies(onixSpecies);
+        pokemonSpeciesService.createPokemonSpecies(bulbassaurSpecies);
         
         Trainer ashTrainer = new TrainerBuilder()
                 .name("Ash")

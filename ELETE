@@ -1,0 +1,8 @@
+HTTP/1.1 200 
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+ETag: "0fb186c10a32808a43f9fce9bd377fd6e"
+Content-Type: application/json;charset=UTF-8
+Content-Length: 97
+Date: Tue, 04 Dec 2018 11:39:48 GMT
+
