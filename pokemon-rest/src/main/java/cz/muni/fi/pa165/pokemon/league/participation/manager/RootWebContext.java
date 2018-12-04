@@ -28,7 +28,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 @Configuration
 @Import({ServiceConfiguration.class, SampleDataConfiguration.class})
-@ComponentScan(basePackages = {"cz.muni.fi.pa165.pokemon.league.participation.manager.controllers"})
+@ComponentScan(basePackages = {"cz.muni.fi.pa165.pokemon.league.participation.manager.rest.controllers"})
 public class RootWebContext implements WebMvcConfigurer {
 
     @Override
