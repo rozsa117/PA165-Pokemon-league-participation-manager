@@ -7,10 +7,10 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesC
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChainException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityUsedException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.rest.exceptions.EntityUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidParameterException;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidPreevolutionChangeException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.rest.exceptions.InvalidParameterException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.rest.exceptions.InvalidPreevolutionChangeException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.PokemonSpeciesFacade;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,13 +69,13 @@ public class PokemonSpeciesController {
      * With command 
      * curl -X POST -i -H "Content-Type: application/json" --data 
      * '{"speciesId":"4","preevolutionId":"3"}' 
-     * http://localhost:8080/pa165/rest/pokemonSpecies/changePreevlution
+     * http://localhost:8080/pa165/rest/pokemonSpecies/changePreevolution
      * the preevolution of pokemon with species id is changed.
      * @param newPreevolution The requested preevolution change.
      * @return The updated pokemon species.
      */
     @RequestMapping(
-            value = "/changePreevlution",
+            value = "/changePreevolution",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -122,7 +122,7 @@ public class PokemonSpeciesController {
     /**
      * With the following command
      * curl -X POST -i -H "Content-Type: application/json" --data  
-     * '{"speciesName":"Charizard","primaryType":"FIRE","secondaryType":"DRAGON",
+     * '{"speciesName":"Charmander","primaryType":"FIRE","secondaryType":"DRAGON",
      * "preevolutionId":"null"}' 
      * http://localhost:8080/pa165/rest/pokemonSpecies/create
      * a pokemon is created with the given attributes, evolves form takes an id 
