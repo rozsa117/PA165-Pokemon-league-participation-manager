@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions;
+package cz.muni.fi.pa165.pokemon.league.participation.manager.rest.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

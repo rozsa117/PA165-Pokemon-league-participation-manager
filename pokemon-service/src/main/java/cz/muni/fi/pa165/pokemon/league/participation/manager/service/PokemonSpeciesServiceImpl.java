@@ -84,7 +84,7 @@ public class PokemonSpeciesServiceImpl implements PokemonSpeciesService {
     private boolean hasMoreEvolutionaryStagesThan(PokemonSpecies species, int i) {
         List<PokemonSpecies> evolutions = getAllEvolutionsOfPokemonSpecies(species);
         if (i > 0) {
-            return evolutions.stream().allMatch(
+            return (!evolutions.isEmpty()) && evolutions.stream().allMatch(
                     (PokemonSpecies sp) -> hasMoreEvolutionaryStagesThan(sp, i - 1));
         } else if (i == 0) {
             return !evolutions.isEmpty();
