@@ -65,7 +65,7 @@
                     <compilerArguments>
                         <endorseddirs>${endorsed.dir}</endorseddirs>
                     </compilerArguments>
-</configuration>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -77,15 +77,13 @@
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
-                    <configuration>
-                        <home>${project.build.directory}/tomcat</home>
-                        <type>standalone</type>
-                        <properties>
-                            <cargo.servlet.port>8080</cargo.servlet.port>
-                        </properties>
-
-                    </configuration>
-
+                <configuration>
+                    <home>${project.build.directory}/tomcat</home>
+                    <type>standalone</type>
+                    <properties>
+                        <cargo.servlet.port>8080</cargo.servlet.port>
+                    </properties>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -110,7 +108,7 @@
                         </configuration>
                     </execution>
                 </executions>
-</plugin>
+            </plugin>
         </plugins>
     </build>
 
