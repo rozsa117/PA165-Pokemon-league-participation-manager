@@ -205,7 +205,6 @@ public class PokemonSpeciesController {
     @RequestMapping(
             value = "/{speciesId}/allEvolutions",
             method = RequestMethod.GET,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public final List<PokemonSpeciesDTO> getAllEvolutionsOfPokemonSpecies(@PathVariable("speciesId") long speciesId) {

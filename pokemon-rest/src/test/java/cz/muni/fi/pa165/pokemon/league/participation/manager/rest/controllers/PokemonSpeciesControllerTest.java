@@ -268,4 +268,22 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
         verify(pokemonSpeciesFacade, atLeastOnce()).removePokemonSpecies(1l);
     }
 
+    @Test
+    public void getAllEvolutionsOfPokemonSpecies() throws Exception {
+
+        when(pokemonSpeciesFacade.getAllEvolutionsOfPokemonSpecies(pikachuDTO.getId()))
+                .thenReturn(Arrays.asList( raichuDTO));
+
+        mvc.perform(MockMvcRequestBuilders.get(POKEMON_SPECIES_URI+"/1/allEvolutions")
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(raichuDTO.getId().intValue())))
+                .andExpect(jsonPath("$[0].speciesName", is(raichuDTO.getSpeciesName())));
+
+        verify(pokemonSpeciesFacade, atLeastOnce())
+                .getAllEvolutionsOfPokemonSpecies(pikachuDTO.getId());
+
+    }
+
 }
