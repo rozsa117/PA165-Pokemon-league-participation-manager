@@ -61,7 +61,7 @@ public class PokemonSpeciesController {
             return pokemonSpeciesFacade.findPokemonSpeciesById(newTyping.getSpeciesId());
         }
         catch(Exception ex) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ex.getMessage(),ex);
         }
     }
     
@@ -87,10 +87,10 @@ public class PokemonSpeciesController {
             return pokemonSpeciesFacade.findPokemonSpeciesById(newPreevolution.getSpeciesId());
         }
         catch(CircularEvolutionChainException | EvolutionChainTooLongException ex) {
-            throw new InvalidPreevolutionChangeException();
+            throw new InvalidPreevolutionChangeException(ex.getMessage(),ex);
         }
         catch (Exception ex) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ex.getMessage(),ex);
         }
     }
     
@@ -115,7 +115,7 @@ public class PokemonSpeciesController {
             throw new EntityUsedException();
         }
         catch(Exception ex) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ex.getMessage(),ex);
         }
     }
     
@@ -144,7 +144,7 @@ public class PokemonSpeciesController {
             return pokemonSpeciesFacade.findPokemonSpeciesById(id);
         }
         catch(Exception ex) {
-            throw new InvalidParameterException();
+            throw new InvalidParameterException(ex.getMessage(),ex);
         }
     }
     
@@ -167,7 +167,7 @@ public class PokemonSpeciesController {
             return pokemonSpeciesFacade.findPokemonSpeciesById(id);
         }
         catch (Exception ex) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ex.getMessage(),ex);
         }
     }
     
@@ -189,7 +189,7 @@ public class PokemonSpeciesController {
             return pokemonSpeciesFacade.getAllPokemonSpecies();
         }
         catch(Exception ex) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ex.getMessage(),ex);
         }
     }
     
@@ -213,7 +213,7 @@ public class PokemonSpeciesController {
             return pokemonSpeciesFacade.getAllEvolutionsOfPokemonSpecies(speciesId);
         }
         catch(Exception ex) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ex.getMessage(),ex);
         }
     }
 }
