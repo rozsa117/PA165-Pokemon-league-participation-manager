@@ -13,10 +13,14 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dozermapper.core.inject.Inject;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.TestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * This is abstract class for rest controller tests
+ *
+ * @author Jiří Medveď 38451
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = TestContext.class)
 @WebAppConfiguration

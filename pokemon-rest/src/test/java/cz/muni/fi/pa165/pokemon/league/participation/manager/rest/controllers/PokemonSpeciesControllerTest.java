@@ -5,17 +5,12 @@
  */
 package cz.muni.fi.pa165.pokemon.league.participation.manager.rest.controllers;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesDTO;
-import org.mockito.Mock;
 
 import static cz.muni.fi.pa165.pokemon.league.participation.manager.ApiUris.*;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangePreevolutionDTO;
@@ -36,8 +31,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.*;
 import org.junit.BeforeClass;
-import org.mockito.Mockito;
 
+/**
+ * This is the controller class of Pokemon Species test
+ *
+ * @author Jiří Medveď 38451
+ */
 public class PokemonSpeciesControllerTest extends AbstractTest {
 
     private static final PokemonSpeciesDTO pikachuDTO = new PokemonSpeciesDTO();
@@ -175,7 +174,7 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
         changePreevolutionDTO.setPreevolutionId(rockDTO.getId());
 
         String inputJson = super.mapToJson(changePreevolutionDTO);
-        
+
         doThrow(new EvolutionChainTooLongException()).when(pokemonSpeciesFacade).changePreevolution(changePreevolutionDTO);
 
         mvc.perform(MockMvcRequestBuilders.post(POKEMON_SPECIES_URI + "/changePreevolution")
@@ -195,7 +194,7 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
         changePreevolutionDTO.setPreevolutionId(rockDTO.getId());
 
         String inputJson = super.mapToJson(changePreevolutionDTO);
-        
+
         doThrow(new CircularEvolutionChainException()).when(pokemonSpeciesFacade).changePreevolution(changePreevolutionDTO);
 
         mvc.perform(MockMvcRequestBuilders.post(POKEMON_SPECIES_URI + "/changePreevolution")
@@ -215,7 +214,7 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
         changePreevolutionDTO.setPreevolutionId(rockDTO.getId());
 
         String inputJson = super.mapToJson(changePreevolutionDTO);
-        
+
         doThrow(new NoSuchEntityException()).when(pokemonSpeciesFacade).changePreevolution(changePreevolutionDTO);
 
         mvc.perform(MockMvcRequestBuilders.post(POKEMON_SPECIES_URI + "/changePreevolution")
@@ -227,19 +226,17 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
         verify(pokemonSpeciesFacade, atLeastOnce()).changePreevolution(changePreevolutionDTO);
     }
 
-    
     @Test
     public void changeTyping() throws Exception {
-        
+
         ChangeTypingDTO changeTypingDTO = new ChangeTypingDTO();
-        
+
         changeTypingDTO.setSpeciesId(pikachuDTO.getId());
         changeTypingDTO.setPrimaryType(PokemonType.FIRE);
         changeTypingDTO.setSecondaryType(PokemonType.DARK);
 
-
         String inputJson = super.mapToJson(changeTypingDTO);
-        
+
         mvc.perform(MockMvcRequestBuilders.post(POKEMON_SPECIES_URI + "/changeTyping")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(inputJson)
@@ -251,8 +248,7 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
 
     @Test
     public void removePokemonSpecies() throws Exception {
-        
-        
+
         mvc.perform(MockMvcRequestBuilders.delete(POKEMON_SPECIES_URI + "/1")
                 .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
@@ -262,10 +258,9 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
 
     @Test
     public void removePokemonSpeciesWithEntityIsUsedException() throws Exception {
-        
+
         doThrow(new EntityIsUsedException()).when(pokemonSpeciesFacade).removePokemonSpecies(1l);
-        
-        
+
         mvc.perform(MockMvcRequestBuilders.delete(POKEMON_SPECIES_URI + "/1")
                 .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isNotAcceptable());
