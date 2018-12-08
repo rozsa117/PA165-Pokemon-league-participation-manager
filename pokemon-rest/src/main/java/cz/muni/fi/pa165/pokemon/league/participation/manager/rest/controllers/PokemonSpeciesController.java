@@ -195,8 +195,7 @@ public class PokemonSpeciesController {
     
     /**
      * With command 
-     * curl -i -H "Accept: application/json" -H "Content-Type: application/json"
-     * -X GET http://localhost:8080/pa165/rest/pokemonSpecies/1/allEvolutions
+     * curl -i -X GET http://localhost:8080/pa165/rest/pokemonSpecies/1/allEvolutions
      * all evolutions of pokemon species is returned.
      * 
      * @param speciesId The evolutions of pokemon species to find.
