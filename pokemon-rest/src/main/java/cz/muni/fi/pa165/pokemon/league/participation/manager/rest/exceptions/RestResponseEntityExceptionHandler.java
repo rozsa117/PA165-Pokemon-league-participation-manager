@@ -1,17 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.fi.pa165.pokemon.league.participation.manager.rest.exceptions;
 
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
@@ -23,20 +17,18 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestResponseEntityExceptionHandler
         extends ResponseEntityExceptionHandler {
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = {ResourceNotFoundException.class})
-    protected ResponseEntity<Object> handleResourceNotFoundException(
-            Exception ex, WebRequest request) {
-        String bodyOfResponse = (ex.getCause() == null ? "Unknown cause" : ex.getCause().getMessage());
-        return handleExceptionInternal(ex, bodyOfResponse,
-                new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    protected ErrorMessage handleResourceNotFoundException(Exception ex) {
+        return new ErrorMessage((ex.getCause() == null ? "Unknown cause" : ex.getCause().getMessage()));
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(value = {InvalidParameterException.class, InvalidPreevolutionChangeException.class})
-    protected ResponseEntity<Object> handleInvalidParameterException(
-            Exception ex, WebRequest request) {
-        String bodyOfResponse = (ex.getCause() == null ? "Invalid parameters" : ex.getCause().getMessage());
-        return handleExceptionInternal(ex, bodyOfResponse,
-                new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE, request);
+    protected ErrorMessage handleInvalidParameterException(Exception ex) {
+        return new ErrorMessage((ex.getCause() == null ? "Invalid parameters" : ex.getCause().getMessage()));
     }
 
 }
