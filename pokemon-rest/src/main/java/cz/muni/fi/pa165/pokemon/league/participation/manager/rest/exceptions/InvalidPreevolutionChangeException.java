@@ -10,4 +10,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE, reason = "The choosen preevolution change is not valid.")
 public class InvalidPreevolutionChangeException extends RuntimeException {
+
+    public InvalidPreevolutionChangeException(String msg, Exception ex) {
+                super(msg,ex);
+    }
 }
