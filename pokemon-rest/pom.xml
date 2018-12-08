@@ -132,9 +132,7 @@
                     <properties>
                         <cargo.servlet.port>8080</cargo.servlet.port>
                     </properties>
-
                 </configuration>
-
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
