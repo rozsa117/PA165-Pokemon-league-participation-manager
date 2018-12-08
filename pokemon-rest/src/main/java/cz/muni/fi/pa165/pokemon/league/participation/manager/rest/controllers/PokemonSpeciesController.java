@@ -61,7 +61,7 @@ public class PokemonSpeciesController {
             return pokemonSpeciesFacade.findPokemonSpeciesById(newTyping.getSpeciesId());
         }
         catch(Exception ex) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ex.getMessage(),ex);
         }
     }
     
@@ -87,10 +87,10 @@ public class PokemonSpeciesController {
             return pokemonSpeciesFacade.findPokemonSpeciesById(newPreevolution.getSpeciesId());
         }
         catch(CircularEvolutionChainException | EvolutionChainTooLongException ex) {
-            throw new InvalidPreevolutionChangeException();
+            throw new InvalidPreevolutionChangeException(ex.getMessage(),ex);
         }
         catch (Exception ex) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ex.getMessage(),ex);
         }
     }
     
@@ -115,7 +115,7 @@ public class PokemonSpeciesController {
             throw new EntityUsedException();
         }
         catch(Exception ex) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ex.getMessage(),ex);
         }
     }
     
@@ -144,7 +144,7 @@ public class PokemonSpeciesController {
             return pokemonSpeciesFacade.findPokemonSpeciesById(id);
         }
         catch(Exception ex) {
-            throw new InvalidParameterException();
+            throw new InvalidParameterException(ex.getMessage(),ex);
         }
     }
     
@@ -167,7 +167,7 @@ public class PokemonSpeciesController {
             return pokemonSpeciesFacade.findPokemonSpeciesById(id);
         }
         catch (Exception ex) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ex.getMessage(),ex);
         }
     }
     
@@ -189,14 +189,13 @@ public class PokemonSpeciesController {
             return pokemonSpeciesFacade.getAllPokemonSpecies();
         }
         catch(Exception ex) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ex.getMessage(),ex);
         }
     }
     
     /**
      * With command 
-     * curl -i -H "Accept: application/json" -H "Content-Type: application/json"
-     * -X GET http://localhost:8080/pa165/rest/pokemonSpecies/1/allEvolutions
+     * curl -i -X GET http://localhost:8080/pa165/rest/pokemonSpecies/1/allEvolutions
      * all evolutions of pokemon species is returned.
      * 
      * @param speciesId The evolutions of pokemon species to find.
@@ -205,7 +204,6 @@ public class PokemonSpeciesController {
     @RequestMapping(
             value = "/{speciesId}/allEvolutions",
             method = RequestMethod.GET,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public final List<PokemonSpeciesDTO> getAllEvolutionsOfPokemonSpecies(@PathVariable("speciesId") long speciesId) {
@@ -214,7 +212,7 @@ public class PokemonSpeciesController {
             return pokemonSpeciesFacade.getAllEvolutionsOfPokemonSpecies(speciesId);
         }
         catch(Exception ex) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ex.getMessage(),ex);
         }
     }
 }
