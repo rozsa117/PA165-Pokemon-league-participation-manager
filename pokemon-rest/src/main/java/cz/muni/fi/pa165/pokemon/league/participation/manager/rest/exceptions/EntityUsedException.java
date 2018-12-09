@@ -5,7 +5,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Exception thrown in case the entity cannot be deleted because it is used.
- * @author User
+ * 
+ * @author Tamás Rózsa 445653
  */
 @ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE, reason = "The requested entity cannot be deleted because it is used.")
 public class EntityUsedException extends RuntimeException  {
