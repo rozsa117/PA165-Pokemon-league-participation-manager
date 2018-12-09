@@ -95,7 +95,7 @@ public class PokemonSpeciesController {
     
     /**
      * With the following command
-     * curl -i -X -DELETE http://localhost:8080/pa165/rest/pokemonSpecies/4
+     * curl -i -X DELETE http://localhost:8080/pa165/rest/pokemonSpecies/4
      * a pokemon species is deleted with given id.
      * 
      * @param id Id of the pokemon species to delete.
