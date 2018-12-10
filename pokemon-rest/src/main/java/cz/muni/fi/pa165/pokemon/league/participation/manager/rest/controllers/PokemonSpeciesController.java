@@ -7,7 +7,6 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesC
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChainException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.rest.exceptions.EntityUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.rest.exceptions.InvalidParameterException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.rest.exceptions.InvalidPreevolutionChangeException;
@@ -96,7 +95,7 @@ public class PokemonSpeciesController {
     
     /**
      * With the following command
-     * curl -i -X -DELETE http://localhost:8080/pa165/rest/pokemonSpecies/4
+     * curl -i -X DELETE http://localhost:8080/pa165/rest/pokemonSpecies/4
      * a pokemon species is deleted with given id.
      * 
      * @param id Id of the pokemon species to delete.
@@ -106,13 +105,14 @@ public class PokemonSpeciesController {
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public final void removePokemonSpecies(@PathVariable("id") long id) {
+    public final void removePokemonSpecies(@PathVariable("id") long id) throws EntityIsUsedException {
         logger.debug("rest removePokemonSpecies({})", id);
         try {
             pokemonSpeciesFacade.removePokemonSpecies(id);
         }
         catch(EntityIsUsedException ex) {
-            throw new EntityUsedException();
+//            throw new EntityUsedException();
+              throw new EntityIsUsedException(ex.getMessage(),ex);
         }
         catch(Exception ex) {
             throw new ResourceNotFoundException(ex.getMessage(),ex);

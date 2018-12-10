@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.rest.exceptions;
 
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -26,7 +27,9 @@ public class RestResponseEntityExceptionHandler
 
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-    @ExceptionHandler(value = {InvalidParameterException.class, InvalidPreevolutionChangeException.class})
+    @ExceptionHandler(value = {InvalidParameterException.class, 
+        InvalidPreevolutionChangeException.class,
+        EntityIsUsedException.class})
     protected ErrorMessage handleInvalidParameterException(Exception ex) {
         return new ErrorMessage((ex.getCause() == null ? "Invalid parameters" : ex.getCause().getMessage()));
     }
