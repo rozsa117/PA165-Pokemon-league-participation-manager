@@ -14,19 +14,19 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.validation.Differin
 public class ChangeTypingDTO {
 
     @NotNull
-    private Long speciesId;
+    private Long id;
 
     @NotNull
     private PokemonType primaryType;
 
     private PokemonType secondaryType;
 
-    public Long getSpeciesId() {
-        return speciesId;
+    public Long getId() {
+        return id;
     }
 
-    public void setSpeciesId(Long speciesId) {
-        this.speciesId = speciesId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public PokemonType getPrimaryType() {
@@ -48,7 +48,7 @@ public class ChangeTypingDTO {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.speciesId);
+        hash = 29 * hash + Objects.hashCode(this.id);
         hash = 29 * hash + Objects.hashCode(this.primaryType);
         hash = 29 * hash + Objects.hashCode(this.secondaryType);
         return hash;
@@ -66,7 +66,7 @@ public class ChangeTypingDTO {
             return false;
         }
         final ChangeTypingDTO other = (ChangeTypingDTO) obj;
-        if (!Objects.equals(this.speciesId, other.speciesId)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (this.primaryType != other.primaryType) {
@@ -77,7 +77,7 @@ public class ChangeTypingDTO {
 
     @Override
     public String toString() {
-        return "ChangeTypingDTO{" + "speciesId=" + speciesId + ", primaryType=" + primaryType + ", secondaryType=" + secondaryType + '}';
+        return "ChangeTypingDTO{" + "id=" + id + ", primaryType=" + primaryType + ", secondaryType=" + secondaryType + '}';
     }
     
 }

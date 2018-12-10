@@ -13,30 +13,30 @@
 <fmt:message var="title" key="pokemon.species"/>
 <my:pagetemplate title="${title}">
 <jsp:attribute name="body">
-    <h1><f:message key="pokemon.species"/> ${pokemonSpecies.speciesName}</h1>
+    <h1><fmt:message key="pokemon.species"/> ${pokemonSpecies.speciesName}</h1>
     <table class="table">
         <tbody>
         <tr>
-            <th><f:message key="pokemon.species.species.name"/></th>
-            <td>${pokemonSpecies.speciesName}</td>
+            <th><fmt:message key="pokemon.species.species.name"/></th>
+            <td><c:out value="${pokemonSpecies.speciesName}"/></td>
         </tr>
 
         <tr>
-            <th><f:message key="pokemon.species.primary.type"/></th>
-            <td>${pokemonSpecies.primaryType}</td>
+            <th><fmt:message key="pokemon.species.primary.type"/></th>
+            <td><c:out value="${pokemonSpecies.primaryType}"/></td>
         </tr>
         <tr>
-            <th><f:message key="pokemon.species.secondary.type"/></th>
-            <td>${pokemonSpecies.secondaryType}</td>
+            <th><fmt:message key="pokemon.species.secondary.type"/></th>
+            <td><c:out value="${pokemonSpecies.secondaryType}"/></td>
         </tr>
         <tr>
-            <th><f:message key="pokemon.species.evolves.from"/></th>
-            <td>${pokemonSpecies.evolvesFrom}</td>
+            <th><fmt:message key="pokemon.species.evolves.from"/></th>
+            <td><c:out value="${pokemonSpecies.evolvesFrom}"/></td>
         </tr>
         </tbody>
     </table>
-    <my:extraTag href="/pokemonSpecies" class="btn btn-default">
-        <f:message key="all.pokemon.species"/>
+    <my:extraTag href="/pokemonSpecies/list" class="btn btn-default">
+        <fmt:message key="all.pokemon.species"/>
     </my:extraTag>
 </jsp:attribute>
 </my:pagetemplate>

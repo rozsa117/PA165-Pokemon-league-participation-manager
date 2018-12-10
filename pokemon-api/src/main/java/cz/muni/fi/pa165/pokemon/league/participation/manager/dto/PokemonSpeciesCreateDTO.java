@@ -23,7 +23,7 @@ public class PokemonSpeciesCreateDTO {
 
     private PokemonType secondaryType;
 
-    private Long preevolutionId;
+    private Long evolvesFromId;
 
     public String getSpeciesName() {
         return speciesName;
@@ -49,12 +49,12 @@ public class PokemonSpeciesCreateDTO {
         this.secondaryType = secondaryType;
     }
 
-    public Long getPreevolutionId() {
-        return preevolutionId;
+    public Long getEvolvesFromId() {
+        return evolvesFromId;
     }
 
-    public void setPreevolutionId(Long preevolutionId) {
-        this.preevolutionId = preevolutionId;
+    public void setEvolvesFromId(Long evolvesFromId) {
+        this.evolvesFromId = evolvesFromId;
     }
 
     @Override
@@ -63,7 +63,7 @@ public class PokemonSpeciesCreateDTO {
         hash = 89 * hash + Objects.hashCode(this.speciesName);
         hash = 89 * hash + Objects.hashCode(this.primaryType);
         hash = 89 * hash + Objects.hashCode(this.secondaryType);
-        hash = 89 * hash + Objects.hashCode(this.preevolutionId);
+        hash = 89 * hash + Objects.hashCode(this.evolvesFromId);
         return hash;
     }
 
@@ -88,12 +88,12 @@ public class PokemonSpeciesCreateDTO {
         if (this.secondaryType != other.secondaryType) {
             return false;
         }
-        return Objects.equals(this.preevolutionId, other.preevolutionId);
+        return Objects.equals(this.evolvesFromId, other.evolvesFromId);
     }
 
     @Override
     public String toString() {
-        return "PokemonSpeciesCreateDTO{" + "speciesName=" + speciesName + ", primaryType=" + primaryType + ", secondaryType=" + secondaryType + ", preevolutionId=" + preevolutionId + '}';
+        return "PokemonSpeciesCreateDTO{" + "speciesName=" + speciesName + ", primaryType=" + primaryType + ", secondaryType=" + secondaryType + ", preevolutionId=" + evolvesFromId + '}';
     }
 
 }
