@@ -1,5 +1,8 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.controllers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangeTypingDTO;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,10 +11,12 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesD
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.PokemonSpeciesFacade;
 import java.util.Arrays;
+import java.util.Map;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
@@ -19,11 +24,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.junit.BeforeClass;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
+import org.springframework.util.MultiValueMap;
 
 /**
  * This is the controller class of Pokemon Species test
@@ -31,6 +41,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Jiří Medveď 38451
  */
 public class PokemonSpeciesControllerTest extends AbstractTest {
+
+    private static final Long NON_EXISTENT_ID = 1000L;
 
     private static final PokemonSpeciesDTO pikachuDTO = new PokemonSpeciesDTO();
     private static final PokemonSpeciesDTO raichuDTO = new PokemonSpeciesDTO();
@@ -63,6 +75,10 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
     @Before
     public void setUp() {
         super.setUp();
+
+        when(pokemonSpeciesFacade.findPokemonSpeciesById(pikachuDTO.getId())).thenReturn(pikachuDTO);
+        when(pokemonSpeciesFacade.findPokemonSpeciesById(raichuDTO.getId())).thenReturn(raichuDTO);
+        when(pokemonSpeciesFacade.findPokemonSpeciesById(rockDTO.getId())).thenReturn(rockDTO);
     }
 
     @Test
@@ -107,8 +123,6 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
     @Test
     public void detailTest() throws Exception {
 
-        when(pokemonSpeciesFacade.findPokemonSpeciesById(raichuDTO.getId())).thenReturn(raichuDTO);
-
         mvc.perform(MockMvcRequestBuilders
                 .get(POKEMON_SPECIES_URI + "/detail/" + raichuDTO.getId().toString()))
                 .andExpect(status().isOk())
@@ -124,7 +138,70 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
                         )
                 ));
 
-        verify(pokemonSpeciesFacade, atLeastOnce()).findPokemonSpeciesById(raichuDTO.getId());
+    }
+
+    @Test
+    public void detailNonExistentPokemonSpeciesTest() throws Exception {
+
+        mvc.perform(MockMvcRequestBuilders
+                .get(POKEMON_SPECIES_URI + "/detail/" + NON_EXISTENT_ID.toString()))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrlPattern("**/pokemonSpecies/list"))
+                .andExpect(flash().attribute("alert_danger", notNullValue()));
+
+    }
+
+    @Test
+    public void changeTypingGetTest() throws Exception {
+
+        mvc.perform(MockMvcRequestBuilders
+                .get(POKEMON_SPECIES_URI + "/changeTyping/" + pikachuDTO.getId().toString()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("pokemonSpecies/changeTyping"))
+                .andExpect(forwardedUrl("pokemonSpecies/changeTyping"))
+                .andExpect(model().attribute("pokemonSpeciesToUpdate", notNullValue()))
+                .andExpect(model().attribute("pokemonSpeciesToUpdate",
+                        allOf(
+                                hasProperty("id", is(pikachuDTO.getId())),
+                                hasProperty("primaryType", is(pikachuDTO.getPrimaryType())),
+                                hasProperty("secondaryType", is(pikachuDTO.getSecondaryType())),
+                                hasProperty("evolvesFrom", is(pikachuDTO.getEvolvesFrom()))
+                        )));
+
+    }
+
+    @Test
+    public void changeTypingGetNonExistentPokemonSpeciesTest() throws Exception {
+
+        mvc.perform(MockMvcRequestBuilders
+                .get(POKEMON_SPECIES_URI + "/changeTyping/" + NON_EXISTENT_ID.toString()))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrlPattern("**/pokemonSpecies/list"))
+                .andExpect(flash().attribute("alert_danger", notNullValue()));
+
+    }
+
+    @Test
+    public void changeTypingPostTest() throws Exception {
+
+        ChangeTypingDTO changeTypingDTO = new ChangeTypingDTO();
+
+        changeTypingDTO.setId(pikachuDTO.getId());
+        changeTypingDTO.setPrimaryType(PokemonType.FIRE);
+        changeTypingDTO.setSecondaryType(PokemonType.DARK);
+
+        mvc.perform(MockMvcRequestBuilders
+                .post(POKEMON_SPECIES_URI + "/changeTyping/" + pikachuDTO.getId().toString())
+                .param("primaryType", changeTypingDTO.getPrimaryType().toString())
+                .param("secondaryType", changeTypingDTO.getSecondaryType().toString())
+        )
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrlPattern("**/pokemonSpecies/list"))
+                .andExpect(flash().attribute("alert_danger", nullValue()))
+                .andExpect(flash().attribute("alert_warning", nullValue()))
+                .andExpect(flash().attribute("alert_success", notNullValue()));
+
+        verify(pokemonSpeciesFacade, atLeastOnce()).changeTyping(changeTypingDTO);
 
     }
 
