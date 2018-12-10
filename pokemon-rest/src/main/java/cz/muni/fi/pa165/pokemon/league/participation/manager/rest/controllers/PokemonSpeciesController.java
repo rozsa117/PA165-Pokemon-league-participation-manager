@@ -58,7 +58,7 @@ public class PokemonSpeciesController {
         logger.debug("rest changeTyping({})", newTyping);
         try {
             pokemonSpeciesFacade.changeTyping(newTyping);
-            return pokemonSpeciesFacade.findPokemonSpeciesById(newTyping.getSpeciesId());
+            return pokemonSpeciesFacade.findPokemonSpeciesById(newTyping.getId());
         }
         catch(Exception ex) {
             throw new ResourceNotFoundException(ex.getMessage(),ex);
@@ -84,7 +84,7 @@ public class PokemonSpeciesController {
         logger.debug("rest changePreevolution({})", newPreevolution);
         try {
             pokemonSpeciesFacade.changePreevolution(newPreevolution);
-            return pokemonSpeciesFacade.findPokemonSpeciesById(newPreevolution.getSpeciesId());
+            return pokemonSpeciesFacade.findPokemonSpeciesById(newPreevolution.getId());
         }
         catch(CircularEvolutionChainException | EvolutionChainTooLongException ex) {
             throw new InvalidPreevolutionChangeException(ex.getMessage(),ex);
