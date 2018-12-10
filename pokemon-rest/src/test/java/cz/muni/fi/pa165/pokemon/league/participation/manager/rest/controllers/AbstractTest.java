@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.TestContext;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.rest.exceptions.RestResponseEntityExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -22,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Jiří Medveď 38451
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = TestContext.class)
+@SpringBootTest(classes = {TestContext.class,RestResponseEntityExceptionHandler.class})
 @WebAppConfiguration
 public abstract class AbstractTest {
 

@@ -39,6 +39,9 @@ import org.junit.BeforeClass;
  */
 public class PokemonSpeciesControllerTest extends AbstractTest {
 
+    private static final String CAUSE_MESSAGE = "Cause text";
+    private static final Exception causeEx = new Exception(CAUSE_MESSAGE);
+
     private static final PokemonSpeciesDTO pikachuDTO = new PokemonSpeciesDTO();
     private static final PokemonSpeciesDTO raichuDTO = new PokemonSpeciesDTO();
     private static final PokemonSpeciesDTO rockDTO = new PokemonSpeciesDTO();
@@ -175,13 +178,15 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
 
         String inputJson = super.mapToJson(changePreevolutionDTO);
 
-        doThrow(new EvolutionChainTooLongException()).when(pokemonSpeciesFacade).changePreevolution(changePreevolutionDTO);
+        doThrow(new EvolutionChainTooLongException(causeEx.getMessage(), causeEx))
+                .when(pokemonSpeciesFacade).changePreevolution(changePreevolutionDTO);
 
         mvc.perform(MockMvcRequestBuilders.post(POKEMON_SPECIES_URI + "/changePreevolution")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(inputJson)
                 .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isNotAcceptable());
+                .andExpect(status().isNotAcceptable())
+                .andExpect(jsonPath("error", is(CAUSE_MESSAGE)));
 
         verify(pokemonSpeciesFacade, atLeastOnce()).changePreevolution(changePreevolutionDTO);
     }
@@ -195,13 +200,15 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
 
         String inputJson = super.mapToJson(changePreevolutionDTO);
 
-        doThrow(new CircularEvolutionChainException()).when(pokemonSpeciesFacade).changePreevolution(changePreevolutionDTO);
+        doThrow(new CircularEvolutionChainException(causeEx.getMessage(), causeEx))
+                .when(pokemonSpeciesFacade).changePreevolution(changePreevolutionDTO);
 
         mvc.perform(MockMvcRequestBuilders.post(POKEMON_SPECIES_URI + "/changePreevolution")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(inputJson)
                 .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isNotAcceptable());
+                .andExpect(status().isNotAcceptable())
+                .andExpect(jsonPath("error", is(CAUSE_MESSAGE)));
 
         verify(pokemonSpeciesFacade, atLeastOnce()).changePreevolution(changePreevolutionDTO);
     }
@@ -215,13 +222,15 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
 
         String inputJson = super.mapToJson(changePreevolutionDTO);
 
-        doThrow(new NoSuchEntityException()).when(pokemonSpeciesFacade).changePreevolution(changePreevolutionDTO);
+        doThrow(new NoSuchEntityException(causeEx.getMessage(), causeEx))
+                .when(pokemonSpeciesFacade).changePreevolution(changePreevolutionDTO);
 
         mvc.perform(MockMvcRequestBuilders.post(POKEMON_SPECIES_URI + "/changePreevolution")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(inputJson)
                 .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("error", is(CAUSE_MESSAGE)));
 
         verify(pokemonSpeciesFacade, atLeastOnce()).changePreevolution(changePreevolutionDTO);
     }
@@ -259,11 +268,13 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
     @Test
     public void removePokemonSpeciesWithEntityIsUsedException() throws Exception {
 
-        doThrow(new EntityIsUsedException()).when(pokemonSpeciesFacade).removePokemonSpecies(1l);
+        doThrow(new EntityIsUsedException(causeEx.getMessage(), causeEx))
+                .when(pokemonSpeciesFacade).removePokemonSpecies(1l);
 
         mvc.perform(MockMvcRequestBuilders.delete(POKEMON_SPECIES_URI + "/1")
                 .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isNotAcceptable());
+                .andExpect(status().isNotAcceptable())
+                .andExpect(jsonPath("error", is(CAUSE_MESSAGE)));
 
         verify(pokemonSpeciesFacade, atLeastOnce()).removePokemonSpecies(1l);
     }
@@ -272,9 +283,9 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
     public void getAllEvolutionsOfPokemonSpecies() throws Exception {
 
         when(pokemonSpeciesFacade.getAllEvolutionsOfPokemonSpecies(pikachuDTO.getId()))
-                .thenReturn(Arrays.asList( raichuDTO));
+                .thenReturn(Arrays.asList(raichuDTO));
 
-        mvc.perform(MockMvcRequestBuilders.get(POKEMON_SPECIES_URI+"/1/allEvolutions")
+        mvc.perform(MockMvcRequestBuilders.get(POKEMON_SPECIES_URI + "/1/allEvolutions")
                 .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))

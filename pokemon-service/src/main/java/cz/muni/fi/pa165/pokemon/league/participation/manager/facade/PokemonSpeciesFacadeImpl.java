@@ -60,7 +60,7 @@ public class PokemonSpeciesFacadeImpl implements PokemonSpeciesFacade {
         return beanMappingService.mapTo(
                 pokemonSpeciesService.getAllEvolutionsOfPokemonSpecies(
                         speciesId == null ? null : pokemonSpeciesService.findPokemonSpeciesById(speciesId)),
-                 PokemonSpeciesDTO.class);
+                PokemonSpeciesDTO.class);
     }
 
     @Override
@@ -80,8 +80,9 @@ public class PokemonSpeciesFacadeImpl implements PokemonSpeciesFacade {
     }
 
     @Override
-    public void removePokemonSpecies(@NotNull Long speciesId) throws EntityIsUsedException {
-        PokemonSpecies species = pokemonSpeciesService.findPokemonSpeciesById(speciesId);
+    public void removePokemonSpecies(@NotNull Long speciesId)
+            throws EntityIsUsedException, NoSuchEntityException {
+        PokemonSpecies species = getNonNullSpecies(speciesId);
         if (species != null) {
             pokemonSpeciesService.remove(species);
         }

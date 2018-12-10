@@ -79,8 +79,9 @@ public interface PokemonSpeciesFacade {
      * @param speciesId ID of the species to remove.
      * @throws EntityIsUsedException when deleting the entity is not possible
      * because it is referenced elsewhere.
+     * @throws NoSuchEntityException when Pokemon Species of that id does not exist
      */
     void removePokemonSpecies(Long speciesId)
-            throws EntityIsUsedException;
+            throws EntityIsUsedException, NoSuchEntityException;
     
 }
