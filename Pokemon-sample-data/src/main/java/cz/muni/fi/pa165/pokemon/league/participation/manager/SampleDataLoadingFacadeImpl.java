@@ -78,7 +78,7 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
         
         PokemonSpecies bulbassaurSpecies = new PokemonSpeciesBuilder()
                 .primaryType(PokemonType.GRASS)
-                .speciesName("Bulbassaur")
+                .speciesName("Bulbasaur")
                 .build();
         
         pokemonSpeciesService.createPokemonSpecies(pikachuSpecies);

@@ -1,12 +1,14 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.facade;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.PokemonSpeciesBuilder;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangePreevolutionDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangeTypingDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.builders.PokemonSpeciesDTOBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChainException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
@@ -145,7 +147,7 @@ public class PokemonSpeciesFacadeTest {
     @Test
     public void testChangeTyping() throws NoSuchEntityException {
         ChangeTypingDTO pokemon = new ChangeTypingDTO();
-        pokemon.setSpeciesId(15L);
+        pokemon.setId(15L);
         pokemon.setPrimaryType(PokemonType.FIRE);
         when(pokemonSpeciesService.findPokemonSpeciesById(15L)).thenReturn(rockEntity);
         
@@ -161,7 +163,7 @@ public class PokemonSpeciesFacadeTest {
     @Test
     public void testChangeTypingNoSuchEntityException() {
         ChangeTypingDTO pokemon = new ChangeTypingDTO();
-        pokemon.setSpeciesId(15L);
+        pokemon.setId(15L);
         pokemon.setPrimaryType(PokemonType.FIRE);
         
         assertThatExceptionOfType(NoSuchEntityException.class).isThrownBy(() -> pokemonSpeciesFacade.changeTyping(pokemon));

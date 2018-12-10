@@ -173,7 +173,7 @@ public class BeanMappingServiceTest {
                 .speciesName(nestedSpecies.getSpeciesName())
                 .build();
         sourceSpeciesCreateDTO = new PokemonSpeciesCreateDTO();
-        sourceSpeciesCreateDTO.setPreevolutionId(-99L); /* Set to something so that we fail if it maps to something. */
+        sourceSpeciesCreateDTO.setEvolvesFromId(-99L); /* Set to something so that we fail if it maps to something. */
         sourceSpeciesCreateDTO.setPrimaryType(expectedSpecies.getPrimaryType());
         sourceSpeciesCreateDTO.setSecondaryType(expectedSpecies.getSecondaryType());
         sourceSpeciesCreateDTO.setSpeciesName(expectedSpecies.getSpeciesName());

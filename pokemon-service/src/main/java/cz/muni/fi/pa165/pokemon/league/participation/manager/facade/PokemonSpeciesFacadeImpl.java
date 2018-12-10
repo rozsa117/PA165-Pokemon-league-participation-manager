@@ -36,9 +36,9 @@ public class PokemonSpeciesFacadeImpl implements PokemonSpeciesFacade {
     public Long createPokemonSpecies(PokemonSpeciesCreateDTO species) throws EvolutionChainTooLongException {
         PokemonSpecies speciesEntity = beanMappingService.mapTo(species, PokemonSpecies.class);
         speciesEntity.setEvolvesFrom(
-                species.getPreevolutionId() == null
+                species.getEvolvesFromId() == null
                 ? null
-                : pokemonSpeciesService.findPokemonSpeciesById(species.getPreevolutionId())
+                : pokemonSpeciesService.findPokemonSpeciesById(species.getEvolvesFromId())
         );
         pokemonSpeciesService.createPokemonSpecies(speciesEntity);
         return speciesEntity.getId();
@@ -65,17 +65,17 @@ public class PokemonSpeciesFacadeImpl implements PokemonSpeciesFacade {
 
     @Override
     public void changeTyping(ChangeTypingDTO newTyping) throws NoSuchEntityException {
-        PokemonSpecies species = getNonNullSpecies(newTyping.getSpeciesId());
+        PokemonSpecies species = getNonNullSpecies(newTyping.getId());
         pokemonSpeciesService.changeTyping(species, newTyping.getPrimaryType(), newTyping.getSecondaryType());
     }
 
     @Override
     public void changePreevolution(ChangePreevolutionDTO newPreevolution)
             throws EvolutionChainTooLongException, CircularEvolutionChainException, NoSuchEntityException {
-        PokemonSpecies species = getNonNullSpecies(newPreevolution.getSpeciesId());
+        PokemonSpecies species = getNonNullSpecies(newPreevolution.getId());
             pokemonSpeciesService.changePreevolution(
                     species,
-                    pokemonSpeciesService.findPokemonSpeciesById(newPreevolution.getPreevolutionId())
+                    newPreevolution.getEvolvesFrom() == null ? null : pokemonSpeciesService.findPokemonSpeciesById(newPreevolution.getEvolvesFrom())
             );
     }
 
