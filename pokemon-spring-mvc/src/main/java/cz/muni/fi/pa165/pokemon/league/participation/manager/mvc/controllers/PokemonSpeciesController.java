@@ -40,11 +40,11 @@ public class PokemonSpeciesController {
     final static Logger log = LoggerFactory.getLogger(PokemonSpeciesController.class);
     
     @Inject
-    PokemonSpeciesFacade pokemonSpeceisFacade;
+    PokemonSpeciesFacade pokemonSpeciesFacade;
     
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
-        model.addAttribute("allPokemonSpecies", pokemonSpeceisFacade.getAllPokemonSpecies());
+        model.addAttribute("allPokemonSpecies", pokemonSpeciesFacade.getAllPokemonSpecies());
         return "pokemonSpecies/list";
     }
     
@@ -54,11 +54,11 @@ public class PokemonSpeciesController {
         RedirectAttributes redirectAttributes,
         UriComponentsBuilder uriComponentsBuilder) {
         
-        if (pokemonSpeceisFacade.findPokemonSpeciesById(id) == null) {
+        if (pokemonSpeciesFacade.findPokemonSpeciesById(id) == null) {
             redirectAttributes.addFlashAttribute("alert_danger", "No pokemon species with id " + id + " exists");
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         }
-        model.addAttribute("pokemonSpecies", pokemonSpeceisFacade.findPokemonSpeciesById(id));
+        model.addAttribute("pokemonSpecies", pokemonSpeciesFacade.findPokemonSpeciesById(id));
         return "pokemonSpecies/detail";
     }
     
@@ -68,11 +68,11 @@ public class PokemonSpeciesController {
         RedirectAttributes redirectAttributes,
         UriComponentsBuilder uriComponentsBuilder) {
         
-        if (pokemonSpeceisFacade.findPokemonSpeciesById(id) == null) {
+        if (pokemonSpeciesFacade.findPokemonSpeciesById(id) == null) {
             redirectAttributes.addFlashAttribute("alert_danger", "No pokemon species with id " + id + " exists");
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         }
-        model.addAttribute("pokemonSpeciesToUpdate", pokemonSpeceisFacade.findPokemonSpeciesById(id));
+        model.addAttribute("pokemonSpeciesToUpdate", pokemonSpeciesFacade.findPokemonSpeciesById(id));
         return "pokemonSpecies/changeTyping";
     }
 
@@ -87,13 +87,16 @@ public class PokemonSpeciesController {
         pokemonSpeciesToUpdate.setId(id);
 
         if (bindingResult.hasErrors()) {
-            for (FieldError fe : bindingResult.getFieldErrors()) {
+            bindingResult.getGlobalErrors().forEach((ge) -> {
+                log.trace("ObjectError: {}", ge);
+            });
+            bindingResult.getFieldErrors().forEach((fe) -> {
                 model.addAttribute(fe.getField() + "_error", true);
-            }
+            });
             return "pokemonSpecies/changeTyping";
         }
         try {
-            pokemonSpeceisFacade.changeTyping(pokemonSpeciesToUpdate);
+            pokemonSpeciesFacade.changeTyping(pokemonSpeciesToUpdate);
         } catch (NoSuchEntityException ex) {
             java.util.logging.Logger.getLogger(PokemonSpeciesController.class.getName()).log(Level.SEVERE, null, ex);
             redirectAttributes.addFlashAttribute("alert_warning", "No pokemon species with id " + pokemonSpeciesToUpdate.getId() + " exists");
@@ -109,11 +112,11 @@ public class PokemonSpeciesController {
         RedirectAttributes redirectAttributes,
         UriComponentsBuilder uriComponentsBuilder) {
         
-        if (pokemonSpeceisFacade.findPokemonSpeciesById(id) == null) {
+        if (pokemonSpeciesFacade.findPokemonSpeciesById(id) == null) {
             redirectAttributes.addFlashAttribute("alert_danger", "No pokemon species with id " + id + " exists");
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         }
-        model.addAttribute("pokemonSpeciesToUpdate", pokemonSpeceisFacade.findPokemonSpeciesById(id));
+        model.addAttribute("pokemonSpeciesToUpdate", pokemonSpeciesFacade.findPokemonSpeciesById(id));
         return "pokemonSpecies/changePreevolution";
     }
 
@@ -128,13 +131,16 @@ public class PokemonSpeciesController {
         pokemonSpeciesToUpdate.setId(id);
 
         if (bindingResult.hasErrors()) {
-            for (FieldError fe : bindingResult.getFieldErrors()) {
+            bindingResult.getGlobalErrors().forEach((ge) -> {
+                log.trace("ObjectError: {}", ge);
+            });
+            bindingResult.getFieldErrors().forEach((fe) -> {
                 model.addAttribute(fe.getField() + "_error", true);
-            }
+            });
             return "pokemonSpecies/changePreevolution";
         }
         try {
-            pokemonSpeceisFacade.changePreevolution(pokemonSpeciesToUpdate);
+            pokemonSpeciesFacade.changePreevolution(pokemonSpeciesToUpdate);
         } catch (NoSuchEntityException ex) {
             java.util.logging.Logger.getLogger(PokemonSpeciesController.class.getName()).log(Level.SEVERE, null, ex);
             redirectAttributes.addFlashAttribute("alert_danger", "No pokemon species with id " + pokemonSpeciesToUpdate.getId() + " exists");
@@ -172,22 +178,22 @@ public class PokemonSpeciesController {
         UriComponentsBuilder uriComponentsBuilder) {
         
         log.debug("create(formBean={})", formBean);
-        //in case of validation error forward back to the the form
         if (bindingResult.hasErrors()) {
-            //model.addAttribute("dogCreate", new DogCreateDTO());
-            for (ObjectError ge : bindingResult.getGlobalErrors()) {
+            bindingResult.getGlobalErrors().forEach((ge) -> {
                 log.trace("ObjectError: {}", ge);
-            }
-            for (FieldError fe : bindingResult.getFieldErrors()) {
+            });
+            bindingResult.getFieldErrors().stream().map((fe) -> {
                 model.addAttribute(fe.getField() + "_error", true);
+                return fe;
+            }).forEachOrdered((fe) -> {
                 log.trace("FieldError: {}", fe);
-            }
+            });
             return "dogs/create";
         }
 
         Long id = null;
         try {
-            id = pokemonSpeceisFacade.createPokemonSpecies(formBean);
+            id = pokemonSpeciesFacade.createPokemonSpecies(formBean);
         } catch (EvolutionChainTooLongException ex) {
             java.util.logging.Logger.getLogger(PokemonSpeciesController.class.getName()).log(Level.SEVERE, null, ex);
             redirectAttributes.addFlashAttribute("alert_warning", "The choosen evolution chain is too long");
@@ -207,7 +213,7 @@ public class PokemonSpeciesController {
     @ModelAttribute("allSpecies")
     public List<PokemonSpeciesDTO> allSpecies() {
         log.debug("allSpecies()");
-        return pokemonSpeceisFacade.getAllPokemonSpecies();
+        return pokemonSpeciesFacade.getAllPokemonSpecies();
     }
 
 }

@@ -73,10 +73,10 @@ public class PokemonSpeciesFacadeImpl implements PokemonSpeciesFacade {
     public void changePreevolution(ChangePreevolutionDTO newPreevolution)
             throws EvolutionChainTooLongException, CircularEvolutionChainException, NoSuchEntityException {
         PokemonSpecies species = getNonNullSpecies(newPreevolution.getId());
-            pokemonSpeciesService.changePreevolution(
-                    species,
-                    newPreevolution.getEvolvesFrom() == null ? null : pokemonSpeciesService.findPokemonSpeciesById(newPreevolution.getEvolvesFrom())
-            );
+        pokemonSpeciesService.changePreevolution(
+                species,
+                newPreevolution.getEvolvesFrom() == null ? null : getNonNullSpecies(newPreevolution.getEvolvesFrom())
+        );
     }
 
     @Override
