@@ -18,7 +18,6 @@
     
     <form:form method="post" action="${pageContext.request.contextPath}/pokemonSpecies/changeTyping/${pokemonSpeciesToUpdate.id}"
                modelAttribute="pokemonSpeciesToUpdate" cssClass="form-horizontal">
-    
         <div class="form-group">
             <form:label path="primaryType" cssClass="col-sm-2 control-label">
                         <fmt:message key="pokemon.species.primary.type"/>
