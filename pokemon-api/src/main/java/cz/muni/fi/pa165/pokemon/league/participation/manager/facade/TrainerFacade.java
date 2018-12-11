@@ -82,4 +82,12 @@ public interface TrainerFacade {
      */
     public void setAdmin (@NotNull Long trainerId, boolean admin) throws NoAdministratorException;
 
+    /**
+     * Retrieve id of a trainer with given username.
+     * 
+     * @param username Username of the trainer.
+     * @return The trainer having the username, null if such trainer doesn't exist.
+     */
+    public TrainerDTO findTrainerByUsername(String username);
+
 }

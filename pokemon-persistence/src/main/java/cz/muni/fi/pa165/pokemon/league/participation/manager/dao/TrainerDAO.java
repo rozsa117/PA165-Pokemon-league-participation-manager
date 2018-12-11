@@ -56,4 +56,13 @@ public interface TrainerDAO {
      * @return number of administrators
      */
     long getAdminCount();
+    
+    /**
+     * Find the trainer who has the given username.
+     * 
+     * @param username Username of the searched trainer.
+     * @return The found trainer, null if no such trainer exists.
+     */
+    Trainer findTrainerByUsername(String username);
+
 }

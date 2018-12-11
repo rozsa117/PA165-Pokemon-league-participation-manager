@@ -86,9 +86,15 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Override
     public boolean isGymLeader(Trainer trainer) {
-        return (DAOExceptionWrapper.withResult(() -> gymDao.getAllGyms(), "getAllGyms failed")
-                .stream().anyMatch((gym) -> (gym.getGymLeader().equals(trainer))));
+        return DAOExceptionWrapper.withResult(() -> gymDao.getAllGyms(), "getAllGyms failed")
+                .stream().anyMatch((gym) -> (gym.getGymLeader().equals(trainer)));
+    }    
+    
+    @Override
+    public Trainer findTrainerByUsername(String username) {
+        return DAOExceptionWrapper.withResult(() -> trainerDao.findTrainerByUsername(username), "findTrainerByUsername failed");
     }
+
 
     private static String createHash(String password) {
         final int SALT_BYTE_SIZE = 24;

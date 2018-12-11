@@ -75,5 +75,10 @@ public class TrainerFacadeImpl implements TrainerFacade {
     public void setAdmin(Long trainerId, boolean admin) throws NoAdministratorException {
         trainerService.setAdmin(trainerService.getTrainerWithId(trainerId), admin);
     }
+    
+    @Override
+    public TrainerDTO findTrainerByUsername(String username) {
+        return beanMappingService.mapTo(trainerService.findTrainerByUsername(username), TrainerDTO.class);
+    }
 
 }
