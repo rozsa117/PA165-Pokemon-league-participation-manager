@@ -19,6 +19,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -79,12 +80,11 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
         when(pokemonSpeciesFacade.findPokemonSpeciesById(pikachuDTO.getId())).thenReturn(pikachuDTO);
         when(pokemonSpeciesFacade.findPokemonSpeciesById(raichuDTO.getId())).thenReturn(raichuDTO);
         when(pokemonSpeciesFacade.findPokemonSpeciesById(rockDTO.getId())).thenReturn(rockDTO);
+        when(pokemonSpeciesFacade.getAllPokemonSpecies()).thenReturn(Arrays.asList(pikachuDTO, raichuDTO, rockDTO));
     }
 
     @Test
     public void listTest() throws Exception {
-
-        when(pokemonSpeciesFacade.getAllPokemonSpecies()).thenReturn(Arrays.asList(pikachuDTO, raichuDTO, rockDTO));
 
         mvc.perform(MockMvcRequestBuilders.get(POKEMON_SPECIES_URI + "/list"))
                 .andExpect(status().isOk())
@@ -404,13 +404,16 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
 
     @Test
     public void newTest() throws Exception {
-
+        
         mvc.perform(MockMvcRequestBuilders
                 .get(POKEMON_SPECIES_URI + "/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("pokemonSpecies/create"))
                 .andExpect(forwardedUrl("pokemonSpecies/create"))
-                .andExpect(model().attribute("pokemonSpeciesCreate", notNullValue()));
+                .andExpect(model().attribute("pokemonSpeciesCreate", notNullValue()))
+                .andExpect(model().attribute("allSpecies", hasSize(greaterThan(0))))
+                .andExpect(model().attribute("allTypes", is(PokemonType.values())))
+                ;
 
     }
 

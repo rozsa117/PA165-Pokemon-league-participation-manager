@@ -129,7 +129,7 @@ public class PokemonSpeciesController {
             pokemonSpeciesFacade.changeTyping(pokemonSpeciesToUpdate);
         } catch (NoSuchEntityException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
-            redirectAttributes.addFlashAttribute("alert_warning", String.format(messages.getString("pokemon.species.does.not.exists"), id));
+            redirectAttributes.addFlashAttribute("alert_danger", String.format(messages.getString("pokemon.species.does.not.exists"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         }
         ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
