@@ -11,31 +11,31 @@ import javax.validation.constraints.NotNull;
 public class ChangePreevolutionDTO {
 
     @NotNull
-    private Long speciesId;
+    private Long id;
 
-    private Long preevolutionId;
+    private Long evolvesFrom;
 
-    public Long getSpeciesId() {
-        return speciesId;
+    public Long getId() {
+        return id;
     }
 
-    public void setSpeciesId(Long speciesId) {
-        this.speciesId = speciesId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Long getPreevolutionId() {
-        return preevolutionId;
+    public Long getEvolvesFrom() {
+        return evolvesFrom;
     }
 
-    public void setPreevolutionId(Long preevolutionId) {
-        this.preevolutionId = preevolutionId;
+    public void setEvolvesFrom(Long evolvesFrom) {
+        this.evolvesFrom = evolvesFrom;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 19 * hash + Objects.hashCode(this.speciesId);
-        hash = 19 * hash + Objects.hashCode(this.preevolutionId);
+        hash = 19 * hash + Objects.hashCode(this.id);
+        hash = 19 * hash + Objects.hashCode(this.evolvesFrom);
         return hash;
     }
 
@@ -51,15 +51,15 @@ public class ChangePreevolutionDTO {
             return false;
         }
         final ChangePreevolutionDTO other = (ChangePreevolutionDTO) obj;
-        if (!Objects.equals(this.speciesId, other.speciesId)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        return Objects.equals(this.preevolutionId, other.preevolutionId);
+        return Objects.equals(this.evolvesFrom, other.evolvesFrom);
     }
 
     @Override
     public String toString() {
-        return "ChangePreevolutionDTO{" + "speciesId=" + speciesId + ", preevolutionId=" + preevolutionId + '}';
+        return "ChangePreevolutionDTO{" + "speciesId=" + id + ", preevolutionId=" + evolvesFrom + '}';
     }
 
 }
