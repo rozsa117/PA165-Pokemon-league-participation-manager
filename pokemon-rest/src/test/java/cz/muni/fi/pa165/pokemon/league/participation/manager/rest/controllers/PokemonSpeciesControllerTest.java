@@ -111,7 +111,7 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
         psCreateDTO.setSpeciesName(raichuDTO.getSpeciesName());
         psCreateDTO.setPrimaryType(raichuDTO.getPrimaryType());
         psCreateDTO.setSecondaryType(raichuDTO.getSecondaryType());
-        psCreateDTO.setPreevolutionId(raichuDTO.getEvolvesFrom().getId());
+        psCreateDTO.setEvolvesFromId(raichuDTO.getEvolvesFrom().getId());
 
         when(pokemonSpeciesFacade.createPokemonSpecies(psCreateDTO)).thenReturn(raichuDTO.getId());
         when(pokemonSpeciesFacade.findPokemonSpeciesById(raichuDTO.getId())).thenReturn(raichuDTO);
@@ -136,7 +136,7 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
         psCreateDTO.setSpeciesName(raichuDTO.getSpeciesName());
         psCreateDTO.setPrimaryType(raichuDTO.getPrimaryType());
         psCreateDTO.setSecondaryType(raichuDTO.getSecondaryType());
-        psCreateDTO.setPreevolutionId(raichuDTO.getEvolvesFrom().getId());
+        psCreateDTO.setEvolvesFromId(raichuDTO.getEvolvesFrom().getId());
 
         when(pokemonSpeciesFacade.createPokemonSpecies(psCreateDTO)).thenThrow(new EvolutionChainTooLongException());
 
@@ -155,8 +155,8 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
     public void changePreevolution() throws Exception {
 
         ChangePreevolutionDTO changePreevolutionDTO = new ChangePreevolutionDTO();
-        changePreevolutionDTO.setSpeciesId(rockDTO.getId());
-        changePreevolutionDTO.setPreevolutionId(pikachuDTO.getId());
+        changePreevolutionDTO.setId(rockDTO.getId());
+        changePreevolutionDTO.setEvolvesFrom(pikachuDTO.getId());
 
         String inputJson = super.mapToJson(changePreevolutionDTO);
 
@@ -173,8 +173,8 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
     public void changePreevolutionWithEvolutionChainTooLongException() throws Exception {
 
         ChangePreevolutionDTO changePreevolutionDTO = new ChangePreevolutionDTO();
-        changePreevolutionDTO.setSpeciesId(rockDTO.getId());
-        changePreevolutionDTO.setPreevolutionId(rockDTO.getId());
+        changePreevolutionDTO.setId(rockDTO.getId());
+        changePreevolutionDTO.setEvolvesFrom(rockDTO.getId());
 
         String inputJson = super.mapToJson(changePreevolutionDTO);
 
@@ -195,8 +195,8 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
     public void changePreevolutionWithCircularEvolutionChainException() throws Exception {
 
         ChangePreevolutionDTO changePreevolutionDTO = new ChangePreevolutionDTO();
-        changePreevolutionDTO.setSpeciesId(rockDTO.getId());
-        changePreevolutionDTO.setPreevolutionId(rockDTO.getId());
+        changePreevolutionDTO.setId(rockDTO.getId());
+        changePreevolutionDTO.setEvolvesFrom(rockDTO.getId());
 
         String inputJson = super.mapToJson(changePreevolutionDTO);
 
@@ -217,8 +217,8 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
     public void changePreevolutionWithNoSuchEntityException() throws Exception {
 
         ChangePreevolutionDTO changePreevolutionDTO = new ChangePreevolutionDTO();
-        changePreevolutionDTO.setSpeciesId(rockDTO.getId());
-        changePreevolutionDTO.setPreevolutionId(rockDTO.getId());
+        changePreevolutionDTO.setId(rockDTO.getId());
+        changePreevolutionDTO.setEvolvesFrom(rockDTO.getId());
 
         String inputJson = super.mapToJson(changePreevolutionDTO);
 
@@ -240,7 +240,7 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
 
         ChangeTypingDTO changeTypingDTO = new ChangeTypingDTO();
 
-        changeTypingDTO.setSpeciesId(pikachuDTO.getId());
+        changeTypingDTO.setId(pikachuDTO.getId());
         changeTypingDTO.setPrimaryType(PokemonType.FIRE);
         changeTypingDTO.setSecondaryType(PokemonType.DARK);
 

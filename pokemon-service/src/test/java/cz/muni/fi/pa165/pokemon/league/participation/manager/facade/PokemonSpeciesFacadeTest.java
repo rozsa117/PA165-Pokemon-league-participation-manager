@@ -147,7 +147,7 @@ public class PokemonSpeciesFacadeTest {
     @Test
     public void testChangeTyping() throws NoSuchEntityException {
         ChangeTypingDTO pokemon = new ChangeTypingDTO();
-        pokemon.setSpeciesId(15L);
+        pokemon.setId(15L);
         pokemon.setPrimaryType(PokemonType.FIRE);
         when(pokemonSpeciesService.findPokemonSpeciesById(15L)).thenReturn(rockEntity);
 
@@ -163,7 +163,7 @@ public class PokemonSpeciesFacadeTest {
     @Test
     public void testChangeTypingNoSuchEntityException() {
         ChangeTypingDTO pokemon = new ChangeTypingDTO();
-        pokemon.setSpeciesId(15L);
+        pokemon.setId(15L);
         pokemon.setPrimaryType(PokemonType.FIRE);
 
         assertThatExceptionOfType(NoSuchEntityException.class).isThrownBy(() -> pokemonSpeciesFacade.changeTyping(pokemon));
@@ -172,8 +172,8 @@ public class PokemonSpeciesFacadeTest {
     @Test
     public void testChangePreevolution() throws Exception {
         ChangePreevolutionDTO pokemon = new ChangePreevolutionDTO();
-        pokemon.setSpeciesId(rockEntity.getId());
-        pokemon.setPreevolutionId(pikachuEntity.getId());
+        pokemon.setId(rockEntity.getId());
+        pokemon.setEvolvesFrom(pikachuEntity.getId());
         when(pokemonSpeciesService.findPokemonSpeciesById(rockEntity.getId()))
                 .thenReturn(rockEntity);
         when(pokemonSpeciesService.findPokemonSpeciesById(pikachuEntity.getId()))
@@ -191,8 +191,8 @@ public class PokemonSpeciesFacadeTest {
     @Test
     public void testChangePreevolutionToNull() throws Exception {
         ChangePreevolutionDTO pokemon = new ChangePreevolutionDTO();
-        pokemon.setSpeciesId(rockEntity.getId());
-        pokemon.setPreevolutionId(null);
+        pokemon.setId(rockEntity.getId());
+        pokemon.setEvolvesFrom(null);
         when(pokemonSpeciesService.findPokemonSpeciesById(rockEntity.getId()))
                 .thenReturn(rockEntity);
 
@@ -208,8 +208,8 @@ public class PokemonSpeciesFacadeTest {
     @Test
     public void testChangePreevolutionToNonExistentId() throws Exception {
         ChangePreevolutionDTO pokemon = new ChangePreevolutionDTO();
-        pokemon.setSpeciesId(rockEntity.getId());
-        pokemon.setPreevolutionId(15L);
+        pokemon.setId(rockEntity.getId());
+        pokemon.setEvolvesFrom(15L);
 
         when(pokemonSpeciesService.findPokemonSpeciesById(rockEntity.getId()))
                 .thenReturn(rockEntity);
@@ -221,8 +221,8 @@ public class PokemonSpeciesFacadeTest {
     @Test
     public void testChangePreevolutionOfNonExistentId() throws Exception {
         ChangePreevolutionDTO pokemon = new ChangePreevolutionDTO();
-        pokemon.setSpeciesId(15L);
-        pokemon.setPreevolutionId(pikachuEntity.getId());
+        pokemon.setId(15L);
+        pokemon.setEvolvesFrom(pikachuEntity.getId());
 
         assertThatExceptionOfType(NoSuchEntityException.class)
                 .isThrownBy(() -> pokemonSpeciesFacade.changePreevolution(pokemon));
