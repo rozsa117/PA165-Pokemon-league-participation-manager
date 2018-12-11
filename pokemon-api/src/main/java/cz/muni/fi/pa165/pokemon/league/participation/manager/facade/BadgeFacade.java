@@ -9,6 +9,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIs
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidChallengeStatusChangeException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
+import java.util.List;
 
 /**
  * Interface for Badge Facade
@@ -87,4 +88,21 @@ public interface BadgeFacade {
     void reopenChallenge(BadgeStatusChangeDTO badge)
             throws InsufficientRightsException, NoSuchEntityException, InvalidChallengeStatusChangeException;
 
+    /**
+     * Retrieves a list of all badges of a trainer.
+     * @param trainerId ID of trainer.
+     * @return List of badges belonging to a trainer.
+     * @throws NoSuchEntityException when trainer of given id doesn't exist.
+     */
+    List<BadgeDTO> findBadgesOfTrainer(Long trainerId)
+            throws NoSuchEntityException;
+    /**
+     * Retrieves a list of all badges of a gym.
+     * @param gymId ID of gym.
+     * @return List of badges issued by a gym.
+     * @throws NoSuchEntityException when gym of given id doesn't exist.
+     */
+    List<BadgeDTO> findBadgesOfGym(Long gymId)
+            throws NoSuchEntityException;
+    
 }

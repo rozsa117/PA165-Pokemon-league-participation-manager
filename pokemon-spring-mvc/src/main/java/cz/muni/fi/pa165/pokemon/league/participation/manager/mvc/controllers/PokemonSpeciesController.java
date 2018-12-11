@@ -9,6 +9,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.Circular
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.PokemonSpeciesFacade;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -68,7 +69,7 @@ public class PokemonSpeciesController {
         log.debug("mvc detail({})", id);
         if (pokemonSpeciesFacade.findPokemonSpeciesById(id) == null) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
-            redirectAttributes.addFlashAttribute("alert_danger", String.format(messages.getString("pokemon.species.does.not.exists"), id));
+            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon.species.singular"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         }
         model.addAttribute("pokemonSpecies", pokemonSpeciesFacade.findPokemonSpeciesById(id));
@@ -90,7 +91,7 @@ public class PokemonSpeciesController {
         log.debug("mvc GET changeTyping({})", id);
         if (pokemonSpeciesFacade.findPokemonSpeciesById(id) == null) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
-            redirectAttributes.addFlashAttribute("alert_danger", String.format(messages.getString("pokemon.species.does.not.exists"), id));
+            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon.species.singular"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         }
         model.addAttribute("pokemonSpeciesToUpdate", pokemonSpeciesFacade.findPokemonSpeciesById(id));
@@ -130,7 +131,7 @@ public class PokemonSpeciesController {
             pokemonSpeciesFacade.changeTyping(pokemonSpeciesToUpdate);
         } catch (NoSuchEntityException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
-            redirectAttributes.addFlashAttribute("alert_warning", String.format(messages.getString("pokemon.species.does.not.exists"), id));
+            redirectAttributes.addFlashAttribute("alert_warning", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon.species.singular"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         }
         ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
@@ -153,7 +154,7 @@ public class PokemonSpeciesController {
         log.debug("mvc GET changePreevolution({})", id);
         if (pokemonSpeciesFacade.findPokemonSpeciesById(id) == null) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
-            redirectAttributes.addFlashAttribute("alert_danger", String.format(messages.getString("pokemon.species.does.not.exists"), id));
+            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon.species.singular"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         }
         model.addAttribute("pokemonSpeciesToUpdate", pokemonSpeciesFacade.findPokemonSpeciesById(id));
@@ -193,7 +194,7 @@ public class PokemonSpeciesController {
             pokemonSpeciesFacade.changePreevolution(pokemonSpeciesToUpdate);
         } catch (NoSuchEntityException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
-            redirectAttributes.addFlashAttribute("alert_danger", String.format(messages.getString("pokemon.species.does.not.exists"), id));
+            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon.species.singular"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         } catch (CircularEvolutionChainException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
@@ -257,7 +258,7 @@ public class PokemonSpeciesController {
             id = pokemonSpeciesFacade.createPokemonSpecies(formBean);
         } catch (EvolutionChainTooLongException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
-            redirectAttributes.addFlashAttribute("alert_warning",  messages.getString("pokemon.species.evolution.chan.too.long"));
+            redirectAttributes.addFlashAttribute("alert_warning",  messages.getString("pokemon.species.evolution.chain.too.long"));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/create").build().encode().toUriString();
         } catch (NoSuchEntityException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
@@ -265,7 +266,7 @@ public class PokemonSpeciesController {
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/create").build().encode().toUriString();
         }
         ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
-        redirectAttributes.addFlashAttribute("alert_success", String.format(messages.getString("pokemon.species.created.successfully"), id));
+        redirectAttributes.addFlashAttribute("alert_success", MessageFormat.format(messages.getString("pokemon.species.created.successfully"), messages.getString("pokemon.species.singular"), id));
         return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").toUriString();
     }
     
