@@ -8,8 +8,6 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesD
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.builders.PokemonSpeciesDTOBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChainException;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
@@ -30,7 +28,6 @@ import static org.mockito.Mockito.when;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -113,7 +110,7 @@ public class PokemonSpeciesFacadeTest {
     }
 
     @Test
-    public void testCreatePokemonSpecies() throws EvolutionChainTooLongException {
+    public void testCreatePokemonSpecies() throws Exception {
         PokemonSpeciesCreateDTO rockSpecies;
         rockSpecies = new PokemonSpeciesCreateDTO();
         rockSpecies.setSpeciesName("Rock");
@@ -123,6 +120,19 @@ public class PokemonSpeciesFacadeTest {
         assertThat(pokemonSpeciesFacade.createPokemonSpecies(rockSpecies))
                 .isEqualTo(rockEntity.getId());
         verify(pokemonSpeciesService, atLeastOnce()).createPokemonSpecies(rockEntity);
+    }
+
+    @Test
+    public void testCreatePokemonSpeciesNoSuchEntityException() throws Exception {
+        PokemonSpeciesCreateDTO rockSpecies;
+        rockSpecies = new PokemonSpeciesCreateDTO();
+        rockSpecies.setSpeciesName("Rock");
+        rockSpecies.setPrimaryType(PokemonType.ROCK);
+        rockSpecies.setSecondaryType(PokemonType.GROUND);
+        rockSpecies.setEvolvesFromId(Long.MAX_VALUE);
+        
+        assertThatExceptionOfType(NoSuchEntityException.class)
+                .isThrownBy(() -> pokemonSpeciesFacade.createPokemonSpecies(rockSpecies));
     }
 
     @Test

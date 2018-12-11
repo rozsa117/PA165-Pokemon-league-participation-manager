@@ -33,13 +33,13 @@ public class PokemonSpeciesFacadeImpl implements PokemonSpeciesFacade {
     private BeanMappingService beanMappingService;
 
     @Override
-    public Long createPokemonSpecies(PokemonSpeciesCreateDTO species) throws EvolutionChainTooLongException {
+    public Long createPokemonSpecies(PokemonSpeciesCreateDTO species) 
+            throws EvolutionChainTooLongException,NoSuchEntityException {
         PokemonSpecies speciesEntity = beanMappingService.mapTo(species, PokemonSpecies.class);
         speciesEntity.setEvolvesFrom(
                 species.getEvolvesFromId() == null
                 ? null
-                : pokemonSpeciesService.findPokemonSpeciesById(species.getEvolvesFromId())
-        );
+                : getNonNullSpecies(species.getEvolvesFromId()));
         pokemonSpeciesService.createPokemonSpecies(speciesEntity);
         return speciesEntity.getId();
     }

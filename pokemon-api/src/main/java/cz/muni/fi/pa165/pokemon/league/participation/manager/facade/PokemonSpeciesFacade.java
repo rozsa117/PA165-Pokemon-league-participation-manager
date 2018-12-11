@@ -24,9 +24,10 @@ public interface PokemonSpeciesFacade {
      * @return ID of the created species.
      * @throws EvolutionChainTooLongException when the species is created as 
      *     part of an evolutionary chain and the chain would have more than 3 members.
+     * @throws NoSuchEntityException when evolvesFromId does not exist
      */
     Long createPokemonSpecies(PokemonSpeciesCreateDTO species)
-            throws EvolutionChainTooLongException;
+            throws EvolutionChainTooLongException, NoSuchEntityException;
     
     /**
      * Finds Pokemon species with the specified ID.
