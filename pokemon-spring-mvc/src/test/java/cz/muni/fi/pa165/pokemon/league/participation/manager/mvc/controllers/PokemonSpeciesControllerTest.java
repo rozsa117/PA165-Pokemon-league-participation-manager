@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangePreevolutionDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangeTypingDTO;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +10,8 @@ import org.junit.Test;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesDTO;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChainException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.PokemonSpeciesFacade;
 import java.util.Arrays;
@@ -193,7 +196,8 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
         changeTypingDTO.setSecondaryType(PokemonType.DARK);
 
         mvc.perform(MockMvcRequestBuilders
-                .post(POKEMON_SPECIES_URI + "/changeTyping/" + pikachuDTO.getId().toString())
+                .post(POKEMON_SPECIES_URI + "/changeTyping/" 
+                        + changeTypingDTO.getId().toString())
                 .param("primaryType", changeTypingDTO.getPrimaryType().toString())
                 .param("secondaryType", changeTypingDTO.getSecondaryType().toString())
         )
@@ -268,6 +272,142 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
                 .andExpect(view().name("pokemonSpecies/changeTyping"))
                 .andExpect(forwardedUrl("pokemonSpecies/changeTyping"))
                 .andExpect(model().attribute("secondaryType_error", is(true)));
+    }
+
+    @Test
+    public void changePreevolutionGetTest() throws Exception {
+
+        mvc.perform(MockMvcRequestBuilders
+                .get(POKEMON_SPECIES_URI + "/changePreevolution/" + pikachuDTO.getId().toString()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("pokemonSpecies/changePreevolution"))
+                .andExpect(forwardedUrl("pokemonSpecies/changePreevolution"))
+                .andExpect(model().attribute("pokemonSpeciesToUpdate", notNullValue()))
+                .andExpect(model().attribute("pokemonSpeciesToUpdate",
+                        allOf(
+                                hasProperty("id", is(pikachuDTO.getId())),
+                                hasProperty("primaryType", is(pikachuDTO.getPrimaryType())),
+                                hasProperty("secondaryType", is(pikachuDTO.getSecondaryType())),
+                                hasProperty("evolvesFrom", is(pikachuDTO.getEvolvesFrom()))
+                        )));
+
+    }
+
+    @Test
+    public void changePreevolutionGetNonExistentPokemonSpeciesTest() throws Exception {
+
+        mvc.perform(MockMvcRequestBuilders
+                .get(POKEMON_SPECIES_URI + "/changePreevolution/" + NON_EXISTENT_ID.toString()))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrlPattern("**/pokemonSpecies/list"))
+                .andExpect(flash().attribute("alert_danger", notNullValue()));
+
+    }
+
+    @Test
+    public void changePreevolutionPostTest() throws Exception {
+
+        ChangePreevolutionDTO changePreevolutionDTO = new ChangePreevolutionDTO();
+        changePreevolutionDTO.setId(rockDTO.getId());
+        changePreevolutionDTO.setEvolvesFrom(pikachuDTO.getId());
+
+        mvc.perform(MockMvcRequestBuilders
+                .post(POKEMON_SPECIES_URI + "/changePreevolution/" 
+                        + changePreevolutionDTO.getId().toString())
+                .param("evolvesFrom", changePreevolutionDTO
+                        .getEvolvesFrom().toString())
+        )
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrlPattern("**/pokemonSpecies/list"))
+                .andExpect(flash().attribute("alert_danger", nullValue()))
+                .andExpect(flash().attribute("alert_warning", nullValue()))
+                .andExpect(flash().attribute("alert_success", notNullValue()));
+
+        verify(pokemonSpeciesFacade, atLeastOnce()).changePreevolution(changePreevolutionDTO);
+
+    }
+
+    @Test
+    public void changePreevolutionPostNonExistentPokemonSpeciesTest() throws Exception {
+
+        ChangePreevolutionDTO changePreevolutionDTO = new ChangePreevolutionDTO();
+        changePreevolutionDTO.setId(NON_EXISTENT_ID);
+        changePreevolutionDTO.setEvolvesFrom(pikachuDTO.getId());
+
+        doThrow(new NoSuchEntityException())
+                .when(pokemonSpeciesFacade).changePreevolution(changePreevolutionDTO);
+
+        mvc.perform(MockMvcRequestBuilders
+                .post(POKEMON_SPECIES_URI + "/changePreevolution/" 
+                        + changePreevolutionDTO.getId().toString())
+                .param("evolvesFrom", changePreevolutionDTO
+                        .getEvolvesFrom().toString())
+        )
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrlPattern("**/pokemonSpecies/list"))
+                .andExpect(flash().attribute("alert_danger", notNullValue()))
+                .andExpect(flash().attribute("alert_warning", nullValue()))
+                .andExpect(flash().attribute("alert_success", nullValue()))
+                ;
+
+        verify(pokemonSpeciesFacade, atLeastOnce()).changePreevolution(changePreevolutionDTO);
+
+    }
+
+    @Test
+    public void changePreevolutionPostCircularEvolutionTest() throws Exception {
+
+        ChangePreevolutionDTO changePreevolutionDTO = new ChangePreevolutionDTO();
+        changePreevolutionDTO.setId(pikachuDTO.getId());
+        changePreevolutionDTO.setEvolvesFrom(pikachuDTO.getId());
+
+        doThrow(new CircularEvolutionChainException())
+                .when(pokemonSpeciesFacade).changePreevolution(changePreevolutionDTO);
+
+        mvc.perform(MockMvcRequestBuilders
+                .post(POKEMON_SPECIES_URI + "/changePreevolution/" 
+                        + changePreevolutionDTO.getId().toString())
+                .param("evolvesFrom", changePreevolutionDTO
+                        .getEvolvesFrom().toString())
+        )
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrlPattern("**/pokemonSpecies/changePreevolution/"
+                   + changePreevolutionDTO.getId().toString()))
+                .andExpect(flash().attribute("alert_danger", nullValue()))
+                .andExpect(flash().attribute("alert_warning", notNullValue()))
+                .andExpect(flash().attribute("alert_success", nullValue()))
+                ;
+
+        verify(pokemonSpeciesFacade, atLeastOnce()).changePreevolution(changePreevolutionDTO);
+
+    }
+
+        @Test
+    public void changePreevolutionPostEvolutionChainTooLongTest() throws Exception {
+
+        ChangePreevolutionDTO changePreevolutionDTO = new ChangePreevolutionDTO();
+        changePreevolutionDTO.setId(pikachuDTO.getId());
+        changePreevolutionDTO.setEvolvesFrom(pikachuDTO.getId());
+
+        doThrow(new EvolutionChainTooLongException())
+                .when(pokemonSpeciesFacade).changePreevolution(changePreevolutionDTO);
+
+        mvc.perform(MockMvcRequestBuilders
+                .post(POKEMON_SPECIES_URI + "/changePreevolution/" 
+                        + changePreevolutionDTO.getId().toString())
+                .param("evolvesFrom", changePreevolutionDTO
+                        .getEvolvesFrom().toString())
+        )
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrlPattern("**/pokemonSpecies/changePreevolution/"
+                   + changePreevolutionDTO.getId().toString()))
+                .andExpect(flash().attribute("alert_danger", nullValue()))
+                .andExpect(flash().attribute("alert_warning", notNullValue()))
+                .andExpect(flash().attribute("alert_success", nullValue()))
+                ;
+
+        verify(pokemonSpeciesFacade, atLeastOnce()).changePreevolution(changePreevolutionDTO);
+
     }
 
 }
