@@ -24,5 +24,5 @@ public class ErrorMessage {
     public String toString() {
         return "ErrorMessage{" + "error=" + error + '}';
     }
-    
+
 }

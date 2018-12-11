@@ -11,6 +11,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEn
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.PokemonSpeciesFacade;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -200,7 +201,7 @@ public class PokemonSpeciesController {
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/changePreevolution/" + pokemonSpeciesToUpdate.getId()).build().encode().toUriString();
         } catch (EvolutionChainTooLongException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
-            redirectAttributes.addFlashAttribute("alert_warning",  messages.getString("pokemon.species.evolution.chan.too.long"));
+            redirectAttributes.addFlashAttribute("alert_warning",  messages.getString("pokemon.species.evolution.chain.too.long"));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/changePreevolution/" + pokemonSpeciesToUpdate.getId()).build().encode().toUriString();
         
         }
@@ -257,6 +258,10 @@ public class PokemonSpeciesController {
         } catch (EvolutionChainTooLongException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("alert_warning",  messages.getString("pokemon.species.evolution.chan.too.long"));
+            return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/create").build().encode().toUriString();
+        } catch (NoSuchEntityException ex) {
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
+            redirectAttributes.addFlashAttribute("alert_warning", String.format(messages.getString("pokemon.species.does.not.exists"), formBean.getEvolvesFromId()));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/create").build().encode().toUriString();
         }
         ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
