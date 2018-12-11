@@ -1,9 +1,8 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.controllers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangePreevolutionDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangeTypingDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesCreateDTO;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,7 +14,6 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.Evolutio
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.PokemonSpeciesFacade;
 import java.util.Arrays;
-import java.util.Map;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
@@ -23,22 +21,19 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.when;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.junit.BeforeClass;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
-import org.springframework.http.MediaType;
+import static org.mockito.Mockito.when;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
-import org.springframework.util.MultiValueMap;
 
 /**
  * This is the controller class of Pokemon Species test
@@ -196,7 +191,7 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
         changeTypingDTO.setSecondaryType(PokemonType.DARK);
 
         mvc.perform(MockMvcRequestBuilders
-                .post(POKEMON_SPECIES_URI + "/changeTyping/" 
+                .post(POKEMON_SPECIES_URI + "/changeTyping/"
                         + changeTypingDTO.getId().toString())
                 .param("primaryType", changeTypingDTO.getPrimaryType().toString())
                 .param("secondaryType", changeTypingDTO.getSecondaryType().toString())
@@ -312,7 +307,7 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
         changePreevolutionDTO.setEvolvesFrom(pikachuDTO.getId());
 
         mvc.perform(MockMvcRequestBuilders
-                .post(POKEMON_SPECIES_URI + "/changePreevolution/" 
+                .post(POKEMON_SPECIES_URI + "/changePreevolution/"
                         + changePreevolutionDTO.getId().toString())
                 .param("evolvesFrom", changePreevolutionDTO
                         .getEvolvesFrom().toString())
@@ -338,7 +333,7 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
                 .when(pokemonSpeciesFacade).changePreevolution(changePreevolutionDTO);
 
         mvc.perform(MockMvcRequestBuilders
-                .post(POKEMON_SPECIES_URI + "/changePreevolution/" 
+                .post(POKEMON_SPECIES_URI + "/changePreevolution/"
                         + changePreevolutionDTO.getId().toString())
                 .param("evolvesFrom", changePreevolutionDTO
                         .getEvolvesFrom().toString())
@@ -347,8 +342,7 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
                 .andExpect(redirectedUrlPattern("**/pokemonSpecies/list"))
                 .andExpect(flash().attribute("alert_danger", notNullValue()))
                 .andExpect(flash().attribute("alert_warning", nullValue()))
-                .andExpect(flash().attribute("alert_success", nullValue()))
-                ;
+                .andExpect(flash().attribute("alert_success", nullValue()));
 
         verify(pokemonSpeciesFacade, atLeastOnce()).changePreevolution(changePreevolutionDTO);
 
@@ -365,24 +359,23 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
                 .when(pokemonSpeciesFacade).changePreevolution(changePreevolutionDTO);
 
         mvc.perform(MockMvcRequestBuilders
-                .post(POKEMON_SPECIES_URI + "/changePreevolution/" 
+                .post(POKEMON_SPECIES_URI + "/changePreevolution/"
                         + changePreevolutionDTO.getId().toString())
                 .param("evolvesFrom", changePreevolutionDTO
                         .getEvolvesFrom().toString())
         )
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrlPattern("**/pokemonSpecies/changePreevolution/"
-                   + changePreevolutionDTO.getId().toString()))
+                        + changePreevolutionDTO.getId().toString()))
                 .andExpect(flash().attribute("alert_danger", nullValue()))
                 .andExpect(flash().attribute("alert_warning", notNullValue()))
-                .andExpect(flash().attribute("alert_success", nullValue()))
-                ;
+                .andExpect(flash().attribute("alert_success", nullValue()));
 
         verify(pokemonSpeciesFacade, atLeastOnce()).changePreevolution(changePreevolutionDTO);
 
     }
 
-        @Test
+    @Test
     public void changePreevolutionPostEvolutionChainTooLongTest() throws Exception {
 
         ChangePreevolutionDTO changePreevolutionDTO = new ChangePreevolutionDTO();
@@ -393,20 +386,136 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
                 .when(pokemonSpeciesFacade).changePreevolution(changePreevolutionDTO);
 
         mvc.perform(MockMvcRequestBuilders
-                .post(POKEMON_SPECIES_URI + "/changePreevolution/" 
+                .post(POKEMON_SPECIES_URI + "/changePreevolution/"
                         + changePreevolutionDTO.getId().toString())
                 .param("evolvesFrom", changePreevolutionDTO
                         .getEvolvesFrom().toString())
         )
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrlPattern("**/pokemonSpecies/changePreevolution/"
-                   + changePreevolutionDTO.getId().toString()))
+                        + changePreevolutionDTO.getId().toString()))
                 .andExpect(flash().attribute("alert_danger", nullValue()))
                 .andExpect(flash().attribute("alert_warning", notNullValue()))
-                .andExpect(flash().attribute("alert_success", nullValue()))
-                ;
+                .andExpect(flash().attribute("alert_success", nullValue()));
 
         verify(pokemonSpeciesFacade, atLeastOnce()).changePreevolution(changePreevolutionDTO);
+
+    }
+
+    @Test
+    public void newTest() throws Exception {
+
+        mvc.perform(MockMvcRequestBuilders
+                .get(POKEMON_SPECIES_URI + "/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("pokemonSpecies/create"))
+                .andExpect(forwardedUrl("pokemonSpecies/create"))
+                .andExpect(model().attribute("pokemonSpeciesCreate", notNullValue()));
+
+    }
+
+    @Test
+    public void createTest() throws Exception {
+
+        PokemonSpeciesCreateDTO psCreateDTO = new PokemonSpeciesCreateDTO();
+
+        psCreateDTO.setSpeciesName(raichuDTO.getSpeciesName());
+        psCreateDTO.setPrimaryType(raichuDTO.getPrimaryType());
+        psCreateDTO.setSecondaryType(raichuDTO.getSecondaryType());
+        psCreateDTO.setEvolvesFromId(raichuDTO.getEvolvesFrom().getId());
+
+        when(pokemonSpeciesFacade.createPokemonSpecies(psCreateDTO)).thenReturn(raichuDTO.getId());
+
+        mvc.perform(MockMvcRequestBuilders
+                .post(POKEMON_SPECIES_URI + "/create")
+                .param("speciesName", psCreateDTO
+                        .getSpeciesName().toString())
+                .param("primaryType", psCreateDTO
+                        .getPrimaryType().toString())
+                .param("secondaryType",
+                        (psCreateDTO.getSecondaryType() != null
+                        ? psCreateDTO.getSecondaryType().toString()
+                        : null))
+                .param("evolvesFromId", psCreateDTO
+                        .getEvolvesFromId().toString())
+        )
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrlPattern("**/pokemonSpecies/list"))
+                .andExpect(flash().attribute("alert_danger", nullValue()))
+                .andExpect(flash().attribute("alert_warning", nullValue()))
+                .andExpect(flash().attribute("alert_success", notNullValue()));
+
+        verify(pokemonSpeciesFacade, atLeastOnce()).createPokemonSpecies(psCreateDTO);
+
+    }
+
+    @Test
+    public void createInvalidPrimaryTypeTest() throws Exception {
+
+        String INVALID_TYPE = "XXXX";
+
+        mvc.perform(MockMvcRequestBuilders
+                .post(POKEMON_SPECIES_URI + "/create")
+                .param("primaryType", INVALID_TYPE)
+                .param("secondaryType", "")
+                .param("evolvesFromId", "1")
+        )
+                .andExpect(status().isOk())
+                .andExpect(view().name("pokemonSpecies/create"))
+                .andExpect(forwardedUrl("pokemonSpecies/create"))
+                .andExpect(model().attribute("primaryType_error", is(true)));
+
+    }
+
+    @Test
+    public void createInvalidSecondaryTypeTest() throws Exception {
+
+        String INVALID_TYPE = "XXXX";
+
+        mvc.perform(MockMvcRequestBuilders
+                .post(POKEMON_SPECIES_URI + "/create")
+                .param("primaryType", PokemonType.FIRE.toString())
+                .param("secondaryType", INVALID_TYPE)
+                .param("evolvesFromId", "1")
+        )
+                .andExpect(status().isOk())
+                .andExpect(view().name("pokemonSpecies/create"))
+                .andExpect(forwardedUrl("pokemonSpecies/create"))
+                .andExpect(model().attribute("secondaryType_error", is(true)));
+
+    }
+
+    @Test
+    public void createEvolutionChainTooLongTest() throws Exception {
+
+        PokemonSpeciesCreateDTO psCreateDTO = new PokemonSpeciesCreateDTO();
+
+        psCreateDTO.setSpeciesName(raichuDTO.getSpeciesName());
+        psCreateDTO.setPrimaryType(raichuDTO.getPrimaryType());
+        psCreateDTO.setSecondaryType(raichuDTO.getSecondaryType());
+        psCreateDTO.setEvolvesFromId(raichuDTO.getEvolvesFrom().getId());
+
+        doThrow(new EvolutionChainTooLongException())
+                .when(pokemonSpeciesFacade).createPokemonSpecies(psCreateDTO);
+
+        mvc.perform(MockMvcRequestBuilders
+                .post(POKEMON_SPECIES_URI + "/create")
+                .param("speciesName", psCreateDTO
+                        .getSpeciesName().toString())
+                .param("primaryType", psCreateDTO
+                        .getPrimaryType().toString())
+                .param("secondaryType",
+                        (psCreateDTO.getSecondaryType() != null
+                        ? psCreateDTO.getSecondaryType().toString()
+                        : ""))
+                .param("evolvesFromId", psCreateDTO
+                        .getEvolvesFromId().toString())
+        )
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrlPattern("**/pokemonSpecies/create"))
+                .andExpect(flash().attribute("alert_danger", nullValue()))
+                .andExpect(flash().attribute("alert_warning", notNullValue()))
+                .andExpect(flash().attribute("alert_success", nullValue()));
 
     }
 
