@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.rest.exceptions;
 
- /* Error message to be returned by Rest API
+/**
+ * Error message to be returned by Rest API.
  *
  * @author Jiří Medveď 38451
  */
