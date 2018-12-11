@@ -9,6 +9,7 @@ import org.junit.Test;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesDTO;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.PokemonSpeciesFacade;
 import java.util.Arrays;
 import java.util.Map;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.when;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.junit.BeforeClass;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -203,6 +205,69 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
 
         verify(pokemonSpeciesFacade, atLeastOnce()).changeTyping(changeTypingDTO);
 
+    }
+
+    @Test
+    public void changeTypingPostNonExistentPokemonSpeciesTest() throws Exception {
+
+        ChangeTypingDTO changeTypingDTO = new ChangeTypingDTO();
+
+        changeTypingDTO.setId(NON_EXISTENT_ID);
+        changeTypingDTO.setPrimaryType(PokemonType.FIRE);
+        changeTypingDTO.setSecondaryType(PokemonType.DARK);
+
+        doThrow(new NoSuchEntityException())
+                .when(pokemonSpeciesFacade).changeTyping(changeTypingDTO);
+
+        mvc.perform(MockMvcRequestBuilders
+                .post(POKEMON_SPECIES_URI + "/changeTyping/" + NON_EXISTENT_ID.toString())
+                .param("primaryType", changeTypingDTO.getPrimaryType().toString())
+                .param("secondaryType", changeTypingDTO.getSecondaryType().toString())
+        )
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrlPattern("**/pokemonSpecies/list"))
+                .andExpect(flash().attribute("alert_danger", notNullValue()))
+                .andExpect(flash().attribute("alert_warning", nullValue()))
+                .andExpect(flash().attribute("alert_success", nullValue()));
+
+        verify(pokemonSpeciesFacade, atLeastOnce()).changeTyping(changeTypingDTO);
+
+    }
+
+    @Test
+    public void changeTypingPostInvalidPrimaryTypeTest() throws Exception {
+
+        String INVALID_TYPE = "XXXX";
+
+        mvc.perform(MockMvcRequestBuilders
+                .post(POKEMON_SPECIES_URI + "/changeTyping/" + pikachuDTO.getId().toString())
+                .param("primaryType", INVALID_TYPE)
+                .param("secondaryType", PokemonType.DARK.toString())
+        )
+                .andExpect(status().isOk())
+                .andExpect(view().name("pokemonSpecies/changeTyping"))
+                .andExpect(forwardedUrl("pokemonSpecies/changeTyping"))
+                .andExpect(model().attribute("primaryType_error", is(true)));
+    }
+
+    @Test
+    public void changeTypingPostInvalidSecondaryTypeTest() throws Exception {
+
+        String INVALID_TYPE = "XXXX";
+
+//        ChangeTypingDTO changeTypingDTO = new ChangeTypingDTO();
+        //       changeTypingDTO.setId(pikachuDTO.getId());
+        //       changeTypingDTO.setPrimaryType(null);
+        //       changeTypingDTO.setSecondaryType(PokemonType.DARK);
+        mvc.perform(MockMvcRequestBuilders
+                .post(POKEMON_SPECIES_URI + "/changeTyping/" + pikachuDTO.getId().toString())
+                .param("primaryType", PokemonType.DARK.toString())
+                .param("secondaryType", INVALID_TYPE)
+        )
+                .andExpect(status().isOk())
+                .andExpect(view().name("pokemonSpecies/changeTyping"))
+                .andExpect(forwardedUrl("pokemonSpecies/changeTyping"))
+                .andExpect(model().attribute("secondaryType_error", is(true)));
     }
 
 }

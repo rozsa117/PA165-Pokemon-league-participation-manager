@@ -65,7 +65,7 @@
                     <c:forEach items="${allSpecies}" var="species">
                         <form:option value="${species.id}"><c:out value="${species.speciesName}"/></form:option>
                     </c:forEach>
-                    <form:option value="${types}"><c:out value="${none}"/></form:option>
+                    <form:option value="${species.id}"><c:out value="${none}"/></form:option>
                 </form:select>
                 <form:errors path="evolvesFromId" cssClass="error"/>
             </div>

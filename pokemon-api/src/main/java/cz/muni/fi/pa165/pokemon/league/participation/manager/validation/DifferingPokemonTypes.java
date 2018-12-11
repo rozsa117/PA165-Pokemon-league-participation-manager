@@ -25,7 +25,7 @@ public @interface DifferingPokemonTypes {
     String primaryTypeMember();
     String secondaryTypeMember();
 
-    String message() default "The pokemon types should differ";
+    String message() default "pokemon.types.should.differ";
 
     Class<?>[] groups() default {};
 

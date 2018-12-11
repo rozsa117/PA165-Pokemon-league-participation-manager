@@ -18,7 +18,6 @@
     
     <form:form method="post" action="${pageContext.request.contextPath}/pokemonSpecies/changePreevolution/${pokemonSpeciesToUpdate.id}"
                modelAttribute="pokemonSpeciesToUpdate" cssClass="form-horizontal">
-    
         
         <div class="form-group">
             <form:label path="evolvesFrom" cssClass="col-sm-2 control-label">
@@ -29,7 +28,7 @@
                     <c:forEach items="${allSpecies}" var="species">
                         <form:option value="${species.id}"><c:out value="${species.speciesName}"/></form:option>
                     </c:forEach>
-                    <form:option value="${types}"><c:out value="${none}"/></form:option>
+                    <form:option value="${species.id}"><c:out value="${none}"/></form:option>
                 </form:select>
                 <form:errors path="evolvesFrom" cssClass="error"/>
             </div>
