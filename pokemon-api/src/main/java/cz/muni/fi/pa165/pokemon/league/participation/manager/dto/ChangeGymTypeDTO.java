@@ -12,28 +12,27 @@ import javax.validation.constraints.NotNull;
 public class ChangeGymTypeDTO {
     
     @NotNull
-    private Long gymId;
+    private Long id;
     
     @NotNull
-    private PokemonType newGymType;
+    private PokemonType type;
 
-    @NotNull
     private Long trainerId;
     
-    public Long getGymId() {
-        return gymId;
+    public Long getId() {
+        return id;
     }
 
-    public void setGymId(Long gymId) {
-        this.gymId = gymId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public PokemonType getNewGymType() {
-        return newGymType;
+    public PokemonType getType() {
+        return type;
     }
 
-    public void setNewGymType(PokemonType newGymType) {
-        this.newGymType = newGymType;
+    public void setType(PokemonType type) {
+        this.type = type;
     }
     
     public Long getTrainerId() {
@@ -47,8 +46,8 @@ public class ChangeGymTypeDTO {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.gymId);
-        hash = 59 * hash + Objects.hashCode(this.newGymType);
+        hash = 59 * hash + Objects.hashCode(this.id);
+        hash = 59 * hash + Objects.hashCode(this.type);
         hash = 59 * hash + Objects.hashCode(this.trainerId);
         return hash;
     }
@@ -65,10 +64,10 @@ public class ChangeGymTypeDTO {
             return false;
         }
         final ChangeGymTypeDTO other = (ChangeGymTypeDTO) obj;
-        if (!Objects.equals(this.gymId, other.gymId)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (!Objects.equals(this.newGymType, other.newGymType)) {
+        if (!Objects.equals(this.type, other.type)) {
             return false;
         }
         return Objects.equals(this.trainerId, other.trainerId);
@@ -76,6 +75,6 @@ public class ChangeGymTypeDTO {
 
     @Override
     public String toString() {
-        return "ChangeGymTypeDTO{" + "gymId=" + gymId + ", newGymType=" + newGymType + ", trainerId=" + trainerId + '}';
+        return "ChangeGymTypeDTO{" + "gymId=" + id + ", newGymType=" + type + ", trainerId=" + trainerId + '}';
     }
 }

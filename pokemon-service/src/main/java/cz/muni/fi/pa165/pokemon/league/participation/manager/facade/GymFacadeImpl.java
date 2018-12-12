@@ -55,8 +55,8 @@ public class GymFacadeImpl implements GymFacade {
 
     @Override
     public void changeGymType(ChangeGymTypeDTO gym) throws InsufficientRightsException {
-        gymService.changeGymType(beanMappingService.mapTo(findGymById(gym.getGymId()), Gym.class),
-                trainerService.getTrainerWithId(gym.getTrainerId()), gym.getNewGymType());
+        gymService.changeGymType(gymService.findGymById(gym.getId()),
+                trainerService.getTrainerWithId(gym.getTrainerId()), gym.getType());
     }
 
     @Override

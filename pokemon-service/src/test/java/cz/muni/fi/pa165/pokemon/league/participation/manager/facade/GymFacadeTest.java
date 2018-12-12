@@ -136,8 +136,8 @@ public class GymFacadeTest {
         updateGymLocationDTO.setNewLocation("Praha");
 
         changeGymTypeDTO = new ChangeGymTypeDTO();
-        changeGymTypeDTO.setGymId(gym.getId());
-        changeGymTypeDTO.setNewGymType(PokemonType.DRAGON);
+        changeGymTypeDTO.setId(gym.getId());
+        changeGymTypeDTO.setType(PokemonType.DRAGON);
         changeGymTypeDTO.setTrainerId(gym.getGymLeader().getId());
 
         changeGymLeaderDTO = new ChangeGymLeaderDTO();
@@ -189,7 +189,7 @@ public class GymFacadeTest {
         when(gymService.findGymsByType(newGym.getType())).thenReturn(Collections.singletonList(newGym));
         doThrow(new EntityIsUsedException("Entity is in use")).when(gymService).createGym(gym);
         doThrow(new InsufficientRightsException("This trainer has no rights to change type"))
-                .when(gymService).changeGymType(gym, newGym.getGymLeader(), changeGymTypeDTO.getNewGymType());
+                .when(gymService).changeGymType(gym, newGym.getGymLeader(), changeGymTypeDTO.getType());
         doThrow(new EntityIsUsedException("This trainer is leader of another gym"))
                 .when(gymService).changeGymLeader(gym, exceptionalGymLeader);
         doThrow(new EntityIsUsedException("Badge for this gym exist"))
@@ -233,7 +233,7 @@ public class GymFacadeTest {
                 .isThrownBy(() -> gymFacade.changeGymType(changeGymTypeDTO));
         changeGymTypeDTO.setTrainerId(gym.getGymLeader().getId());
         gymFacade.changeGymType(changeGymTypeDTO);
-        verify(gymService, atLeastOnce()).changeGymType(gym, gym.getGymLeader(), changeGymTypeDTO.getNewGymType());
+        verify(gymService, atLeastOnce()).changeGymType(gym, gym.getGymLeader(), changeGymTypeDTO.getType());
     }
 
     @Test

@@ -34,42 +34,40 @@
                 <td><c:out value="${gymBadge.gym.type}"/></td>
                 <td>
                     <my:extraTag href="/trainer/detail/${gymBadge.gym.gymLeader.id}" class='btn btn-primary'>
-                        <span class="glyphicon glyphicon-align-justify"></span>
+                        <span class="glyphicon glyphicon-eye-open"></span>
                     </my:extraTag>
                     <c:out value="${gymBadge.gym.gymLeader.name} ${gymBadge.gym.gymLeader.surname}"/>
                 </td>
                 <td>
                 <security:authorize access="hasRole('ADMIN')">
-                    <my:extraTag href="/admin/gym/changeLeader?gym=${gymBadge.gym.id}" class='btn btn-primary'>
+                    <my:extraTag href="/admin/gym/changeLeader/${gymBadge.gym.id}" class='btn btn-primary'>
                         <span class="glyphicon glyphicon-edit"></span> 
                         <fmt:message key="gym.edit.admin"/>
                     </my:extraTag>
                 </security:authorize>
+                <c:set var="userId"><security:authentication property="principal.trainerId"/></c:set>
                 <c:choose>
                     <c:when test="${gymBadge.badge == null}">
-                        <c:set var="userId"><security:authentication property="principal.trainerId"/></c:set>
-                        <c:choose>
-                            <c:when test="${gymBadge.gym.gymLeader.id == userId}">
-                    <my:extraTag href="/gym/edit?gym=${gymBadge.gym.id}" class='btn btn-primary'>
-                        <span class="glyphicon glyphicon-edit"></span> 
-                        <fmt:message key="gym.edit.leader"/>
-                    </my:extraTag>
-                            </c:when>
-                            <c:otherwise>
-                    <my:extraTag href="/badge/new?gym=${gymBadge.gym.id}" class='btn btn-primary'>
-                        <span class="glyphicon glyphicon-plus"></span> 
-                        <fmt:message key="gym.badge.create.new"/>
-                    </my:extraTag>
-                            </c:otherwise>
-                        </c:choose>
+                        <c:if test="${gymBadge.gym.gymLeader.id != userId}">
+                            <my:extraTag href="/badge/new?gym=${gymBadge.gym.id}" class='btn btn-primary'>
+                                <span class="glyphicon glyphicon-plus"></span> 
+                                <fmt:message key="gym.badge.create.new"/>
+                            </my:extraTag>
+                        </c:if>
                     </c:when>
                     <c:otherwise>
                     <my:extraTag href="/badge/detail/${gymBadge.badge.id}" class='btn btn-primary'>
-                        <span class="glyphicon glyphicon-align-justify"></span> 
+                        <span class="glyphicon glyphicon-eye-open"></span> 
                         <fmt:message key="gym.list.badge.view"/>
                     </my:extraTag>
                     </c:otherwise>
                 </c:choose>
+                <c:if test="${gymBadge.gym.gymLeader.id == userId}">
+                    <my:extraTag href="/gym/changeType/${gymBadge.gym.id}" class='btn btn-primary'>
+                        <span class="glyphicon glyphicon-edit"></span> 
+                        <fmt:message key="gym.edit.leader"/>
+                    </my:extraTag>
+                </c:if>
                 </td>
             </tr>
         </c:forEach>

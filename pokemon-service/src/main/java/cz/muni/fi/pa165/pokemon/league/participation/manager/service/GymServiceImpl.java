@@ -58,7 +58,7 @@ public class GymServiceImpl implements GymService {
     @Override
     public void changeGymType(Gym gym, Trainer trainer, PokemonType newType)
             throws InsufficientRightsException {
-        if (gym.getGymLeader() != trainer) {
+        if (!gym.getGymLeader().equals(trainer)) {
             throw new InsufficientRightsException("Only Gym Leader may change Gym Type");
         }
         try {
@@ -90,7 +90,7 @@ public class GymServiceImpl implements GymService {
     @Override
     public void removeGym(Gym gym) throws EntityIsUsedException {
 
-        if (badgeDAO.findBadgesOfGym(gym).size() != 0) {
+        if (!badgeDAO.findBadgesOfGym(gym).isEmpty()) {
             throw new EntityIsUsedException("Gym is used on badge(s)");
         }
 

@@ -9,6 +9,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <fmt:setBundle basename="Texts"/>
 <fmt:message var="title" key="gym"/>
 <my:pagetemplate title="${title}">
@@ -23,18 +24,37 @@
 
         <tr onclick="window.location='/pa165/trainer/detail/${gym.gymLeader.id}'" style="cursor: pointer;">
             <th><fmt:message key="gym.leader"/></th>
-            <td><c:out value="${gym.gymLeader}"/></td>
+            <td><c:out value="${gym.gymLeader.name} ${gym.gymLeader.surname}"/></td>
         </tr>
         </tbody>
     </table>
+        <security:authorize access="hasRole('ADMIN')">
+            <my:extraTag href="/admin/gym/changeLeader?gym=${gymBadge.gym.id}" class='btn btn-primary'>
+                <span class="glyphicon glyphicon-edit"></span> 
+                <fmt:message key="gym.edit.admin"/>
+            </my:extraTag>
+        </security:authorize>
     <c:choose>
         <c:when test="${badge == null}">
-            <my:extraTag href="/badge/new?gym=${gym.id}" class="btn btn-default">
-                <fmt:message key="gym.badge.create.new"/>
-            </my:extraTag>
+            <c:set var="userId"><security:authentication property="principal.trainerId"/></c:set>
+            <c:choose>
+                <c:when test="${gym.gymLeader.id == userId}">
+                    <my:extraTag href="/gym/changeType/${gym.id}" class='btn btn-primary'>
+                        <span class="glyphicon glyphicon-edit"></span> 
+                        <fmt:message key="gym.edit.leader"/>
+                    </my:extraTag>
+                </c:when>
+                <c:otherwise>
+                    <my:extraTag href="/badge/new?gym=${gym.id}" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-plus"></span> 
+                        <fmt:message key="gym.badge.create.new"/>
+                    </my:extraTag>
+                </c:otherwise>
+            </c:choose>
         </c:when>
         <c:otherwise>
-            <my:extraTag href="/badge/detail/${badge.id}" class="btn btn-default">
+            <my:extraTag href="/badge/detail/${badge.id}" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-eye-open"></span> 
                 <fmt:message key="badge.view"/>
             </my:extraTag>
         </c:otherwise>
