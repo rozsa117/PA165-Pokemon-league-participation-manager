@@ -516,7 +516,7 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
                         .getEvolvesFromId().toString())
         )
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrlPattern("**/pokemonSpecies/create"))
+                .andExpect(redirectedUrlPattern("**/pokemonSpecies/new"))
                 .andExpect(flash().attribute("alert_danger", nullValue()))
                 .andExpect(flash().attribute("alert_warning", notNullValue()))
                 .andExpect(flash().attribute("alert_success", nullValue()));
@@ -550,7 +550,7 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
                         .getEvolvesFromId().toString())
         )
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrlPattern("**/pokemonSpecies/create"))
+                .andExpect(redirectedUrlPattern("**/pokemonSpecies/new"))
                 .andExpect(flash().attribute("alert_danger", notNullValue()))
                 .andExpect(flash().attribute("alert_warning", nullValue()))
                 .andExpect(flash().attribute("alert_success", nullValue()));
