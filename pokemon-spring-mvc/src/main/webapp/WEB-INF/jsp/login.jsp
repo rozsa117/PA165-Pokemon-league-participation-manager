@@ -1,6 +1,6 @@
 <%-- 
     Document   : Jsp page for login form.
-    Author     : Tamás Rózsa 445653
+    Author     : Tibor Zauko 433531
 --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="utf-8" trimDirectiveWhitespaces="false"
          session="false" %>
