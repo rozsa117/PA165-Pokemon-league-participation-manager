@@ -47,7 +47,7 @@ public class TrainerFacadeAuthenticationProvider implements AuthenticationProvid
         if (trainer.isAdmin()) {
             auths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
-        UserDetails user = new User(name, password, auths);
+        UserDetails user = new TrainerIdContainingUser(name, password, auths, trainer.getId());
         return new UsernamePasswordAuthenticationToken(user, password, auths);
     }
 
