@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -20,15 +21,16 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 /**
  * The spring mvc configuration.
- * 
+ *
  * @author Tamás Rózsa 445653
  */
 @EnableWebMvc
 @Configuration
+@EnableWebSecurity
 @Import({SampleDataConfiguration.class})
 @ComponentScan(basePackages = "cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.controllers")
 public class SpringMvcConfig implements WebMvcConfigurer {
-    
+
     final static Logger log = LoggerFactory.getLogger(SpringMvcConfig.class);
 
     public static final String TEXTS = "Texts";
@@ -40,6 +42,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         log.debug("mapping URL / to home view");
         registry.addViewController("/").setViewName("home");
+        registry.addViewController("/login").setViewName("login");
     }
 
 
@@ -84,4 +87,5 @@ public class SpringMvcConfig implements WebMvcConfigurer {
         log.debug("registering JSR-303 validator");
         return new LocalValidatorFactoryBean();
     }
+
 }
