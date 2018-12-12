@@ -8,6 +8,8 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.DataAccessException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.service.utils.DAOExceptionWrapper;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.utils.GymAndBadge;
 import java.util.List;
 import java.util.NoSuchElementException;
 import javax.inject.Inject;
@@ -150,5 +152,10 @@ public class GymServiceImpl implements GymService {
             throw new DataAccessException("Cannot fing the gym for the following trainer " + trainer.toString(), ex) {
             };
         }
+    }
+
+    @Override
+    public List<GymAndBadge> getAllGymsAndBadgesOfTrainer(Trainer trainer) {
+        return DAOExceptionWrapper.withResult(() -> gymDAO.getAllGymsAndBadgesOfTrainer(trainer), "getAllGymsAndBadgesOfTrainer failed");
     }
 }

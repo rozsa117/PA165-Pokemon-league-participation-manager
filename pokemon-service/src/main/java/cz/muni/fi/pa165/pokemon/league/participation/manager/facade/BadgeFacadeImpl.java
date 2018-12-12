@@ -18,6 +18,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.service.GymService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
 import java.time.LocalDate;
+import java.util.List;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -121,5 +122,25 @@ public class BadgeFacadeImpl implements BadgeFacade {
         }
 
         badgeService.changeBadgeStatus(badgeService.findBadgeById(badge.getBadgeId()), status);
+    }
+
+    @Override
+    public List<BadgeDTO> findBadgesOfTrainer(Long trainerId)
+            throws NoSuchEntityException {
+        Trainer t = trainerService.getTrainerWithId(trainerId);
+        if (t == null) {
+            throw new NoSuchEntityException("No trainer of requested id exists");
+        }
+        return beanMappingService.mapTo(badgeService.findBadgesOfTrainer(t), BadgeDTO.class);
+    }
+
+    @Override
+    public List<BadgeDTO> findBadgesOfGym(Long gymId)
+            throws NoSuchEntityException {
+        Gym g = gymService.findGymById(gymId);
+        if (g == null) {
+            throw new NoSuchEntityException("No gym of requested id exists");
+        }
+        return beanMappingService.mapTo(badgeService.findBadgesOfGym(g), BadgeDTO.class);
     }
 }

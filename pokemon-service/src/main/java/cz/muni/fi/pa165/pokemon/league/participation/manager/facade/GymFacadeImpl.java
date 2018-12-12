@@ -2,14 +2,17 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.facade;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangeGymLeaderDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangeGymTypeDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymAndBadgeDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.UpdateGymLocationDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.GymService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
@@ -96,5 +99,15 @@ public class GymFacadeImpl implements GymFacade {
                 gymService.getAllGyms().stream()
                         .filter((gym) -> gym.getGymLeader().getId().equals(trainerId)).findFirst().get(),
                 GymDTO.class);
+    }
+
+    @Override
+    public List<GymAndBadgeDTO> getAllGymsAndBadgesOfTrainer(Long trainerId)
+            throws NoSuchEntityException {
+        Trainer t = trainerService.getTrainerWithId(trainerId);
+        if (t == null) {
+            throw new NoSuchEntityException("No trainer of given ID exists");
+        }
+        return beanMappingService.mapTo(gymService.getAllGymsAndBadgesOfTrainer(t), GymAndBadgeDTO.class);
     }
 }

@@ -3,7 +3,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.BadgeBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.GymBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.TrainerBuilder;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.common.PersistenceApplicationContext;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.utils.PersistenceApplicationContext;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;

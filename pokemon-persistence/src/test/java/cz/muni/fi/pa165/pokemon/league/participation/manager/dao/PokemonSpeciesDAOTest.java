@@ -1,7 +1,7 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.PokemonSpeciesBuilder;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.common.PersistenceApplicationContext;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.utils.PersistenceApplicationContext;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import javax.inject.Inject;

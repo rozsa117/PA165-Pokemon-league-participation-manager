@@ -7,6 +7,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.PokemonSpe
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.TrainerBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymAndBadgeDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonCreateDTO;
@@ -28,6 +29,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.utils.GymAndBadge;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -63,6 +65,7 @@ public class BeanMappingServiceTest {
     private static PokemonSpecies nestedSpecies;
     private static Pokemon sourcePokemon;
     private static Pokemon expectedPokemon;
+    private static GymAndBadge sourceGymAndBadge;
 
     private static TrainerCreateDTO sourceTrainerCreateDTO;
     private static TrainerDTO expectedTrainerDTO;
@@ -75,6 +78,7 @@ public class BeanMappingServiceTest {
     private static PokemonSpeciesDTO nestedSpeciesDTO;
     private static PokemonCreateDTO sourcePokemonCreateDTO;
     private static PokemonDTO expectedPokemonDTO;
+    private static GymAndBadgeDTO expectedGymAndBadgeDTO;
 
     @BeforeClass
     public static void setUpClass() {
@@ -209,6 +213,9 @@ public class BeanMappingServiceTest {
                 .status(sourceBadge.getStatus())
                 .trainer(expectedTrainerDTO)
                 .build();
+        
+        sourceGymAndBadge = new GymAndBadge(sourceGym, sourceBadge);
+        expectedGymAndBadgeDTO = new GymAndBadgeDTO(expectedGymDTO, expectedBadgeDTO);
     }
 
     @Test
@@ -269,6 +276,12 @@ public class BeanMappingServiceTest {
     public void testMapBadgeToBadgeDTO() {
         assertThat(bms.mapTo(sourceBadge, BadgeDTO.class))
                 .isEqualToComparingFieldByField(expectedBadgeDTO);
+    }
+    
+    @Test
+    public void testMapGymAndBadgeToGymAndBadgeDTO() {
+        assertThat(bms.mapTo(sourceGymAndBadge, GymAndBadgeDTO.class))
+                .isEqualToComparingFieldByField(expectedGymAndBadgeDTO);
     }
 
     @Test

@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.pokemon.league.participation.manager.common;
+package cz.muni.fi.pa165.pokemon.league.participation.manager.utils;
 
 import javax.sql.DataSource;
 
