@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.utils.GymAndBadge;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -40,6 +42,13 @@ public class GymDAOImpl implements GymDAO {
     @Override
     public List<Gym> getAllGyms() {
         return em.createQuery("select g from Gym g", Gym.class).getResultList();
+    }
+
+    @Override
+    public List<GymAndBadge> getAllGymsAndBadgesOfTrainer(Trainer trainer) {
+        return em.createQuery("SELECT NEW cz.muni.fi.pa165.pokemon.league.participation.manager.utils.GymAndBadge(g,b) FROM Gym g LEFT JOIN g.badges b ON b.trainer = :trainer" , GymAndBadge.class)
+                .setParameter("trainer", trainer)
+                .getResultList();
     }
 
 }

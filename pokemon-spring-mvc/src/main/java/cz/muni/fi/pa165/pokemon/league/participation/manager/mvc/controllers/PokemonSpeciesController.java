@@ -12,7 +12,6 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.PokemonSpeci
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -37,7 +36,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("/pokemonSpecies")
 public class PokemonSpeciesController {
     
-    final static Logger log = LoggerFactory.getLogger(PokemonSpeciesController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(PokemonSpeciesController.class);
     
     @Inject
     PokemonSpeciesFacade pokemonSpeciesFacade;
@@ -49,7 +48,7 @@ public class PokemonSpeciesController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
-        log.debug("mvc list()");
+        LOGGER.debug("mvc list()");
         model.addAttribute("allPokemonSpecies", pokemonSpeciesFacade.getAllPokemonSpecies());
         return "pokemonSpecies/list";
     }
@@ -66,7 +65,7 @@ public class PokemonSpeciesController {
         RedirectAttributes redirectAttributes,
         UriComponentsBuilder uriComponentsBuilder) {
         
-        log.debug("mvc detail({})", id);
+        LOGGER.debug("mvc detail({})", id);
         if (pokemonSpeciesFacade.findPokemonSpeciesById(id) == null) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
             redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon.species.singular"), id));
@@ -88,7 +87,7 @@ public class PokemonSpeciesController {
         RedirectAttributes redirectAttributes,
         UriComponentsBuilder uriComponentsBuilder) {
         
-        log.debug("mvc GET changeTyping({})", id);
+        LOGGER.debug("mvc GET changeTyping({})", id);
         if (pokemonSpeciesFacade.findPokemonSpeciesById(id) == null) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
             redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon.species.singular"), id));
@@ -113,13 +112,13 @@ public class PokemonSpeciesController {
         UriComponentsBuilder uriComponentsBuilder,
         @PathVariable long id) {
 
-        log.debug("mvc POST changeTyping({})", pokemonSpeciesToUpdate);
+        LOGGER.debug("mvc POST changeTyping({})", pokemonSpeciesToUpdate);
         pokemonSpeciesToUpdate.setId(id);
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
-                log.trace("ObjectError: {}", ge);
+                LOGGER.trace("ObjectError: {}", ge);
                 model.addAttribute("alert_warning", messages.getString(ge.getDefaultMessage()));
             });
             bindingResult.getFieldErrors().forEach((fe) -> {
@@ -135,7 +134,7 @@ public class PokemonSpeciesController {
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         }
         ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
-        redirectAttributes.addFlashAttribute("alert_success", messages.getString("pokemon.species.successfully.updated"));
+        redirectAttributes.addFlashAttribute("alert_success", MessageFormat.format(messages.getString("entity.successfully.updated"), messages.getString("pokemon.species.singular")));
         return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
     }
     
@@ -151,7 +150,7 @@ public class PokemonSpeciesController {
         RedirectAttributes redirectAttributes,
         UriComponentsBuilder uriComponentsBuilder) {
         
-        log.debug("mvc GET changePreevolution({})", id);
+        LOGGER.debug("mvc GET changePreevolution({})", id);
         if (pokemonSpeciesFacade.findPokemonSpeciesById(id) == null) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
             redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon.species.singular"), id));
@@ -176,13 +175,13 @@ public class PokemonSpeciesController {
         UriComponentsBuilder uriComponentsBuilder,
         @PathVariable long id) {
         
-        log.debug("mvc POST changePreevolution({})", id);
+        LOGGER.debug("mvc POST changePreevolution({})", id);
         pokemonSpeciesToUpdate.setId(id);
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
                 ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
-                log.trace("ObjectError: {}", ge);
+                LOGGER.trace("ObjectError: {}", ge);
                 model.addAttribute("alert_warning", messages.getString(ge.getDefaultMessage()));
             });
             bindingResult.getFieldErrors().forEach((fe) -> {
@@ -207,7 +206,7 @@ public class PokemonSpeciesController {
         
         }
         ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
-        redirectAttributes.addFlashAttribute("alert_success", messages.getString("pokemon.species.successfully.updated"));
+        redirectAttributes.addFlashAttribute("alert_success", MessageFormat.format(messages.getString("entity.successfully.updated"), messages.getString("pokemon.species.singular")));
         return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
     }
     
@@ -219,7 +218,7 @@ public class PokemonSpeciesController {
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String createNewPokemonSpecies(Model model) {
         
-        log.debug("mvc GET createNewPokemonSpecies()");
+        LOGGER.debug("mvc GET createNewPokemonSpecies()");
         model.addAttribute("pokemonSpeciesCreate", new PokemonSpeciesCreateDTO());
 
         return "pokemonSpecies/create";
@@ -239,16 +238,16 @@ public class PokemonSpeciesController {
         RedirectAttributes redirectAttributes,
         UriComponentsBuilder uriComponentsBuilder) {
         
-        log.debug("mvc GET create()");
+        LOGGER.debug("mvc GET create()");
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
-                log.trace("ObjectError: {}", ge);
+                LOGGER.trace("ObjectError: {}", ge);
             });
             bindingResult.getFieldErrors().stream().map((fe) -> {
                 model.addAttribute(fe.getField() + "_error", true);
                 return fe;
             }).forEachOrdered((fe) -> {
-                log.trace("FieldError: {}", fe);
+                LOGGER.trace("FieldError: {}", fe);
             });
             return "pokemonSpecies/create";
         }
@@ -262,11 +261,11 @@ public class PokemonSpeciesController {
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/create").build().encode().toUriString();
         } catch (NoSuchEntityException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
-            redirectAttributes.addFlashAttribute("alert_warning", String.format(messages.getString("pokemon.species.does.not.exists"), formBean.getEvolvesFromId()));
+            redirectAttributes.addFlashAttribute("alert_warning", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon.species.singular"), formBean.getEvolvesFromId()));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/create").build().encode().toUriString();
         }
         ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
-        redirectAttributes.addFlashAttribute("alert_success", MessageFormat.format(messages.getString("pokemon.species.created.successfully"), messages.getString("pokemon.species.singular"), id));
+        redirectAttributes.addFlashAttribute("alert_success", MessageFormat.format(messages.getString("entity.created.successfully"), messages.getString("pokemon.species.singular"), id));
         return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").toUriString();
     }
     
@@ -276,7 +275,7 @@ public class PokemonSpeciesController {
      */
     @ModelAttribute("allTypes")
     public PokemonType[] allTypes() {
-        log.debug("mvc allTypes()");
+        LOGGER.debug("mvc allTypes()");
         return PokemonType.values();
     }
     
@@ -286,7 +285,7 @@ public class PokemonSpeciesController {
      */
     @ModelAttribute("allSpecies")
     public List<PokemonSpeciesDTO> allSpecies() {
-        log.debug("mvc allSpecies()");
+        LOGGER.debug("mvc allSpecies()");
         return pokemonSpeciesFacade.getAllPokemonSpecies();
     }
 

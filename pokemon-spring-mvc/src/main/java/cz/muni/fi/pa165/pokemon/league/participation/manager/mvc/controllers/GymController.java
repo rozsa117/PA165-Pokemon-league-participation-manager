@@ -1,12 +1,14 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.controllers;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymAndBadgeDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.BadgeFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.GymFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.TrainerFacade;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.security.TrainerIdContainingUser;
 import java.security.Principal;
 import java.text.MessageFormat;
 import java.util.AbstractMap;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,19 +47,18 @@ public class GymController {
     private TrainerFacade trainerFacade;
 
     @RequestMapping("/list")
-    public String list(Model model, Principal principal) {
-        List<GymDTO> gyms = gymFacade.getAllGyms();
-        List<BadgeDTO> badges = getBadgesOfCallingUser(principal);
-        List<AbstractMap.SimpleImmutableEntry<GymDTO, BadgeDTO>> gymBadgePairs = gyms.stream()
-                .map((GymDTO gym) -> {
-                    BadgeDTO badge = badges.stream()
-                            .filter((BadgeDTO b) -> b.getGym().getId().equals(gym.getId()))
-                            .findFirst()
-                            .orElse(null);
-                    return new AbstractMap.SimpleImmutableEntry<>(gym, badge);
-                })
-                .collect(Collectors.toList());
-        model.addAttribute("allGymBadgePairs", gymBadgePairs);
+    public String list(Model model, Authentication authentication) {
+        List<GymAndBadgeDTO> gymsAndBadges;
+        try {
+            gymsAndBadges = gymFacade.getAllGymsAndBadgesOfTrainer(((TrainerIdContainingUser) authentication.getPrincipal()).getTrainerId());
+        } catch (NoSuchEntityException ex) {
+            LOGGER.warn("Trainer got deleted in the meantime");
+            gymsAndBadges = gymFacade.getAllGyms().stream()
+                    .map(gym -> new GymAndBadgeDTO(gym, null))
+                    .collect(Collectors.toList());
+        }
+        LOGGER.debug("Got GymsAndBadges", gymsAndBadges);
+        model.addAttribute("allGymBadgePairs", gymsAndBadges);
         return "gym/list";
     }
 

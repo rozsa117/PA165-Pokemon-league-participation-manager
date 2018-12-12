@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.utils.GymAndBadge;
 import java.util.List;
 
 /**
@@ -41,7 +42,7 @@ public interface GymService {
      * @throws InsufficientRightsException when other trainer than Gym Leader tries
      * to change Gym Type
      */
-    public void changeGymType(Gym gym, Trainer trainer, PokemonType newType) 
+    public void changeGymType(Gym gym, Trainer trainer, PokemonType newType)
             throws InsufficientRightsException;
 
     /**
@@ -49,7 +50,7 @@ public interface GymService {
      *
      * @param gym Gym to be updated.
      * @param newGymLeader New leader of the gym.
-     * @throws EntityIsUsedException when the newGymLeader is a GymLeader of 
+     * @throws EntityIsUsedException when the newGymLeader is a GymLeader of
      * another Gym already
      */
     public void changeGymLeader(Gym gym, Trainer newGymLeader) throws EntityIsUsedException;
@@ -100,4 +101,15 @@ public interface GymService {
      * @return The gym with the given trainer, null in case no such gym exists.
      */
     public Gym findGymByLeader(Trainer trainer);
+
+    /**
+     * Returns a list containing all gyms, and where applicable a badge of the trainer from that gym.
+     *
+     * For gyms from which the trainer doesn't have a badge, null is set as badge.
+     *
+     * @param trainer Trainer whose badges shall be fetched.
+     * @return List of gyms and badges.
+     */
+    List<GymAndBadge> getAllGymsAndBadgesOfTrainer(Trainer trainer);
+
 }

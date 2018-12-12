@@ -10,6 +10,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<fmt:setLocale value="${pageContext.request.locale}"/>
 <fmt:setBundle basename="Texts"/>
 <fmt:message var="title" key="gym"/>
 <my:pagetemplate title="${title}">
@@ -27,33 +29,48 @@
          <tbody>
         <c:forEach items="${allGymBadgePairs}" var="gymBadge">
             
-            <tr onclick="window.location='/pa165/gym/detail/${gymBadge.key.id}'" style="cursor: pointer;">
-                <td><c:out value="${gymBadge.key.location}"/></td>
-                <td><c:out value="${gymBadge.key.type}"/></td>
+            <tr onclick="window.location='/pa165/gym/detail/${gymBadge.gym.id}'" style="cursor: pointer;">
+                <td><c:out value="${gymBadge.gym.location}"/></td>
+                <td><c:out value="${gymBadge.gym.type}"/></td>
                 <td>
-                    <my:extraTag href="/trainer/detail/${gymBadge.key.gymLeader.id}" class='btn btn-primary'>
+                    <my:extraTag href="/trainer/detail/${gymBadge.gym.gymLeader.id}" class='btn btn-primary'>
                         <span class="glyphicon glyphicon-align-justify"></span>
                     </my:extraTag>
-                    <c:out value="${gymBadge.key.gymLeader.name} ${gymBadge.key.gymLeader.surname}"/>
+                    <c:out value="${gymBadge.gym.gymLeader.name} ${gymBadge.gym.gymLeader.surname}"/>
                 </td>
-                <c:choose>
-                    <c:when test="${gymBadge.value == null}">
                 <td>
-                    <my:extraTag href="/badge/new?gym=${gymBadge.key.id}" class='btn btn-primary'>
+                <security:authorize access="hasRole('ADMIN')">
+                    <my:extraTag href="/admin/gym/changeLeader?gym=${gymBadge.gym.id}" class='btn btn-primary'>
+                        <span class="glyphicon glyphicon-edit"></span> 
+                        <fmt:message key="gym.edit.admin"/>
+                    </my:extraTag>
+                </security:authorize>
+                <c:choose>
+                    <c:when test="${gymBadge.badge == null}">
+                        <c:set var="userId"><security:authentication property="principal.trainerId"/></c:set>
+                        <c:choose>
+                            <c:when test="${gymBadge.gym.gymLeader.id == userId}">
+                    <my:extraTag href="/gym/edit?gym=${gymBadge.gym.id}" class='btn btn-primary'>
+                        <span class="glyphicon glyphicon-edit"></span> 
+                        <fmt:message key="gym.edit.leader"/>
+                    </my:extraTag>
+                            </c:when>
+                            <c:otherwise>
+                    <my:extraTag href="/badge/new?gym=${gymBadge.gym.id}" class='btn btn-primary'>
                         <span class="glyphicon glyphicon-plus"></span> 
                         <fmt:message key="gym.badge.create.new"/>
                     </my:extraTag>
-                </td>
+                            </c:otherwise>
+                        </c:choose>
                     </c:when>
                     <c:otherwise>
-                <td>
-                    <my:extraTag href="/badge/detail/${gymBadge.value.id}" class='btn btn-primary'>
+                    <my:extraTag href="/badge/detail/${gymBadge.badge.id}" class='btn btn-primary'>
                         <span class="glyphicon glyphicon-align-justify"></span> 
                         <fmt:message key="gym.list.badge.view"/>
                     </my:extraTag>
-                </td>
                     </c:otherwise>
                 </c:choose>
+                </td>
             </tr>
         </c:forEach>
         </tbody>

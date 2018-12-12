@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.entities;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import java.util.ArrayList;
+import java.util.List;
 ;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
+import javax.persistence.OneToMany;
 
 /**
  * Entity class for object gym.
@@ -41,6 +44,13 @@ public class Gym {
     @JoinColumn(name = "trainer_id", nullable = false, unique = true)
     private Trainer gymLeader;
 
+    /*
+     * Needed for LEFT JOIN. 
+     */
+    @OneToMany(mappedBy = "gym")
+    private List<Badge> badges;
+    
+    
     public Gym() {
     }
 
