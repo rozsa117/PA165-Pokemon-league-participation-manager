@@ -1,5 +1,5 @@
 <%-- 
-    Document   : Jsp page for list all pokemon species.
+    Document   : Jsp home page.
     Author     : Tamás Rózsa 445653
 --%>
 
