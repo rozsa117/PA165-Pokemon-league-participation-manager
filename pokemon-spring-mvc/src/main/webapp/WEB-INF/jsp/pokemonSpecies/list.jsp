@@ -32,7 +32,7 @@
                 <td><c:out value="${pokemonSpecies.speciesName}"/></td>
                 <td><c:out value="${pokemonSpecies.primaryType}"/></td>
                 <td><c:out value="${pokemonSpecies.secondaryType}"/></td>
-                <td><c:out value="${pokemonSpecies.evolvesFrom}"/></td>
+                <td><c:out value="${pokemonSpecies.evolvesFrom.speciesName}"/></td>
                 <security:authorize access="hasRole('ADMIN')">
                     <td>
                         <my:extraTag href="/admin/pokemonSpecies/changeTyping/${pokemonSpecies.id}" class='btn btn-primary'>
