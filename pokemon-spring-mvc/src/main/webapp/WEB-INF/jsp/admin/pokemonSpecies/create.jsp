@@ -16,7 +16,7 @@
 <jsp:attribute name="body">
     <h1><fmt:message key="pokemon.species.create.new"/></h1>
     
-    <form:form method="post" action="${pageContext.request.contextPath}/pokemonSpecies/create"
+    <form:form method="post" action="${pageContext.request.contextPath}/admin/pokemonSpecies/create"
                modelAttribute="pokemonSpeciesCreate" cssClass="form-horizontal">
     
         <div class="form-group ${speciesName_error?'has-error':''}">

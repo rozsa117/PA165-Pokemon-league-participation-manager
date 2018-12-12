@@ -37,7 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/admin/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/login").defaultSuccessUrl("/pokemonSpecies/list").permitAll();
+                .formLogin().loginPage("/login").defaultSuccessUrl("/").permitAll()
+                .and()
+                .logout().permitAll();
     }
 
     @Override

@@ -35,7 +35,7 @@
         </tr>
         </tbody>
     </table>
-    <my:extraTag href="/pokemonSpecies/list" class="btn btn-default">
+    <my:extraTag href="/pokemonSpecies/list" class="btn btn-detail">
         <fmt:message key="all.pokemon.species"/>
     </my:extraTag>
 </jsp:attribute>
