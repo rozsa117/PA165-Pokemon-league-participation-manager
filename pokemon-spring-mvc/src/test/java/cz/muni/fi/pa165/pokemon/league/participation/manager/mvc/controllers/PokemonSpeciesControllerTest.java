@@ -523,4 +523,38 @@ public class PokemonSpeciesControllerTest extends AbstractTest {
 
     }
 
+    @Test
+    public void createNoSuchEntityTest() throws Exception {
+
+        PokemonSpeciesCreateDTO psCreateDTO = new PokemonSpeciesCreateDTO();
+
+        psCreateDTO.setSpeciesName(raichuDTO.getSpeciesName());
+        psCreateDTO.setPrimaryType(raichuDTO.getPrimaryType());
+        psCreateDTO.setSecondaryType(raichuDTO.getSecondaryType());
+        psCreateDTO.setEvolvesFromId(Long.MAX_VALUE);
+
+        doThrow(new NoSuchEntityException())
+                .when(pokemonSpeciesFacade).createPokemonSpecies(psCreateDTO);
+
+        mvc.perform(MockMvcRequestBuilders
+                .post(POKEMON_SPECIES_URI + "/create")
+                .param("speciesName", psCreateDTO
+                        .getSpeciesName().toString())
+                .param("primaryType", psCreateDTO
+                        .getPrimaryType().toString())
+                .param("secondaryType",
+                        (psCreateDTO.getSecondaryType() != null
+                        ? psCreateDTO.getSecondaryType().toString()
+                        : ""))
+                .param("evolvesFromId", psCreateDTO
+                        .getEvolvesFromId().toString())
+        )
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrlPattern("**/pokemonSpecies/create"))
+                .andExpect(flash().attribute("alert_danger", notNullValue()))
+                .andExpect(flash().attribute("alert_warning", nullValue()))
+                .andExpect(flash().attribute("alert_success", nullValue()));
+
+    }
+
 }

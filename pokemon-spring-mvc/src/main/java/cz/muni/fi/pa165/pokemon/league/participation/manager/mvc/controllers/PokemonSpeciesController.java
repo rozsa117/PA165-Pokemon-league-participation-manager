@@ -258,6 +258,10 @@ public class PokemonSpeciesController {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("alert_warning",  messages.getString("pokemon.species.evolution.chan.too.long"));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/create").build().encode().toUriString();
+        } catch (NoSuchEntityException ex) {
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+            redirectAttributes.addFlashAttribute("alert_danger",  messages.getString("pokemon.species.does.not.exists"));
+            return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/create").build().encode().toUriString();
         }
         ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
         redirectAttributes.addFlashAttribute("alert_success", String.format(messages.getString("pokemon.species.created.successfully"), id));
