@@ -65,7 +65,7 @@ public class TrainerServiceImpl implements TrainerService {
     @Override
     public void renameTrainer(Trainer trainer, String newName, String newSurname) {
         trainer.setName(newName);
-        trainer.setName(newSurname);
+        trainer.setSurname(newSurname);
         daoUpdateTrainer(trainer);
     }
 

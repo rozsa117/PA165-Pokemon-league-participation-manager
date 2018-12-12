@@ -12,7 +12,6 @@ import javax.validation.constraints.Size;
  */
 public class TrainerChangePasswordDTO {
 
-    @NotNull
     private Long trainerId;
 
     @NotNull

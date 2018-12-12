@@ -19,7 +19,7 @@ public class TrainerRenameDTO {
     private String name;
 
     @NotNull
-    @Size(min = SURNAME_MIN_LENGTH, max = SURNAME_MIN_LENGTH)
+    @Size(min = SURNAME_MIN_LENGTH, max = SURNAME_MAX_LENGTH)
     private String surname;
 
     public Long getTrainerId() {
