@@ -57,7 +57,8 @@ public class TrainerFacadeImpl implements TrainerFacade {
 
     @Override
     public TrainerDTO getTrainerWithId(Long trainerId) {
-        return beanMappingService.mapTo(trainerService.getTrainerWithId(trainerId), TrainerDTO.class);
+        Trainer trainer = trainerService.getTrainerWithId(trainerId);
+        return trainer == null ? null : beanMappingService.mapTo(trainerService.getTrainerWithId(trainerId), TrainerDTO.class);
     }
 
     @Override
@@ -74,6 +75,12 @@ public class TrainerFacadeImpl implements TrainerFacade {
     @Override
     public void setAdmin(Long trainerId, boolean admin) throws NoAdministratorException {
         trainerService.setAdmin(trainerService.getTrainerWithId(trainerId), admin);
+    }
+    
+    @Override
+    public TrainerDTO findTrainerByUsername(String username) {
+        Trainer trainer = trainerService.findTrainerByUsername(username);
+        return trainer == null ? null : beanMappingService.mapTo(trainerService.findTrainerByUsername(username), TrainerDTO.class);
     }
 
 }

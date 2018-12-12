@@ -84,4 +84,13 @@ public interface TrainerService {
      * of old password failed
      */
     public boolean changePassword(Trainer trainer, String oldPassword, String newPassword);
+
+    /**
+     * Find trainer with given username
+     *
+     * @param username the username for which the trainer shall be found.
+     * @return Found trainer, null if no such trainer exists.
+     */
+    public Trainer findTrainerByUsername(String username);
+
 }
