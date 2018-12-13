@@ -16,7 +16,7 @@
 <jsp:attribute name="body">
     <h1><fmt:message key="pokemon.species.change.typing"/></h1>
     
-    <form:form method="post" action="${pageContext.request.contextPath}/pokemonSpecies/changeTyping/${pokemonSpeciesToUpdate.id}"
+    <form:form method="post" action="${pageContext.request.contextPath}/admin/pokemonSpecies/changeTyping/${pokemonSpeciesToUpdate.id}"
                modelAttribute="pokemonSpeciesToUpdate" cssClass="form-horizontal">
         <div class="form-group">
             <form:label path="primaryType" cssClass="col-sm-2 control-label">

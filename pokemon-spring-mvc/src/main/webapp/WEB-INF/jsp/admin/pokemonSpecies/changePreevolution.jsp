@@ -16,7 +16,7 @@
 <jsp:attribute name="body">
     <h1><fmt:message key="pokemon.species.change.preevolution"/></h1>
     
-    <form:form method="post" action="${pageContext.request.contextPath}/pokemonSpecies/changePreevolution/${pokemonSpeciesToUpdate.id}"
+    <form:form method="post" action="${pageContext.request.contextPath}/admin/pokemonSpecies/changePreevolution/${pokemonSpeciesToUpdate.id}"
                modelAttribute="pokemonSpeciesToUpdate" cssClass="form-horizontal">
         
         <div class="form-group">

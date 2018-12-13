@@ -91,7 +91,7 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
                 .surname("Ketchum")
                 .born(LocalDate.of(1998, Month.JANUARY, 11))
                 .isAdmin(true)
-                .userName("Ash")
+                .userName("ash")
                 .build();
         
         Trainer brockTrainer = new TrainerBuilder()
