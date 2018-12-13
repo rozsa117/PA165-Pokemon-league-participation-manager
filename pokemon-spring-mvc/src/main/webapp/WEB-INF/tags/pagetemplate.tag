@@ -38,9 +38,9 @@
                         <li><a href="/pa165"><f:message key="home"/></a></li>
                         <li><a href="/pa165/pokemonSpecies/list"><f:message key="pokemon.species"/></a></li>
                         <li><a href="/pa165/pokemon"><f:message key="pokemon"/></a></li>
-                        <li><a href="/pa165/gym/list"><f:message key="gym"/></a></li>
-                        <li><a href="/pa165/trainer"><f:message key="trainer"/></a></li>
-                        <li><a href="/pa165/badge"><f:message key="badge"/></a></li>
+                        <li><a href="/pa165/gym/list"><f:message key="gyms"/></a></li>
+                        <li><a href="/pa165/trainer"><f:message key="trainers"/></a></li>
+                        <li><a href="/pa165/badge"><f:message key="badges"/></a></li>
                         <security:authorize access="isAuthenticated()">
                             <li><a href="/pa165/logout"><f:message key="log.out"/></a></li>
                         </security:authorize>

@@ -13,10 +13,10 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <fmt:setLocale value="${pageContext.request.locale}"/>
 <fmt:setBundle basename="Texts"/>
-<fmt:message var="title" key="gym"/>
+<fmt:message var="title" key="gyms"/>
 <my:pagetemplate title="${title}">
 <jsp:attribute name="body">
-    <h1><fmt:message key="gym"/> ${gym.location}</h1>
+    <h1><fmt:message key="gyms"/> ${gym.location}</h1>
     <table class="table">
         <thead>
         <tr>

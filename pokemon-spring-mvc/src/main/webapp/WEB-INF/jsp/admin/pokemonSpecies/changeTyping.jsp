@@ -11,7 +11,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <fmt:setBundle basename="Texts"/>
-<fmt:message var="title" key="pokemon.species"/>
+<fmt:message var="title" key="pokemon.species.singular"/>
 <my:pagetemplate title="${title}">
 <jsp:attribute name="body">
     <h1><fmt:message key="pokemon.species.change.typing"/></h1>

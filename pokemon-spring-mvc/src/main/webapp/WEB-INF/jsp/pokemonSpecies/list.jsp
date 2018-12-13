@@ -39,8 +39,6 @@
                             <span class="glyphicon glyphicon-edit"></span> 
                             <fmt:message key="pokemon.species.change.typing"/>
                         </my:extraTag>
-                    </td>
-                    <td>
                         <my:extraTag href="/admin/pokemonSpecies/changePreevolution/${pokemonSpecies.id}" class='btn btn-primary'>
                             <span class="glyphicon glyphicon-edit"></span> 
                             <fmt:message key="pokemon.species.change.preevolution"/>
@@ -52,7 +50,7 @@
         </tbody>
     </table>
     <security:authorize access="hasRole('ADMIN')">
-        <my:extraTag href="/admin/pokemonSpecies/new" class="btn btn-primary">
+        <my:extraTag href="/admin/pokemonSpecies/create" class="btn btn-primary">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 <fmt:message key="pokemon.species.create.new"/>
         </my:extraTag>

@@ -181,7 +181,7 @@ public class AdminPokemonSpeciesController {
      * 
      * @return Path to jsp page.
      */
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String createNewPokemonSpecies(Model model) {
         
         LOGGER.debug("mvc GET createNewPokemonSpecies()");
