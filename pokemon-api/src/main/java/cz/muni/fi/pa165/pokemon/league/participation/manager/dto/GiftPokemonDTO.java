@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
  */
 public class GiftPokemonDTO {
     
-    @NotNull
     private Long pokemonId;
     
     @NotNull

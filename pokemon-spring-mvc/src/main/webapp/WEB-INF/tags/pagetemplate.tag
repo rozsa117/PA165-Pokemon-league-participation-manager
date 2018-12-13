@@ -37,7 +37,7 @@
                     <ul class="nav navbar-nav">
                         <li><a href="/pa165"><f:message key="home"/></a></li>
                         <li><a href="/pa165/pokemonSpecies/list"><f:message key="pokemon.species"/></a></li>
-                        <li><a href="/pa165/pokemon"><f:message key="pokemon"/></a></li>
+                        <li><a href="/pa165/pokemon/list"><f:message key="pokemon"/></a></li>
                         <li><a href="/pa165/gym"><f:message key="gym"/></a></li>
                         <li><a href="/pa165/trainer"><f:message key="trainer"/></a></li>
                         <li><a href="/pa165/badge"><f:message key="badge"/></a></li>

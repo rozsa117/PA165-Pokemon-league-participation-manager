@@ -3,6 +3,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.controllers;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangePreevolutionDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.EvolvePokemonDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GiftPokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymAndBadgeDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonDTO;
@@ -73,10 +74,10 @@ public class PokemonController {
     @RequestMapping("/list")
     public String list(Model model, Authentication authentication) {
         List<PokemonDTO> pokemons = null;
-        TrainerDTO principal = trainerFacade.getTrainerWithId(getPrincipalId(authentication));
+        TrainerDTO principal = trainerFacade.getTrainerWithId(getCurrentTrainerId(authentication));
         model.addAttribute("principal", principal);
         try {
-            pokemons = pokemonFacade.getPokemonOfTrainer(getPrincipalId(authentication));
+            pokemons = pokemonFacade.getPokemonOfTrainer(getCurrentTrainerId(authentication));
         } catch (NoSuchEntityException ex) {
             LOGGER.warn("Trainer got deleted in the meantime");
         }
@@ -119,73 +120,155 @@ public class PokemonController {
             return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
         }
 
-        if (!Objects.equals(pokemon.getTrainer().getId(), getPrincipalId(authentication))) {
+        if (!Objects.equals(pokemon.getTrainer().getId(), getCurrentTrainerId(authentication))) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("alert_warning", MessageFormat.format(messages.getString("not.authorized"), messages.getString("pokemon"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
         }
-//        model.addAttribute("pokemon", pokemon);
+        model.addAttribute("pokemon", pokemon);
         EvolvePokemonDTO pokemonToEvolve = new EvolvePokemonDTO();
         pokemonToEvolve.setPokemonId(pokemon.getId());
-        pokemonToEvolve.setNewSpeciesId(pokemon.getId());
-        pokemonToEvolve.setRequestingTrainerId(getPrincipalId(authentication));
+        pokemonToEvolve.setNewSpeciesId(pokemon.getSpecies().getId());
+        pokemonToEvolve.setRequestingTrainerId(getCurrentTrainerId(authentication));
         model.addAttribute("pokemonToEvolve", pokemonToEvolve);
         return "pokemon/evolve";
     }
-    
-        /**
-     * Post controller for changing preevolution of pokemon species.
-     * 
-     * @param pokemon DTO of pokemon species to change preevolution.
+
+    /**
+     * Post controller for evolve pokemon
+     *
+     * @param pokemon DTO of pokemon to evolve
      * @param id Id of pokemon species to change preevolution.
      * @return Path to jsp page.
      */
     @RequestMapping(value = "/evolve/{id}", method = RequestMethod.POST)
     public String evolve(@Valid @ModelAttribute("pokemonToEvolve") EvolvePokemonDTO pokemon,
-        BindingResult bindingResult,
-        Model model,
-        RedirectAttributes redirectAttributes,
-        UriComponentsBuilder uriComponentsBuilder,
-        @PathVariable long id) {
-        
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes,
+            UriComponentsBuilder uriComponentsBuilder,
+            @PathVariable long id) {
+
         LOGGER.debug("mvc POST evolve({})", id);
         pokemon.setPokemonId(id);
-        LOGGER.debug("mvc POST evolve({}) " + pokemon.toString(), id);
-        LOGGER.debug("binding result mvc POST evolve({}) " + bindingResult.hasErrors(), id);
-        
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
-                ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
+                ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
                 LOGGER.trace("ObjectError: {}", ge);
                 model.addAttribute("alert_warning", messages.getString(ge.getDefaultMessage()));
             });
             bindingResult.getFieldErrors().forEach((fe) -> {
-                LOGGER.debug("FieldError: {}", fe);
                 model.addAttribute(fe.getField() + "_error", true);
             });
-            return "pokemon/evolve";
+            return "pokemon/evolve/";
         }
         try {
             pokemonFacade.evolvePokemon(pokemon);
         } catch (NoSuchEntityException ex) {
-            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
         } catch (InvalidPokemonEvolutionException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
-            redirectAttributes.addFlashAttribute("alert_warning",  messages.getString("pokemon.invalid.evolution"));
+            redirectAttributes.addFlashAttribute("alert_warning", messages.getString("pokemon.invalid.evolution"));
             return "redirect:" + uriComponentsBuilder.path("/pokemon/evolve/" + pokemon.getPokemonId()).build().encode().toUriString();
         } catch (InsufficientRightsException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("alert_warning", MessageFormat.format(messages.getString("not.authorized"), messages.getString("pokemon"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
         }
-        ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
+        ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
         redirectAttributes.addFlashAttribute("alert_success", MessageFormat.format(messages.getString("entity.successfully.updated"), messages.getString("pokemon")));
         return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
     }
 
+    /**
+     * Get controller for gift pokemon.
+     *
+     * @param id Id of pokemon to gift.
+     * @return Path to jsp page.
+     */
+    @RequestMapping(value = "/gift/{id}", method = RequestMethod.GET)
+    public String gift(@PathVariable long id,
+            Model model,
+            RedirectAttributes redirectAttributes,
+            UriComponentsBuilder uriComponentsBuilder,
+            Authentication authentication) {
+
+        LOGGER.debug("mvc GET gift({})", id);
+
+        PokemonDTO pokemon = pokemonFacade.findPokemonById(id);
+
+        if (pokemon == null) {
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon"), id));
+            return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
+        }
+
+        if (!Objects.equals(pokemon.getTrainer().getId(), getCurrentTrainerId(authentication))) {
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+            redirectAttributes.addFlashAttribute("alert_warning", MessageFormat.format(messages.getString("not.authorized"), messages.getString("pokemon"), id));
+            return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
+        }
+        model.addAttribute("pokemon", pokemon);
+
+        GiftPokemonDTO pokemonToGift = new GiftPokemonDTO();
+        pokemonToGift.setPokemonId(pokemon.getId());
+        pokemonToGift.setRequestingTrainerId(getCurrentTrainerId(authentication));
+        model.addAttribute("pokemonToGift", pokemonToGift);
+
+        List<TrainerDTO> otherTrainers = trainerFacade.getAllTrainers();
+        otherTrainers.removeIf(trainer -> trainer.getId() == 1);
+        model.addAttribute("otherTrainers", otherTrainers);
+
+        return "pokemon/gift";
+    }
+
+    /**
+     * Post controller for evolve pokemon
+     *
+     * @param pokemon DTO of pokemon to gift
+     * @param id Id of pokemon species to gift
+     * @return Path to jsp page.
+     */
+    @RequestMapping(value = "/gift/{id}", method = RequestMethod.POST)
+    public String gift(@Valid @ModelAttribute("pokemonToGift") GiftPokemonDTO pokemon,
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes,
+            UriComponentsBuilder uriComponentsBuilder,
+            @PathVariable long id) {
+
+        LOGGER.debug("mvc POST gift({})", id);
+        pokemon.setPokemonId(id);
+
+        if (bindingResult.hasErrors()) {
+            bindingResult.getGlobalErrors().forEach((ge) -> {
+                ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+                LOGGER.trace("ObjectError: {}", ge);
+                model.addAttribute("alert_warning", messages.getString(ge.getDefaultMessage()));
+            });
+            bindingResult.getFieldErrors().forEach((fe) -> {
+                model.addAttribute(fe.getField() + "_error", true);
+            });
+            return "pokemon/gift";
+        }
+        try {
+            pokemonFacade.giftPokemon(pokemon);
+        } catch (NoSuchEntityException ex) {
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon"), id));
+            return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
+        } catch (InsufficientRightsException ex) {
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+            redirectAttributes.addFlashAttribute("alert_warning", MessageFormat.format(messages.getString("not.authorized"), messages.getString("pokemon"), id));
+            return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
+        }
+        ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+        redirectAttributes.addFlashAttribute("alert_success", MessageFormat.format(messages.getString("entity.successfully.updated"), messages.getString("pokemon")));
+        return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
+    }
 
     /**
      * Model attribute for all pokemon species.
@@ -198,7 +281,7 @@ public class PokemonController {
         return pokemonSpeciesFacade.getAllPokemonSpecies();
     }
 
-    private Long getPrincipalId(Authentication authentication) {
+    private Long getCurrentTrainerId(Authentication authentication) {
         return ((TrainerIdContainingUser) authentication.getPrincipal()).getTrainerId();
     }
 }
