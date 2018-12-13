@@ -28,7 +28,6 @@
                     <th><fmt:message key="pokemon.species.species.name"/></th>
                     <th><fmt:message key="pokemon.level"/></th>
                     <th><fmt:message key="pokemon.date.time.of.capture"/></th>
-                    <th><!--Button Column--></th>
                 </tr>
             </thead>
             <tbody>

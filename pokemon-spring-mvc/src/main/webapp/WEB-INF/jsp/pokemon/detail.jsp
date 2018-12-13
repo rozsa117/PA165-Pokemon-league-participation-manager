@@ -10,34 +10,31 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <fmt:setBundle basename="Texts"/>
-<fmt:message var="title" key="gym"/>
+<fmt:message var="title" key="pokemon"/>
 <my:pagetemplate title="${title}">
-<jsp:attribute name="body">
-    <h1><fmt:message key="gym"/> ${gym.location}</h1>
-    <table class="table">
-        <tbody>
-        <tr>
-            <th><fmt:message key="gym.type"/></th>
-            <td><c:out value="${gym.type}"/></td>
-        </tr>
-
-        <tr onclick="window.location='/pa165/trainer/detail/${gym.gymLeader.id}'" style="cursor: pointer;">
-            <th><fmt:message key="gym.leader"/></th>
-            <td><c:out value="${gym.gymLeader}"/></td>
-        </tr>
-        </tbody>
-    </table>
-    <c:choose>
-        <c:when test="${badge == null}">
-            <my:extraTag href="/badge/new?gym=${gym.id}" class="btn btn-default">
-                <fmt:message key="gym.badge.create.new"/>
-            </my:extraTag>
-        </c:when>
-        <c:otherwise>
-            <my:extraTag href="/badge/detail/${badge.id}" class="btn btn-default">
-                <fmt:message key="badge.view"/>
-            </my:extraTag>
-        </c:otherwise>
-    </c:choose>
-</jsp:attribute>
+    <jsp:attribute name="body">
+        <h1><fmt:message key="pokemon"/> ${pokemon.nickname}</h1>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th><fmt:message key="pokemon.level"/></th>
+                    <td><c:out value="${pokemon.level}"/></td>
+                </tr>
+                <tr onclick="window.location = '/pa165/pokemonSpecies/detail/${pokemon.species.id}'" style="cursor: pointer;">
+                    <th><fmt:message key="pokemon.species"/></th>
+                    <td><c:out value="${pokemon.species.speciesName}"/></td>
+                </tr>
+                <tr>
+                    <th><fmt:message key="pokemon.date.time.of.capture"/></th>
+                    <td> 
+                        <fmt:parseDate value="${pokemon.dateTimeOfCapture}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                        <fmt:formatDate value="${parsedDateTime}" type="both"  dateStyle="MEDIUM" timeStyle="SHORT"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+                        <my:extraTag href="/pokemon/list" class="btn btn-primary">
+        <fmt:message key="all.my.pokemons"/>
+    </my:extraTag>
+    </jsp:attribute>
 </my:pagetemplate>
