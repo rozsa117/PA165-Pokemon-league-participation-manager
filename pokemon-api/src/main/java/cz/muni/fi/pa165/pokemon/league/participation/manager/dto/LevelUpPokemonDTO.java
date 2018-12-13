@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
  */
 public class LevelUpPokemonDTO {
 
-    @NotNull
     private Long pokemonId;
 
     @NotNull

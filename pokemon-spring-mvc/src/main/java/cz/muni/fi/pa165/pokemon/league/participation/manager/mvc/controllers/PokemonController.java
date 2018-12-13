@@ -6,6 +6,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.EvolvePokemonDT
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GiftPokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymAndBadgeDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.LevelUpPokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
@@ -219,7 +220,7 @@ public class PokemonController {
         model.addAttribute("pokemonToGift", pokemonToGift);
 
         List<TrainerDTO> otherTrainers = trainerFacade.getAllTrainers();
-        otherTrainers.removeIf(trainer -> trainer.getId() == 1);
+        otherTrainers.removeIf(trainer -> trainer.getId() == getCurrentTrainerId(authentication));
         model.addAttribute("otherTrainers", otherTrainers);
 
         return "pokemon/gift";
@@ -270,6 +271,46 @@ public class PokemonController {
         return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
     }
 
+        /**
+     * Get controller for gift pokemon.
+     *
+     * @param id Id of pokemon to gift.
+     * @return Path to jsp page.
+     */
+    @RequestMapping(value = "/levelup/{id}", method = RequestMethod.GET)
+    public String levelUp(@PathVariable long id,
+            Model model,
+            RedirectAttributes redirectAttributes,
+            UriComponentsBuilder uriComponentsBuilder,
+            Authentication authentication) {
+
+        LOGGER.debug("mvc GET level up({})", id);
+
+        PokemonDTO pokemon = pokemonFacade.findPokemonById(id);
+
+        if (pokemon == null) {
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon"), id));
+            return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
+        }
+
+        if (!Objects.equals(pokemon.getTrainer().getId(), getCurrentTrainerId(authentication))) {
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+            redirectAttributes.addFlashAttribute("alert_warning", MessageFormat.format(messages.getString("not.authorized"), messages.getString("pokemon"), id));
+            return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
+        }
+        model.addAttribute("pokemon", pokemon);
+        
+        LevelUpPokemonDTO pokemonToLevelUp = new LevelUpPokemonDTO();
+        pokemonToLevelUp.setPokemonId(pokemon.getId());
+        pokemonToLevelUp.setNewLevel(pokemon.getLevel());
+        pokemonToLevelUp.setRequestingTrainerId(getCurrentTrainerId(authentication));
+        model.addAttribute("pokemonToLevelUp", pokemonToLevelUp);
+
+        return "pokemon/levelup";
+    }
+
+    
     /**
      * Model attribute for all pokemon species.
      *

@@ -46,12 +46,7 @@
                             <fmt:parseDate value="${pokemon.dateTimeOfCapture}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
                             <fmt:formatDate value="${parsedDateTime}" type="both"  dateStyle="MEDIUM" timeStyle="SHORT"/>
                         </td>
-                        <td>
-                            <my:extraTag href="/pokemon/levelup/${pokemon.id}" class='btn btn-primary'>
-                                <span class="glyphicon glyphicon-edit"></span> 
-                                <fmt:message key="pokemon.level.up"/>
-                            </my:extraTag>
-                        </td>
+                        <c:set var="MaxLevel" value="${100}"/>
                         <td>
                             <my:extraTag href="/pokemon/evolve/${pokemon.id}" class='btn btn-primary'>
                                 <span class="glyphicon glyphicon-edit"></span> 
@@ -64,6 +59,15 @@
                                 <fmt:message key="pokemon.gift"/>
                             </my:extraTag>
                         </td>
+                        <c:if test="${pokemon.level < MaxLevel}">
+                            <td>
+                                <my:extraTag href="/pokemon/levelup/${pokemon.id}" class='btn btn-primary'>
+                                    <span class="glyphicon glyphicon-edit"></span> 
+                                    <fmt:message key="pokemon.level.up"/>
+                                </my:extraTag>
+                            </td>
+                        </c:if>
+
                     </tr>
                 </c:forEach>
             </tbody>
