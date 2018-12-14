@@ -37,8 +37,6 @@
                 <span class="glyphicon glyphicon-edit"></span> 
                 <fmt:message key="confirm"/>
             </button>
-            <form:input path="requestingTrainerId" type="hidden"/>
         </form:form>
-
     </jsp:attribute> 
 </my:pagetemplate>

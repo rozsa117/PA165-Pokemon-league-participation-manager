@@ -11,8 +11,6 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.Insuffic
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidPokemonEvolutionException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.LevelNotIncreasedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.BadgeFacade;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.GymFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.PokemonFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.PokemonSpeciesFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.TrainerFacade;
@@ -127,10 +125,10 @@ public class PokemonController {
         model.addAttribute("speciesEvolveTo", speciesEvolveTo);
 
         model.addAttribute("pokemon", pokemon);
+        
         EvolvePokemonDTO pokemonToEvolve = new EvolvePokemonDTO();
-        pokemonToEvolve.setPokemonId(pokemon.getId());
-        pokemonToEvolve.setNewSpeciesId(pokemon.getSpecies().getId());
-        pokemonToEvolve.setRequestingTrainerId(getCurrentTrainerId(authentication));
+        pokemonToEvolve.setPokemonId(id);
+        
         model.addAttribute("pokemonToEvolve", pokemonToEvolve);
 
         return "pokemon/evolve";
@@ -150,10 +148,12 @@ public class PokemonController {
             Model model,
             RedirectAttributes redirectAttributes,
             UriComponentsBuilder uriComponentsBuilder,
+            Authentication authentication,
             @PathVariable long id) {
 
         LOGGER.debug("mvc POST evolve({})", id);
         pokemon.setPokemonId(id);
+        pokemon.setRequestingTrainerId(getCurrentTrainerId(authentication));
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
@@ -164,7 +164,7 @@ public class PokemonController {
             bindingResult.getFieldErrors().forEach((fe) -> {
                 model.addAttribute(fe.getField() + "_error", true);
             });
-            return "pokemon/evolve/";
+            return "pokemon/evolve";
         }
         try {
             pokemonFacade.evolvePokemon(pokemon);
@@ -218,7 +218,6 @@ public class PokemonController {
 
         GiftPokemonDTO pokemonToGift = new GiftPokemonDTO();
         pokemonToGift.setPokemonId(pokemon.getId());
-        pokemonToGift.setRequestingTrainerId(getCurrentTrainerId(authentication));
         model.addAttribute("pokemonToGift", pokemonToGift);
 
         List<TrainerDTO> otherTrainers = trainerFacade.getAllTrainers();
@@ -241,10 +240,12 @@ public class PokemonController {
             Model model,
             RedirectAttributes redirectAttributes,
             UriComponentsBuilder uriComponentsBuilder,
+            Authentication authentication,
             @PathVariable long id) {
 
         LOGGER.debug("mvc POST gift({})", id);
         pokemon.setPokemonId(id);
+        pokemon.setRequestingTrainerId(getCurrentTrainerId(authentication));
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
@@ -306,7 +307,6 @@ public class PokemonController {
         LevelUpPokemonDTO pokemonToLevelUp = new LevelUpPokemonDTO();
         pokemonToLevelUp.setPokemonId(pokemon.getId());
         pokemonToLevelUp.setNewLevel(pokemon.getLevel());
-        pokemonToLevelUp.setRequestingTrainerId(getCurrentTrainerId(authentication));
         model.addAttribute("pokemonToLevelUp", pokemonToLevelUp);
 
         return "pokemon/levelup";
@@ -325,10 +325,12 @@ public class PokemonController {
             Model model,
             RedirectAttributes redirectAttributes,
             UriComponentsBuilder uriComponentsBuilder,
+            Authentication authentication,
             @PathVariable long id) {
 
         LOGGER.debug("mvc POST level up({})", id);
         pokemon.setPokemonId(id);
+        pokemon.setRequestingTrainerId(getCurrentTrainerId(authentication));
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
@@ -407,7 +409,7 @@ public class PokemonController {
      * @return Path to jsp page.
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String levelUp(@Valid @ModelAttribute("pokemonCreate") PokemonCreateDTO pokemon,
+    public String Create(@Valid @ModelAttribute("pokemonCreate") PokemonCreateDTO pokemon,
             BindingResult bindingResult,
             Model model,
             RedirectAttributes redirectAttributes,

@@ -18,7 +18,6 @@
 
         <form:form method="post" action="${pageContext.request.contextPath}/pokemon/levelup/${pokemonToLevelUp.pokemonId}"
                    modelAttribute="pokemonToLevelUp" cssClass="form-horizontal">
-
             <div class="form-group ${newLevel_error?'has-error':''}">
                 <form:label path="newLevel" cssClass="col-sm-2 control-label">
                     <fmt:message key="pokemon.new.level"/>
@@ -32,12 +31,10 @@
                     <form:errors path="newLevel" cssClass="error"/>
                 </div>
             </div>
-
             <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
                 <span class="glyphicon glyphicon-edit"></span> 
                 <fmt:message key="confirm"/>
             </button>
-            <form:input path="requestingTrainerId" type="hidden"/>
         </form:form>
     </jsp:attribute> 
 </my:pagetemplate>
