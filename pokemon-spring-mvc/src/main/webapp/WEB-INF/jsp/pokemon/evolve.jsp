@@ -19,7 +19,7 @@
         <form:form method="post" action="${pageContext.request.contextPath}/pokemon/evolve/${pokemonToEvolve.pokemonId}"
                    modelAttribute="pokemonToEvolve" cssClass="form-horizontal">
 
-            <div class="form-group">
+            <div class="form-group ${newSpeciesId_error?'has-error':''}">
                 <form:label path="newSpeciesId" cssClass="col-sm-2 control-label">
                     <fmt:message key="pokemon.species.singular"/>
                 </form:label>

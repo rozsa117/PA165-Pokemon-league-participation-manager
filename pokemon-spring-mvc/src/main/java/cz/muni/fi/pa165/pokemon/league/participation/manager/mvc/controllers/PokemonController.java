@@ -1,17 +1,12 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.controllers;
 
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeDTO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangePreevolutionDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.EvolvePokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GiftPokemonDTO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymAndBadgeDTO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.LevelUpPokemonDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonSpeciesDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.CircularEvolutionChainException;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidPokemonEvolutionException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.LevelNotIncreasedException;
@@ -24,13 +19,9 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.TrainerFacad
 import cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.security.TrainerIdContainingUser;
 import java.security.Principal;
 import java.text.MessageFormat;
-import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -60,12 +51,6 @@ public class PokemonController {
 
     @Inject
     private PokemonFacade pokemonFacade;
-
-    @Inject
-    private GymFacade gymFacade;
-
-    @Inject
-    private BadgeFacade badgeFacade;
 
     @Inject
     private TrainerFacade trainerFacade;
@@ -133,7 +118,7 @@ public class PokemonController {
                 -> (species.getEvolvesFrom() == null
                 || !species.getEvolvesFrom().getId().equals(pokemon.getSpecies().getId())));
 
-        if (speciesEvolveTo.size() == 0) {
+        if (speciesEvolveTo.isEmpty()) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("alert_warning", messages.getString("pokemon.cannot.evolve"));
             return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
@@ -147,7 +132,6 @@ public class PokemonController {
         pokemonToEvolve.setNewSpeciesId(pokemon.getSpecies().getId());
         pokemonToEvolve.setRequestingTrainerId(getCurrentTrainerId(authentication));
         model.addAttribute("pokemonToEvolve", pokemonToEvolve);
-
 
         return "pokemon/evolve";
 
@@ -391,5 +375,68 @@ public class PokemonController {
 
     private Long getCurrentTrainerId(Authentication authentication) {
         return ((TrainerIdContainingUser) authentication.getPrincipal()).getTrainerId();
+    }
+
+    /**
+     * Get controller for create a new pokemon.
+     *
+     * @return Path to jsp page.
+     */
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    public String create(
+            Model model,
+            RedirectAttributes redirectAttributes,
+            UriComponentsBuilder uriComponentsBuilder,
+            Authentication authentication) {
+
+        LOGGER.debug("mvc GET create");
+
+        PokemonCreateDTO pokemon = new PokemonCreateDTO();
+        pokemon.setCreatingTrainerId(getCurrentTrainerId(authentication));
+        pokemon.setLevel(1);
+
+        model.addAttribute("pokemonCreate", pokemon);
+
+        return "pokemon/create";
+    }
+
+    /**
+     * Post controller for create a mew pokemon
+     *
+     * @param pokemon DTO of pokemon to create
+     * @return Path to jsp page.
+     */
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public String levelUp(@Valid @ModelAttribute("pokemonCreate") PokemonCreateDTO pokemon,
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes,
+            UriComponentsBuilder uriComponentsBuilder) {
+
+        LOGGER.debug("mvc POST create");
+        Long id = null;
+
+        if (bindingResult.hasErrors()) {
+            bindingResult.getGlobalErrors().forEach((ge) -> {
+                ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+                LOGGER.trace("ObjectError: {}", ge);
+                model.addAttribute("alert_warning", messages.getString(ge.getDefaultMessage()));
+            });
+            bindingResult.getFieldErrors().forEach((fe) -> {
+                model.addAttribute(fe.getField() + "_error", true);
+            });
+            return "pokemon/create";
+        }
+        try {
+            pokemonFacade.createPokemon(pokemon);
+        } catch (NoSuchEntityException ex) {
+            LOGGER.error("Pokemon create failed", ex);
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+            redirectAttributes.addFlashAttribute("alert_danger", messages.getString("something.went.wrong"));
+            return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
+        }
+        ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+        redirectAttributes.addFlashAttribute("alert_success", MessageFormat.format(messages.getString("entity.created.successfully"), messages.getString("pokemon"), id));
+        return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
     }
 }

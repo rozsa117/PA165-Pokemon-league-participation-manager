@@ -72,6 +72,10 @@
                 </c:forEach>
             </tbody>
         </table>
+        <my:extraTag href="/pokemon/create" class="btn btn-primary">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            <fmt:message key="pokemon.create.new"/>
+        </my:extraTag>
 
     </jsp:attribute> 
 </my:pagetemplate>

@@ -19,7 +19,7 @@
         <form:form method="post" action="${pageContext.request.contextPath}/pokemon/levelup/${pokemonToLevelUp.pokemonId}"
                    modelAttribute="pokemonToLevelUp" cssClass="form-horizontal">
 
-            <div class="form-group">
+            <div class="form-group ${newLevel_error?'has-error':''}">
                 <form:label path="newLevel" cssClass="col-sm-2 control-label">
                     <fmt:message key="pokemon.new.level"/>
                 </form:label>

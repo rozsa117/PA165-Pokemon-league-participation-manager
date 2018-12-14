@@ -19,7 +19,7 @@
         <form:form method="post" action="${pageContext.request.contextPath}/pokemon/gift/${pokemonToGift.pokemonId}"
                    modelAttribute="pokemonToGift" cssClass="form-horizontal">
 
-            <div class="form-group">
+            <div class="form-group ${giftedTrainerId_error?'has-error':''}">
                 <form:label path="giftedTrainerId" cssClass="col-sm-2 control-label">
                     <fmt:message key="pokemon.trainer.to.gift"/>
                 </form:label>
