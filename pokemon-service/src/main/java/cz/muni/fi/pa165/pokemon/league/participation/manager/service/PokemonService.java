@@ -34,7 +34,7 @@ public interface PokemonService {
      * @param to Levels to increase the Pokemon's level to (must be positive,
      * must not exceed 100, must be higher than the Pokemon's current level).
      * @throws LevelNotIncreasedException when the specified target level is
-     * lower than the Pokemon's current level.
+     * lower or equal than the Pokemon's current level.
      */
     void increasePokemonLevel(Pokemon pokemon, int to)
             throws LevelNotIncreasedException;
