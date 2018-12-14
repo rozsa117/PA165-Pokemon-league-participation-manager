@@ -14,7 +14,6 @@ public class LevelUpPokemonDTO {
 
     private Long pokemonId;
 
-    @NotNull
     private Long requestingTrainerId;
 
     @Min(1)

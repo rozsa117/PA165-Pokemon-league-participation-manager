@@ -15,7 +15,6 @@ public class EvolvePokemonDTO {
     @NotNull
     private Long newSpeciesId;
 
-    @NotNull
     private Long requestingTrainerId;
 
     public Long getPokemonId() {

@@ -12,7 +12,6 @@ public class GiftPokemonDTO {
     
     private Long pokemonId;
     
-    @NotNull
     private Long requestingTrainerId;
     
     @NotNull
