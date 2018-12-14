@@ -23,7 +23,7 @@
                 <form:label path="giftedTrainerId" cssClass="col-sm-2 control-label">
                     <fmt:message key="pokemon.trainer.to.gift"/>
                 </form:label>
-                <div class="col-sm-10">
+                <div class="col-sm-3">
                     <form:select path="giftedTrainerId" cssClass="form-control">
                         <c:forEach items="${otherTrainers}" var="trainer">
                             <form:option value="${trainer.id}">

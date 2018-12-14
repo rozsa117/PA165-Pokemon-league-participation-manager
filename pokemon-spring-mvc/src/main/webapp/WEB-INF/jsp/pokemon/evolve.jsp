@@ -23,9 +23,9 @@
                 <form:label path="newSpeciesId" cssClass="col-sm-2 control-label">
                     <fmt:message key="pokemon.species.singular"/>
                 </form:label>
-                <div class="col-sm-10">
+                <div class="col-sm-2">
                     <form:select path="newSpeciesId" cssClass="form-control">
-                        <c:forEach items="${allSpecies}" var="species">
+                        <c:forEach items="${speciesEvolveTo}" var="species">
                             <form:option value="${species.id}"><c:out value="${species.speciesName}"/></form:option>
                         </c:forEach>
                     </form:select>

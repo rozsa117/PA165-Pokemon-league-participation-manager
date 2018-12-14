@@ -14,6 +14,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.Circular
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EvolutionChainTooLongException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidPokemonEvolutionException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.LevelNotIncreasedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.BadgeFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.GymFacade;
@@ -126,13 +127,30 @@ public class PokemonController {
             redirectAttributes.addFlashAttribute("alert_warning", MessageFormat.format(messages.getString("not.authorized"), messages.getString("pokemon"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
         }
+
+        List<PokemonSpeciesDTO> speciesEvolveTo = pokemonSpeciesFacade.getAllPokemonSpecies();
+        speciesEvolveTo.removeIf(species
+                -> (species.getEvolvesFrom() == null
+                || !species.getEvolvesFrom().getId().equals(pokemon.getSpecies().getId())));
+
+        if (speciesEvolveTo.size() == 0) {
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+            redirectAttributes.addFlashAttribute("alert_warning", messages.getString("pokemon.cannot.evolve"));
+            return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
+        }
+
+        model.addAttribute("speciesEvolveTo", speciesEvolveTo);
+
         model.addAttribute("pokemon", pokemon);
         EvolvePokemonDTO pokemonToEvolve = new EvolvePokemonDTO();
         pokemonToEvolve.setPokemonId(pokemon.getId());
         pokemonToEvolve.setNewSpeciesId(pokemon.getSpecies().getId());
         pokemonToEvolve.setRequestingTrainerId(getCurrentTrainerId(authentication));
         model.addAttribute("pokemonToEvolve", pokemonToEvolve);
+
+
         return "pokemon/evolve";
+
     }
 
     /**
@@ -271,10 +289,10 @@ public class PokemonController {
         return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
     }
 
-        /**
-     * Get controller for gift pokemon.
+    /**
+     * Get controller for level up pokemon.
      *
-     * @param id Id of pokemon to gift.
+     * @param id Id of pokemon to level up.
      * @return Path to jsp page.
      */
     @RequestMapping(value = "/levelup/{id}", method = RequestMethod.GET)
@@ -300,7 +318,7 @@ public class PokemonController {
             return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
         }
         model.addAttribute("pokemon", pokemon);
-        
+
         LevelUpPokemonDTO pokemonToLevelUp = new LevelUpPokemonDTO();
         pokemonToLevelUp.setPokemonId(pokemon.getId());
         pokemonToLevelUp.setNewLevel(pokemon.getLevel());
@@ -310,7 +328,56 @@ public class PokemonController {
         return "pokemon/levelup";
     }
 
-    
+    /**
+     * Post controller for level up pokemon
+     *
+     * @param pokemon DTO of pokemon to level up
+     * @param id Id of pokemon species to level up
+     * @return Path to jsp page.
+     */
+    @RequestMapping(value = "/levelup/{id}", method = RequestMethod.POST)
+    public String levelUp(@Valid @ModelAttribute("pokemonLevelUp") LevelUpPokemonDTO pokemon,
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes,
+            UriComponentsBuilder uriComponentsBuilder,
+            @PathVariable long id) {
+
+        LOGGER.debug("mvc POST level up({})", id);
+        pokemon.setPokemonId(id);
+
+        if (bindingResult.hasErrors()) {
+            bindingResult.getGlobalErrors().forEach((ge) -> {
+                ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+                LOGGER.trace("ObjectError: {}", ge);
+                model.addAttribute("alert_warning", messages.getString(ge.getDefaultMessage()));
+            });
+            bindingResult.getFieldErrors().forEach((fe) -> {
+                model.addAttribute(fe.getField() + "_error", true);
+            });
+            return "pokemon/levelup";
+        }
+        try {
+            pokemonFacade.levelUpPokemon(pokemon);
+        } catch (NoSuchEntityException ex) {
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon"), id));
+            return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
+        } catch (InsufficientRightsException ex) {
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+            redirectAttributes.addFlashAttribute("alert_warning", MessageFormat.format(messages.getString("not.authorized"), messages.getString("pokemon"), id));
+            return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
+        } catch (LevelNotIncreasedException ex) {
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+            redirectAttributes.addFlashAttribute("alert_warning", messages.getString("pokemon.level.not.increased"));
+            return "redirect:" + uriComponentsBuilder.path("/pokemon/levelup/" + pokemon.getPokemonId())
+                    .build().encode().toUriString();
+        }
+        ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+        redirectAttributes.addFlashAttribute("alert_success", MessageFormat.format(messages.getString("entity.successfully.updated"), messages.getString("pokemon")));
+        return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
+    }
+
     /**
      * Model attribute for all pokemon species.
      *
