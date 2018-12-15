@@ -48,5 +48,12 @@ public class TrainerDAOImpl implements TrainerDAO {
     public List<Trainer> getAllTrainers() {
             return em.createQuery("SELECT t FROM Trainer t", Trainer.class).getResultList();
     }
-    
+
+    @Override
+    public Trainer findTrainerByUsername(String username) {
+        return em.createQuery("SELECT t FROM Trainer t WHERE t.userName = :username", Trainer.class)
+                .setParameter("username", username)
+                .getResultList().stream().findFirst().orElse(null);
+    }
+
 }

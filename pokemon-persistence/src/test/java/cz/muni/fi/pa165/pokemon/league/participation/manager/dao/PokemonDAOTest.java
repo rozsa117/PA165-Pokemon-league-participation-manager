@@ -3,7 +3,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.PokemonBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.TrainerBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.PokemonSpeciesBuilder;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.common.PersistenceApplicationContext;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.utils.PersistenceApplicationContext;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.PokemonSpecies;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;

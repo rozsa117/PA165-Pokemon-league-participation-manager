@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.facade;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangeGymLeaderDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangeGymTypeDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymAndBadgeDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
@@ -9,6 +10,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.UpdateGymLocati
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -95,4 +97,16 @@ public interface GymFacade {
      */
     public GymDTO findGymByLeader(@NotNull Long trainerId);
     
+
+    /**
+     * Returns a list containing all gyms, and where applicable a badge of the trainer from that gym.
+     * 
+     * For gyms from which the trainer doesn't have a badge, null is set as badge.
+     *
+     * @param trainerId ID of trainer whose badges shall be fetched.
+     * @return List of gyms and badges.
+     * @throws NoSuchEntityException when given trainer doesn't exist.
+     */
+    List<GymAndBadgeDTO> getAllGymsAndBadgesOfTrainer(Long trainerId)
+            throws NoSuchEntityException;
 }

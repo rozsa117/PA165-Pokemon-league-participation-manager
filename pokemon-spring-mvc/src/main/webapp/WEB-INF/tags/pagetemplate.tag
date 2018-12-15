@@ -5,6 +5,7 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="my" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html lang="${pageContext.request.locale}">
@@ -40,6 +41,9 @@
                         <li><a href="/pa165/gym"><f:message key="gym"/></a></li>
                         <li><a href="/pa165/trainer/list"><f:message key="trainer"/></a></li>
                         <li><a href="/pa165/badge"><f:message key="badge"/></a></li>
+                        <security:authorize access="isAuthenticated()">
+                            <li><a href="/pa165/logout"><f:message key="log.out"/></a></li>
+                        </security:authorize>
                     </ul>
                 </div>
             </div>

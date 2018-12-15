@@ -31,11 +31,11 @@
         </tr>
         <tr>
             <th><fmt:message key="pokemon.species.evolves.from"/></th>
-            <td><c:out value="${pokemonSpecies.evolvesFrom}"/></td>
+            <td><c:out value="${pokemonSpecies.evolvesFrom.speciesName}"/></td>
         </tr>
         </tbody>
     </table>
-    <my:extraTag href="/pokemonSpecies/list" class="btn btn-default">
+    <my:extraTag href="/pokemonSpecies/list" class="btn btn-primary">
         <fmt:message key="all.pokemon.species"/>
     </my:extraTag>
 </jsp:attribute>

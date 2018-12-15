@@ -1,11 +1,15 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
+import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.BadgeBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.GymBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.TrainerBuilder;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.common.PersistenceApplicationContext;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.utils.PersistenceApplicationContext;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.utils.GymAndBadge;
 import java.time.LocalDate;
 import java.time.Month;
 import javax.inject.Inject;
@@ -48,6 +52,7 @@ public class GymDAOTest {
     private Trainer trainerAsh;
     private Trainer trainerBrock;
     private Trainer trainerRoxanne;
+    private Badge ashBadgeFromBrno;
         
     @Before
     public void setUp() {
@@ -90,11 +95,19 @@ public class GymDAOTest {
                 .gymLeader(trainerRoxanne)
                 .build();
         
+        ashBadgeFromBrno = new BadgeBuilder()
+                .date(LocalDate.now())
+                .gym(gymInBrno)
+                .trainer(trainerAsh)
+                .status(ChallengeStatus.WON)
+                .build();
+        
         trainerDAO.createTrainer(trainerAsh);
         trainerDAO.createTrainer(trainerBrock);
         trainerDAO.createTrainer(trainerRoxanne);
         gymDao.createGym(gymInBrno);
         gymDao.createGym(finalGym);
+        em.persist(ashBadgeFromBrno);
     }
     
     @Test
@@ -180,5 +193,12 @@ public class GymDAOTest {
     @Test
     public void getAllGyms() {
         assertThat(gymDao.getAllGyms()).usingFieldByFieldElementComparator().containsOnly(gymInBrno, finalGym);
+    }
+    
+    @Test
+    public void getAllGymsAndBadgesOfTrainer() {
+        assertThat(gymDao.getAllGymsAndBadgesOfTrainer(trainerAsh))
+                .usingFieldByFieldElementComparator()
+                .containsExactlyInAnyOrder(new GymAndBadge(gymInBrno, ashBadgeFromBrno), new GymAndBadge(finalGym, null));
     }
 }

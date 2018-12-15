@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dao;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.utils.GymAndBadge;
 
 import java.util.List;
 
@@ -50,4 +52,14 @@ public interface GymDAO {
      * @return list of all gyms.
      */
     List<Gym> getAllGyms();
+    
+    /**
+     * Returns a list containing all gyms, and where applicable a badge of the trainer from that gym.
+     *
+     * For gyms from which the trainer doesn't have a badge, null is set as badge.
+     *
+     * @param trainer Trainer whose badges shall be fetched.
+     * @return List of gyms and badges.
+     */
+    List<GymAndBadge> getAllGymsAndBadgesOfTrainer(Trainer trainer);
 }
