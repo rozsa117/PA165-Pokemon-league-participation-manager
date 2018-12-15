@@ -145,4 +145,17 @@ public class TrainerDAOTest {
 
         assertThat(trainerDAO.getAdminCount()).isEqualTo(1L);
     }
+
+    @Test
+    public void findTrainerByUserNameTest() {
+        trainerDAO.createTrainer(ashTrainer);
+        assertThat(trainerDAO.findTrainerByUsername(ashTrainer.getUserName()))
+                .isEqualToComparingFieldByField(ashTrainer);
+    }
+
+    @Test
+    public void findTrainerByNonExistentUserNameTest() {
+        assertThat(trainerDAO.findTrainerByUsername("wrong_user_name"))
+                .isNull();
+    }
 }
