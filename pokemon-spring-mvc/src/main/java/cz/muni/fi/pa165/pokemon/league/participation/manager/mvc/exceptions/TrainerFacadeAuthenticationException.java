@@ -17,5 +17,5 @@ public class TrainerFacadeAuthenticationException extends AuthenticationExceptio
     public TrainerFacadeAuthenticationException(String msg, Throwable t) {
         super(msg, t);
     }
-    
+
 }

@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  * Configure user authentication.
- * 
+ *
  * @author Tibor Zauko 433531
  */
 @Configuration
@@ -27,15 +27,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public SecurityConfig() {
         super();
     }
-    
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/favicon.ico","/","/pokemonSpecies/**").permitAll()
-                    .antMatchers("/admin/**").hasRole("ADMIN")
-                    .anyRequest().authenticated()
+                .antMatchers("/favicon.ico", "/", "/pokemonSpecies/**").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").defaultSuccessUrl("/").permitAll()
                 .and()
@@ -45,6 +45,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(provider);
-    }    
+    }
 
 }

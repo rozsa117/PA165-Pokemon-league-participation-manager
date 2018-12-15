@@ -17,22 +17,22 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * Controller class for Pokemon species.
- * 
+ *
  * @author Tamás Rózsa 445653
  */
 @Controller
 @RequestMapping("/pokemonSpecies")
 public class PokemonSpeciesController {
-    
+
     private final static Logger LOGGER = LoggerFactory.getLogger(AdminPokemonSpeciesController.class);
-    
+
     @Inject
     private PokemonSpeciesFacade pokemonSpeciesFacade;
-    
+
     /**
      * Controller method for list all pokemon species.
-     * 
-     * @return Path to jsp page. 
+     *
+     * @return Path to jsp page.
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
@@ -40,22 +40,22 @@ public class PokemonSpeciesController {
         model.addAttribute("allPokemonSpecies", pokemonSpeciesFacade.getAllPokemonSpecies());
         return "pokemonSpecies/list";
     }
-        
+
     /**
      * Controller method for get details of pokemon species.
-     * 
+     *
      * @param id Id of pokemon species to see details.
      * @return Path to jsp page.
      */
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
     public String detail(@PathVariable long id,
-        Model model,
-        RedirectAttributes redirectAttributes,
-        UriComponentsBuilder uriComponentsBuilder) {
-        
+            Model model,
+            RedirectAttributes redirectAttributes,
+            UriComponentsBuilder uriComponentsBuilder) {
+
         LOGGER.debug("mvc detail({})", id);
         if (pokemonSpeciesFacade.findPokemonSpeciesById(id) == null) {
-            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon.species.singular"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         }

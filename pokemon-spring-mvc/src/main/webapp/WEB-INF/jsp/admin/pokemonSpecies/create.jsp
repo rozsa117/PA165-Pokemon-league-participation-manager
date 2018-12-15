@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : Jsp page for creating new pokemon species.
     Author     : Tamás Rózsa 445653
 --%>
@@ -14,69 +14,69 @@
 <fmt:setBundle basename="Types" var = "t"/>
 <fmt:message var="title" key="pokemon.species.singular"/>
 <my:pagetemplate title="${title}">
-<jsp:attribute name="body">
-    <h1><fmt:message key="pokemon.species.create.new"/></h1>
-    
-    <form:form method="post" action="${pageContext.request.contextPath}/admin/pokemonSpecies/create"
-               modelAttribute="pokemonSpeciesCreate" cssClass="form-horizontal">
-    
-        <div class="form-group ${speciesName_error?'has-error':''}">
-            <form:label path="speciesName" cssClass="col-sm-2 control-label"><fmt:message key="pokemon.species.species.name"/></form:label>
-            <div class="col-sm-10">
-                <form:input path="speciesName" cssClass="form-control"/>
-                <form:errors path="speciesName" cssClass="help-block"/>
+    <jsp:attribute name="body">
+        <h1><fmt:message key="pokemon.species.create.new"/></h1>
+
+        <form:form method="post" action="${pageContext.request.contextPath}/admin/pokemonSpecies/create"
+                   modelAttribute="pokemonSpeciesCreate" cssClass="form-horizontal">
+
+            <div class="form-group ${speciesName_error?'has-error':''}">
+                <form:label path="speciesName" cssClass="col-sm-2 control-label"><fmt:message key="pokemon.species.species.name"/></form:label>
+                    <div class="col-sm-10">
+                    <form:input path="speciesName" cssClass="form-control"/>
+                    <form:errors path="speciesName" cssClass="help-block"/>
+                </div>
             </div>
-        </div>
-            
-        <div class="form-group">
-            <form:label path="primaryType" cssClass="col-sm-2 control-label">
-                        <fmt:message key="pokemon.species.primary.type"/>
-            </form:label>
-            <div class="col-sm-10">
-                <form:select path="primaryType" cssClass="form-control">
-                    <c:forEach items="${allTypes}" var="types">
-                        <form:option value="${types}"><fmt:message bundle="${t}" key="${types}"/></form:option>
-                    </c:forEach>
-                </form:select>
-                <form:errors path="primaryType" cssClass="error"/>
+
+            <div class="form-group">
+                <form:label path="primaryType" cssClass="col-sm-2 control-label">
+                    <fmt:message key="pokemon.species.primary.type"/>
+                </form:label>
+                <div class="col-sm-10">
+                    <form:select path="primaryType" cssClass="form-control">
+                        <c:forEach items="${allTypes}" var="types">
+                            <form:option value="${types}"><fmt:message bundle="${t}" key="${types}"/></form:option>
+                        </c:forEach>
+                    </form:select>
+                    <form:errors path="primaryType" cssClass="error"/>
+                </div>
             </div>
-        </div>
-        
-        <div class="form-group">
-            <form:label path="secondaryType" cssClass="col-sm-2 control-label">
-                        <fmt:message key="pokemon.species.secondary.type"/>
-            </form:label>
-            <div class="col-sm-10">
-                <form:select path="secondaryType" cssClass="form-control">
-                    <c:forEach items="${allTypes}" var="types">
-                        <form:option value="${types}"><fmt:message bundle="${t}" key="${types}"/></form:option>
-                    </c:forEach>
-                    <form:option value="${types}"><c:out value="${none}"/></form:option>
-                </form:select>
-                <form:errors path="secondaryType" cssClass="error"/>
+
+            <div class="form-group">
+                <form:label path="secondaryType" cssClass="col-sm-2 control-label">
+                    <fmt:message key="pokemon.species.secondary.type"/>
+                </form:label>
+                <div class="col-sm-10">
+                    <form:select path="secondaryType" cssClass="form-control">
+                        <c:forEach items="${allTypes}" var="types">
+                            <form:option value="${types}"><fmt:message bundle="${t}" key="${types}"/></form:option>
+                        </c:forEach>
+                        <form:option value="${types}"><c:out value="${none}"/></form:option>
+                    </form:select>
+                    <form:errors path="secondaryType" cssClass="error"/>
+                </div>
             </div>
-        </div>
-            
-        <div class="form-group">
-            <form:label path="evolvesFromId" cssClass="col-sm-2 control-label">
-                        <fmt:message key="pokemon.species.evolves.from"/>
-            </form:label>
-            <div class="col-sm-10">
-                <form:select path="evolvesFromId" cssClass="form-control">
-                    <c:forEach items="${allSpecies}" var="species">
-                        <form:option value="${species.id}"><c:out value="${species.speciesName}"/></form:option>
-                    </c:forEach>
-                    <form:option value="${species.id}"><c:out value="${none}"/></form:option>
-                </form:select>
-                <form:errors path="evolvesFromId" cssClass="error"/>
+
+            <div class="form-group">
+                <form:label path="evolvesFromId" cssClass="col-sm-2 control-label">
+                    <fmt:message key="pokemon.species.evolves.from"/>
+                </form:label>
+                <div class="col-sm-10">
+                    <form:select path="evolvesFromId" cssClass="form-control">
+                        <c:forEach items="${allSpecies}" var="species">
+                            <form:option value="${species.id}"><c:out value="${species.speciesName}"/></form:option>
+                        </c:forEach>
+                        <form:option value="${species.id}"><c:out value="${none}"/></form:option>
+                    </form:select>
+                    <form:errors path="evolvesFromId" cssClass="error"/>
+                </div>
             </div>
-        </div>
-            
-        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
-            <span class="glyphicon glyphicon-edit"></span> 
-            <fmt:message key="confirm"/>
-        </button>
-    </form:form>
-            
-</jsp:attribute> 
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
+                <span class="glyphicon glyphicon-edit"></span>
+                <fmt:message key="confirm"/>
+            </button>
+        </form:form>
+
+    </jsp:attribute>
 </my:pagetemplate>

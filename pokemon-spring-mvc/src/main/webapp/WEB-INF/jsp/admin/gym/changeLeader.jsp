@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : Jsp page for changing leader of a gym.
     Author     : Tibor Zauko 433531
 --%>
@@ -13,31 +13,31 @@
 <fmt:setBundle basename="Texts"/>
 <fmt:message var="title" key="gym"/>
 <my:pagetemplate title="${title}">
-<jsp:attribute name="body">
-    <h1><fmt:message key="gym.edit.admin"/></h1>
-    
-    <form:form method="post" action="${pageContext.request.contextPath}/admin/gym/changeLeader/${gymToUpdate.id}"
-               modelAttribute="gymToUpdate" cssClass="form-horizontal">
-        
-        <div class="form-group">
-            <form:label path="type" cssClass="col-sm-2 control-label">
-                        <fmt:message key="gym.leader"/>
-            </form:label>
-            <div class="col-sm-10">
-                <form:select path="gymLeader" cssClass="form-control">
-                    <c:forEach items="${possibleTrainers}" var="trainer">
-                        <form:option value="${trainer.id}"><c:out value="${trainer.name} ${trainer.surname}"/></form:option>
-                    </c:forEach>
-                </form:select>
-                <form:errors path="gymLeader" cssClass="error"/>
-            </div>
-        </div>
+    <jsp:attribute name="body">
+        <h1><fmt:message key="gym.edit.admin"/></h1>
 
-        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
-            <span class="glyphicon glyphicon-edit"></span> 
-            <fmt:message key="confirm"/>
-        </button>
-    </form:form>
-            
-</jsp:attribute> 
+        <form:form method="post" action="${pageContext.request.contextPath}/admin/gym/changeLeader/${gymToUpdate.id}"
+                   modelAttribute="gymToUpdate" cssClass="form-horizontal">
+
+            <div class="form-group">
+                <form:label path="type" cssClass="col-sm-2 control-label">
+                    <fmt:message key="gym.leader"/>
+                </form:label>
+                <div class="col-sm-10">
+                    <form:select path="gymLeader" cssClass="form-control">
+                        <c:forEach items="${possibleTrainers}" var="trainer">
+                            <form:option value="${trainer.id}"><c:out value="${trainer.name} ${trainer.surname}"/></form:option>
+                        </c:forEach>
+                    </form:select>
+                    <form:errors path="gymLeader" cssClass="error"/>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
+                <span class="glyphicon glyphicon-edit"></span>
+                <fmt:message key="confirm"/>
+            </button>
+        </form:form>
+
+    </jsp:attribute>
 </my:pagetemplate>

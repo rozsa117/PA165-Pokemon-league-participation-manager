@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : Jsp page for listing all gyms.
     Author     : Tibor Zauko 433531
 --%>
@@ -20,39 +20,41 @@
     <jsp:attribute name="body">
         <h1>
             <fmt:message key="badges.of.entity">
-                <fmt:param value="${trainer.name} ${trainer.surname}"/>              
+                <fmt:param value="${trainer.name} ${trainer.surname}"/>
             </fmt:message>
         </h1>
         <c:set var="userId"><security:authentication property="principal.trainerId"/></c:set>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th><fmt:message key="badge.gym"/></th>
-                    <th><fmt:message key="badge.first.challenged.on"/></th>
-                    <th><fmt:message key="badge.status"/></th>
-                    <th><!--Button Column--></th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach items="${badges}" var="badge">
-
-                    <tr onclick="window.location = '/pa165/badge/detail/${badge.id}'" style="cursor: pointer;">
-                        <td><fmt:message key="gym.at.location"><fmt:param value="${badge.gym.location}"/></fmt:message></td>
-                        <td><javatime:format value="${badge.date}"/></td>
-                        <td><fmt:message bundle="${s}" key="${badge.status}"/></td>
-                        <td>
-                            <c:if test="${badge.trainer.id eq userId && badge.status eq 'LOST'}">
-                                <my:extraTag href="/badge/rechallenge/${badge.id}" class='btn btn-primary'>
-                                    <span class="glyphicon glyphicon-eye-open"></span>
-                                    <fmt:message key="badge.rechallenge"/>
-                                </my:extraTag>
-                            </c:if>
-                        </td>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th><fmt:message key="badge.gym"/></th>
+                        <th><fmt:message key="badge.first.challenged.on"/></th>
+                        <th><fmt:message key="badge.status"/></th>
+                        <th><!--Button Column--></th>
                     </tr>
-                </c:forEach>
-            </tbody>
-        </table>                
+                </thead>
+                <tbody>
+                    <c:forEach items="${badges}" var="badge">
 
-    </jsp:attribute> 
+                        <tr onclick="window.location = '/pa165/badge/detail/${badge.id}'" style="cursor: pointer;">
+                            <td><fmt:message key="gym.at.location"><fmt:param value="${badge.gym.location}"/></fmt:message></td>
+                            <td><javatime:format value="${badge.date}"/></td>
+                            <td><fmt:message bundle="${s}" key="${badge.status}"/></td>
+                            <td>
+                                <c:if test="${badge.trainer.id eq userId && badge.status eq 'LOST'}">
+                                    <my:extraTag href="/badge/rechallenge/${badge.id}" class='btn btn-primary'>
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                        <fmt:message key="badge.rechallenge"/>
+                                    </my:extraTag>
+                                </c:if>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
+
+    </jsp:attribute>
 </my:pagetemplate>
 

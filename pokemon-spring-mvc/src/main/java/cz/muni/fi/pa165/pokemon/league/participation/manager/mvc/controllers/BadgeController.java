@@ -3,11 +3,8 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.controllers;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeStatusChangeDTO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.ChangeGymTypeDTO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymAndBadgeDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InvalidChallengeStatusChangeException;
@@ -17,18 +14,13 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.GymFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.TrainerFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.security.TrainerIdUserDetails;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.inject.Inject;
-import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -57,7 +49,7 @@ public class BadgeController {
     private TrainerFacade trainerFacade;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public String list(Model model, Authentication authentication, 
+    public String list(Model model, Authentication authentication,
             @RequestParam(name = "trainerId", required = false) Long trainerId,
             RedirectAttributes ra, UriComponentsBuilder uriComponentsBuilder) {
         List<BadgeDTO> trainersBadges;
@@ -237,7 +229,7 @@ public class BadgeController {
         model.addAttribute("msgKey", "badge.reissue.confirm");
         return "badge/confirmBadgeOperation";
     }
-    
+
     @RequestMapping(value = "/reissue/{id}", method = RequestMethod.POST)
     public String reissue(
             @PathVariable long id,
@@ -287,7 +279,7 @@ public class BadgeController {
         model.addAttribute("msgKey", "badge.rechallenge.confirm");
         return "badge/confirmBadgeOperation";
     }
-    
+
     @RequestMapping(value = "/rechallenge/{id}", method = RequestMethod.POST)
     public String rechallenge(
             @PathVariable long id,
@@ -338,7 +330,7 @@ public class BadgeController {
         model.addAttribute("requestParam", id);
         return "badge/confirmBadgeOperation";
     }
-    
+
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(
             @RequestParam(name = "requestParam", required = true) long gymId,

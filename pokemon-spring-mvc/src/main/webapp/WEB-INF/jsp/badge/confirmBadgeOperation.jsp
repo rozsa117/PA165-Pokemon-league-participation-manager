@@ -1,5 +1,5 @@
-<%-- 
-    Document   : Jsp page for confirming badge status change.
+<%--
+    Document   : Jsp page for confirming badge operation.
     Author     : Tibor Zauko 433531
 --%>
 
@@ -13,25 +13,25 @@
 <fmt:setBundle basename="Texts"/>
 <fmt:message var="title" key="confirm"/>
 <my:pagetemplate title="${title}">
-<jsp:attribute name="body">
-    
-    <p>
-        <fmt:message key="${msgKey}">
-            <fmt:param value="${subject}"/>
-        </fmt:message>
-    </p>
-    
-    <form:form method="post" action="${pageContext.request.contextPath}${postUrl}"
-               modelAttribute="requestParam" cssClass="form-horizontal">
-        <c:if test="${not empty requestParam}">
-            <input type="hidden" name="requestParam" value="${requestParam}"/>
-        </c:if>
+    <jsp:attribute name="body">
 
-        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
-            <span class="glyphicon glyphicon-ok"></span> 
-            <fmt:message key="confirm"/>
-        </button>
-    </form:form>
-            
-</jsp:attribute> 
+        <p>
+            <fmt:message key="${msgKey}">
+                <fmt:param value="${subject}"/>
+            </fmt:message>
+        </p>
+
+        <form:form method="post" action="${pageContext.request.contextPath}${postUrl}"
+                   modelAttribute="requestParam" cssClass="form-horizontal">
+            <c:if test="${not empty requestParam}">
+                <input type="hidden" name="requestParam" value="${requestParam}"/>
+            </c:if>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
+                <span class="glyphicon glyphicon-ok"></span>
+                <fmt:message key="confirm"/>
+            </button>
+        </form:form>
+
+    </jsp:attribute>
 </my:pagetemplate>

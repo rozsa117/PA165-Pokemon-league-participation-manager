@@ -29,33 +29,33 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * Controller class for Pokemon species for admins.
- * 
+ *
  * @author Tamás Rózsa 445653
  */
 @Controller
 @RequestMapping("/admin/pokemonSpecies")
 public class AdminPokemonSpeciesController {
-    
+
     private final static Logger LOGGER = LoggerFactory.getLogger(AdminPokemonSpeciesController.class);
-    
+
     @Inject
     private PokemonSpeciesFacade pokemonSpeciesFacade;
-    
+
     /**
      * Get controller for changing type of pokemon species.
-     * 
+     *
      * @param id Id of pokemon species to change typing.
      * @return Path to jsp page.
      */
     @RequestMapping(value = "/changeTyping/{id}", method = RequestMethod.GET)
     public String changeTyping(@PathVariable long id,
-        Model model, 
-        RedirectAttributes redirectAttributes,
-        UriComponentsBuilder uriComponentsBuilder) {
-        
+            Model model,
+            RedirectAttributes redirectAttributes,
+            UriComponentsBuilder uriComponentsBuilder) {
+
         LOGGER.debug("mvc GET changeTyping({})", id);
         if (pokemonSpeciesFacade.findPokemonSpeciesById(id) == null) {
-            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon.species.singular"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         }
@@ -65,24 +65,24 @@ public class AdminPokemonSpeciesController {
 
     /**
      * Post controller for changing type of pokemon species.
-     * 
+     *
      * @param pokemonSpeciesToUpdate DTO of changing pokemon species.
      * @param id Id of pokemon species to change typing.
-     * @return Path to jsp page. 
+     * @return Path to jsp page.
      */
     @RequestMapping(value = "/changeTyping/{id}", method = RequestMethod.POST)
     public String changeTyping(@Valid @ModelAttribute("pokemonSpeciesToUpdate") ChangeTypingDTO pokemonSpeciesToUpdate,
-        BindingResult bindingResult,
-        Model model,
-        RedirectAttributes redirectAttributes,
-        UriComponentsBuilder uriComponentsBuilder,
-        @PathVariable long id) {
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes,
+            UriComponentsBuilder uriComponentsBuilder,
+            @PathVariable long id) {
 
         LOGGER.debug("mvc POST changeTyping({})", pokemonSpeciesToUpdate);
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
-            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
+                ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
                 LOGGER.trace("ObjectError: {}", ge);
                 model.addAttribute("alert_warning", messages.getString(ge.getDefaultMessage()));
             });
@@ -94,30 +94,30 @@ public class AdminPokemonSpeciesController {
         try {
             pokemonSpeciesFacade.changeTyping(pokemonSpeciesToUpdate);
         } catch (NoSuchEntityException ex) {
-            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("alert_warning", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon.species.singular"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         }
-        ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
+        ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
         redirectAttributes.addFlashAttribute("alert_success", MessageFormat.format(messages.getString("entity.successfully.updated"), messages.getString("pokemon.species.singular")));
         return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
     }
-    
+
     /**
      * Get controller for changing preevolution of pokemon species.
-     * 
+     *
      * @param id Id of pokemon species to change preevolution.
      * @return Path to jsp page.
      */
     @RequestMapping(value = "/changePreevolution/{id}", method = RequestMethod.GET)
     public String changePreevolution(@PathVariable long id,
-        Model model, 
-        RedirectAttributes redirectAttributes,
-        UriComponentsBuilder uriComponentsBuilder) {
-        
+            Model model,
+            RedirectAttributes redirectAttributes,
+            UriComponentsBuilder uriComponentsBuilder) {
+
         LOGGER.debug("mvc GET changePreevolution({})", id);
         if (pokemonSpeciesFacade.findPokemonSpeciesById(id) == null) {
-            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon.species.singular"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         }
@@ -127,24 +127,25 @@ public class AdminPokemonSpeciesController {
 
     /**
      * Post controller for changing preevolution of pokemon species.
-     * 
-     * @param pokemonSpeciesToUpdate DTO of pokemon species to change preevolution.
+     *
+     * @param pokemonSpeciesToUpdate DTO of pokemon species to change
+     * preevolution.
      * @param id Id of pokemon species to change preevolution.
      * @return Path to jsp page.
      */
     @RequestMapping(value = "/changePreevolution/{id}", method = RequestMethod.POST)
     public String changePreevolution(@Valid @ModelAttribute("pokemonSpeciesToUpdate") ChangePreevolutionDTO pokemonSpeciesToUpdate,
-        BindingResult bindingResult,
-        Model model,
-        RedirectAttributes redirectAttributes,
-        UriComponentsBuilder uriComponentsBuilder,
-        @PathVariable long id) {
-        
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes,
+            UriComponentsBuilder uriComponentsBuilder,
+            @PathVariable long id) {
+
         LOGGER.debug("mvc POST changePreevolution({})", id);
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
-                ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
+                ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
                 LOGGER.trace("ObjectError: {}", ge);
                 model.addAttribute("alert_warning", messages.getString(ge.getDefaultMessage()));
             });
@@ -156,56 +157,56 @@ public class AdminPokemonSpeciesController {
         try {
             pokemonSpeciesFacade.changePreevolution(pokemonSpeciesToUpdate);
         } catch (NoSuchEntityException ex) {
-            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon.species.singular"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         } catch (CircularEvolutionChainException ex) {
-            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("alert_warning", messages.getString("pokemon.species.circular.evolution"));
             return "redirect:" + uriComponentsBuilder.path("/admin/pokemonSpecies/changePreevolution/" + pokemonSpeciesToUpdate.getId()).build().encode().toUriString();
         } catch (EvolutionChainTooLongException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
-            redirectAttributes.addFlashAttribute("alert_warning",  messages.getString("pokemon.species.evolution.chain.too.long"));
+            redirectAttributes.addFlashAttribute("alert_warning", messages.getString("pokemon.species.evolution.chain.too.long"));
             return "redirect:" + uriComponentsBuilder.path("/admin/pokemonSpecies/changePreevolution/" + pokemonSpeciesToUpdate.getId()).build().encode().toUriString();
-        
+
         }
-        ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
+        ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
         redirectAttributes.addFlashAttribute("alert_success", MessageFormat.format(messages.getString("entity.successfully.updated"), messages.getString("pokemon.species.singular")));
         return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
     }
-    
+
     /**
      * Get controller for creating new pokemon species.
-     * 
+     *
      * @return Path to jsp page.
      */
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String createNewPokemonSpecies(Model model) {
-        
+
         LOGGER.debug("mvc GET createNewPokemonSpecies()");
         model.addAttribute("pokemonSpeciesCreate", new PokemonSpeciesCreateDTO());
 
         return "admin/pokemonSpecies/create";
     }
-    
+
     /**
      * post controller for creating new pokemon species.
-     * 
+     *
      * @param formBean DTO for creating new pokemon species.
      * @return Path to jsp page.
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(
-        @Valid @ModelAttribute("pokemonSpeciesCreate") PokemonSpeciesCreateDTO formBean,
-        BindingResult bindingResult,
-        Model model,
-        RedirectAttributes redirectAttributes,
-        UriComponentsBuilder uriComponentsBuilder) {
-        
+            @Valid @ModelAttribute("pokemonSpeciesCreate") PokemonSpeciesCreateDTO formBean,
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes,
+            UriComponentsBuilder uriComponentsBuilder) {
+
         LOGGER.debug("mvc GET create()");
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
-                ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
+                ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
                 LOGGER.trace("ObjectError: {}", ge);
                 model.addAttribute("alert_warning", messages.getString(ge.getDefaultMessage()));
             });
@@ -223,10 +224,10 @@ public class AdminPokemonSpeciesController {
             id = pokemonSpeciesFacade.createPokemonSpecies(formBean);
         } catch (EvolutionChainTooLongException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
-            redirectAttributes.addFlashAttribute("alert_warning",  messages.getString("pokemon.species.evolution.chain.too.long"));
+            redirectAttributes.addFlashAttribute("alert_warning", messages.getString("pokemon.species.evolution.chain.too.long"));
             return "redirect:" + uriComponentsBuilder.path("/admin/pokemonSpecies/create").build().encode().toUriString();
         } catch (NoSuchEntityException ex) {
-            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale()); 
+            ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("alert_warning", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon.species.singular"), formBean.getEvolvesFromId()));
             return "redirect:" + uriComponentsBuilder.path("/admin/pokemonSpecies/create").build().encode().toUriString();
         }
@@ -234,9 +235,10 @@ public class AdminPokemonSpeciesController {
         redirectAttributes.addFlashAttribute("alert_success", MessageFormat.format(messages.getString("entity.created.successfully"), messages.getString("pokemon.species.singular"), id));
         return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").toUriString();
     }
-    
+
     /**
      * Model attribute for all pokemon types.
+     *
      * @return Array of all pokemon types.
      */
     @ModelAttribute("allTypes")
@@ -244,9 +246,10 @@ public class AdminPokemonSpeciesController {
         LOGGER.debug("mvc allTypes()");
         return PokemonType.values();
     }
-    
+
     /**
      * Model attribute for all pokemon species.
+     *
      * @return List of all pokemon species.
      */
     @ModelAttribute("allSpecies")
