@@ -75,57 +75,6 @@ public class TrainerController {
     }
 
     /**
-     * Get Controller for creating new Trainer
-     * @param model data to be displayed
-     * @return JSP page
-     */
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String createTrainer(Model model) {
-        log.debug("mvc GET newTrainer()");
-        model.addAttribute("trainerCreate", new TrainerCreateDTO());
-        return "trainer/create";
-    }
-
-    /**
-     * POST controller for creating new trainer
-     * @param formBean DTO for creating new trainer
-     * @return JSP page
-     */
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute("trainerCreate") TrainerCreateDTO formBean,
-                         BindingResult bindingResult,
-                         Model model,
-                         RedirectAttributes redirectAttributes,
-                         UriComponentsBuilder uriComponentsBuilder) {
-        log.debug("mvc POST create()");
-        //formBean.setBorn(LocalDate.parse(date.toString(), DateTimeFormatter.ofPattern("mm/dd/yyyy")));
-
-        if (bindingResult.hasErrors()) {
-            bindingResult.getGlobalErrors().forEach((ge) -> {
-                log.trace("ObjectError: {}", ge);
-            });
-            bindingResult.getFieldErrors().forEach((fe) -> {
-                model.addAttribute(fe.getField() + "_error", true);
-                log.trace("FieldError: {}", fe);
-            });
-
-            return "trainer/create";
-        }
-
-        Long id;
-
-        try {
-            id = trainerFacade.createTrainer(formBean);
-        } catch (NoAdministratorException ex) {
-            redirectAttributes.addFlashAttribute("alert_warning", messages.getString("trainer.no.administrator"));
-            return "redirect:" + uriComponentsBuilder.path("/trainer/create").build().encode().toUriString();
-        }
-
-        redirectAttributes.addFlashAttribute("alert_success", String.format(messages.getString("trainer.created.successfully"), id));
-        return "redirect:" + uriComponentsBuilder.path("/trainer/list").toUriString();
-    }
-
-    /**
      * GET controller for renaming of trainer
      * @param id of trainer to be renamed
      * @param model data to be displayed

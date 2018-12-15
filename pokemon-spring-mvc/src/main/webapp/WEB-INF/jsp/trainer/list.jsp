@@ -9,11 +9,12 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <fmt:setBundle basename="Texts"/>
 <fmt:message var="title" key="trainer.trainers"/>
 <my:pagetemplate title="${title}">
 <jsp:attribute name="body">
-    <h1><fmt:message key="trainer.trainers"/> ${pokemonSpecies.speciesName}</h1>
+    <h1><fmt:message key="trainer.trainers"/> ${trainer.userName}</h1>
     <table class="table">
         <thead>
         <tr>
@@ -45,19 +46,24 @@
                         <fmt:message key="trainer.changePassword"/>
                     </my:extraTag>
                 </td>
+                <security:authorize access="hasRole('ADMIN')">
                 <td>
-                    <my:extraTag href="/trainer/setAdmin/${trainer.id}" class='btn btn-primary'>
-                        <span class="glyphicon glyphicon-edit"></span>
-                        <fmt:message key="trainer.setAdmin"/>
-                    </my:extraTag>
+                    <c:choose>
+                        <c:when test="${trainer.admin}">
+                            <my:extraTag href="/admin/trainer/unsetAdmin/${trainer.id}" class='btn btn-primary'>
+                                <span class="glyphicon glyphicon-edit"></span>
+                                <fmt:message key="trainer.unsetAdmin"/>
+                            </my:extraTag>
+                        </c:when>
+                        <c:otherwise>
+                            <my:extraTag href="/admin/trainer/setAdmin/${trainer.id}" class='btn btn-primary'>
+                                <span class="glyphicon glyphicon-edit"></span>
+                                <fmt:message key="trainer.setAdmin"/>
+                            </my:extraTag>
+                        </c:otherwise>
+                    </c:choose>
                 </td>
-
-                <td>
-                    <my:extraTag href="/trainer/unsetAdmin/${trainer.id}" class='btn btn-primary'>
-                        <span class="glyphicon glyphicon-edit"></span>
-                        <fmt:message key="trainer.unsetAdmin"/>
-                    </my:extraTag>
-                </td>
+                </security:authorize>
             </tr>
         </c:forEach>
         </tbody>
