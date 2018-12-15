@@ -12,6 +12,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <fmt:setBundle basename="Texts"/>
+<fmt:setBundle basename="Types" var = "t"/>
 <fmt:message var="title" key="pokemon.species"/>
 <my:pagetemplate title="${title}">
 <jsp:attribute name="body">
@@ -30,8 +31,8 @@
         <c:forEach items="${allPokemonSpecies}" var="pokemonSpecies">
             <tr onclick="window.location='/pa165/pokemonSpecies/detail/${pokemonSpecies.id}'" style="cursor: pointer;">
                 <td><c:out value="${pokemonSpecies.speciesName}"/></td>
-                <td><c:out value="${pokemonSpecies.primaryType}"/></td>
-                <td><c:out value="${pokemonSpecies.secondaryType}"/></td>
+                <td><fmt:message bundle="${t}" key="${pokemonSpecies.primaryType}"/></td>
+                <td><fmt:message bundle="${t}" key="${empty pokemonSpecies.secondaryType ? 'empty' : pokemonSpecies.secondaryType }"/></td>
                 <td><c:out value="${pokemonSpecies.evolvesFrom.speciesName}"/></td>
                 <security:authorize access="hasRole('ADMIN')">
                     <td>

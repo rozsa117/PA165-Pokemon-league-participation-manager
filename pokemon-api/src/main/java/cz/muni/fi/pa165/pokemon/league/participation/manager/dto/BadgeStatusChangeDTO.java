@@ -1,7 +1,5 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dto;
 
-import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
-
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
@@ -16,7 +14,7 @@ public class BadgeStatusChangeDTO {
     private Long badgeId;
 
     @NotNull
-    private Long trainerId;
+    private Long requestingTrainerId;
 
     public Long getBadgeId() {
         return badgeId;
@@ -26,12 +24,12 @@ public class BadgeStatusChangeDTO {
         this.badgeId = badgeId;
     }
 
-    public Long getTrainerId() {
-        return trainerId;
+    public Long getRequestingTrainerId() {
+        return requestingTrainerId;
     }
 
-    public void setTrainerId(Long trainerId) {
-        this.trainerId = trainerId;
+    public void setRequestingTrainerId(Long requestingTrainerId) {
+        this.requestingTrainerId = requestingTrainerId;
     }
 
     @Override
@@ -40,13 +38,13 @@ public class BadgeStatusChangeDTO {
         if (o == null || getClass() != o.getClass()) return false;
         BadgeStatusChangeDTO that = (BadgeStatusChangeDTO) o;
         return Objects.equals(badgeId, that.badgeId) &&
-                Objects.equals(trainerId, that.trainerId);
+                Objects.equals(requestingTrainerId, that.requestingTrainerId);
     }
 
     @Override
     public int hashCode() {
         int hash = 13;
-        hash = 29 * Objects.hashCode(trainerId) * Objects.hashCode(badgeId);
+        hash = 29 * Objects.hashCode(requestingTrainerId) * Objects.hashCode(badgeId);
         return hash;
     }
 
@@ -54,7 +52,7 @@ public class BadgeStatusChangeDTO {
     public String toString() {
         return "BadgeStatusChangeDTO{" +
                 "badgeId=" + badgeId +
-                ", trainerId=" + trainerId +
+                ", trainerId=" + requestingTrainerId +
                 '}';
     }
 }

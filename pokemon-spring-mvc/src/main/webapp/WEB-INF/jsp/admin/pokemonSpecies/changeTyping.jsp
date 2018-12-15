@@ -11,6 +11,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <fmt:setBundle basename="Texts"/>
+<fmt:setBundle basename="Types" var = "t"/>
 <fmt:message var="title" key="pokemon.species.singular"/>
 <my:pagetemplate title="${title}">
 <jsp:attribute name="body">
@@ -25,7 +26,7 @@
             <div class="col-sm-10">
                 <form:select path="primaryType" cssClass="form-control">
                     <c:forEach items="${allTypes}" var="types">
-                        <form:option value="${types}"><c:out value="${types}"/></form:option>
+                        <form:option value="${types}"><fmt:message bundle="${t}" key="${types}"/></form:option>
                     </c:forEach>
                 </form:select>
                 <form:errors path="primaryType" cssClass="error"/>
@@ -39,7 +40,7 @@
             <div class="col-sm-10">
                 <form:select path="secondaryType" cssClass="form-control">
                     <c:forEach items="${allTypes}" var="types">
-                        <form:option value="${types}"><c:out value="${types}"/></form:option>
+                        <form:option value="${types}"><fmt:message bundle="${t}" key="${types}"/></form:option>
                     </c:forEach>
                     <form:option value="${types}"><c:out value="${none}"/></form:option>
                 </form:select>

@@ -46,7 +46,7 @@ public interface GymService {
             throws InsufficientRightsException;
 
     /**
-     * Changes the leader of an existing gym.
+     * Changes the leader of an existing gym. Also changes its type specialization to none.
      *
      * @param gym Gym to be updated.
      * @param newGymLeader New leader of the gym.

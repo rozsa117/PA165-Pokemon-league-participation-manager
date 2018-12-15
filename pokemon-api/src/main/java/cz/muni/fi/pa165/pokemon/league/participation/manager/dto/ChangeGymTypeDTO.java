@@ -14,7 +14,6 @@ public class ChangeGymTypeDTO {
     @NotNull
     private Long id;
     
-    @NotNull
     private PokemonType type;
 
     private Long trainerId;

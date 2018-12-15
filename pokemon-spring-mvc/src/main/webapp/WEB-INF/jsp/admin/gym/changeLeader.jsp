@@ -1,5 +1,5 @@
 <%-- 
-    Document   : Jsp page for changing type of a gym.
+    Document   : Jsp page for changing leader of a gym.
     Author     : Tibor Zauko 433531
 --%>
 
@@ -11,27 +11,25 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <fmt:setBundle basename="Texts"/>
-<fmt:setBundle basename="Types" var = "t"/>
-<fmt:message var="title" key="gym.at.location"><fmt:param value="${gymToUpdate.location}"/></fmt:message>
+<fmt:message var="title" key="gym"/>
 <my:pagetemplate title="${title}">
 <jsp:attribute name="body">
-    <h1><fmt:message key="gym.change.type"/></h1>
+    <h1><fmt:message key="gym.edit.admin"/></h1>
     
-    <form:form method="post" action="${pageContext.request.contextPath}/gym/changeType/${gymToUpdate.id}"
+    <form:form method="post" action="${pageContext.request.contextPath}/admin/gym/changeLeader/${gymToUpdate.id}"
                modelAttribute="gymToUpdate" cssClass="form-horizontal">
         
         <div class="form-group">
             <form:label path="type" cssClass="col-sm-2 control-label">
-                        <fmt:message key="gym.type"/>
+                        <fmt:message key="gym.leader"/>
             </form:label>
             <div class="col-sm-10">
-                <form:select path="type" cssClass="form-control">
-                    <c:forEach items="${allTypes}" var="type">
-                        <form:option value="${type}"><fmt:message bundle="${t}" key="${type}"/></form:option>
+                <form:select path="gymLeader" cssClass="form-control">
+                    <c:forEach items="${possibleTrainers}" var="trainer">
+                        <form:option value="${trainer.id}"><c:out value="${trainer.name} ${trainer.surname}"/></form:option>
                     </c:forEach>
-                    <form:option value="${type}"><c:out value="${none}"/></form:option>
                 </form:select>
-                <form:errors path="type" cssClass="error"/>
+                <form:errors path="gymLeader" cssClass="error"/>
             </div>
         </div>
 

@@ -10,6 +10,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <fmt:setBundle basename="Texts"/>
+<fmt:setBundle basename="Types" var = "t"/>
 <fmt:message var="title" key="pokemon.species.singular"/>
 <my:pagetemplate title="${title}">
 <jsp:attribute name="body">
@@ -23,11 +24,11 @@
 
         <tr>
             <th><fmt:message key="pokemon.species.primary.type"/></th>
-            <td><c:out value="${pokemonSpecies.primaryType}"/></td>
+            <td><fmt:message bundle="${t}" key="${pokemonSpecies.primaryType}"/></td>
         </tr>
         <tr>
             <th><fmt:message key="pokemon.species.secondary.type"/></th>
-            <td><c:out value="${pokemonSpecies.secondaryType}"/></td>
+            <td><fmt:message bundle="${t}" key="${empty pokemonSpecies.secondaryType ? 'empty' : pokemonSpecies.secondaryType}"/></td>
         </tr>
         <tr>
             <th><fmt:message key="pokemon.species.evolves.from"/></th>

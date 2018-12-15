@@ -10,6 +10,7 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.GymService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
@@ -141,8 +142,8 @@ public class GymFacadeTest {
         changeGymTypeDTO.setTrainerId(gym.getGymLeader().getId());
 
         changeGymLeaderDTO = new ChangeGymLeaderDTO();
-        changeGymLeaderDTO.setGymID(gym.getId());
-        changeGymLeaderDTO.setNewGymLeaderID(newGymLeader.getId());
+        changeGymLeaderDTO.setId(gym.getId());
+        changeGymLeaderDTO.setGymLeader(newGymLeader.getId());
 
         gymLeaderDTO = new TrainerDTOBuilder()
                 .id(gymLeader.getId())
@@ -195,7 +196,7 @@ public class GymFacadeTest {
         doThrow(new EntityIsUsedException("Badge for this gym exist"))
                 .when(gymService).removeGym(newGym);
         when(trainerService.getTrainerWithId(changeGymTypeDTO.getTrainerId())).thenReturn(gymLeader);
-        when(trainerService.getTrainerWithId(changeGymLeaderDTO.getNewGymLeaderID())).thenReturn(newGymLeader);
+        when(trainerService.getTrainerWithId(changeGymLeaderDTO.getGymLeader())).thenReturn(newGymLeader);
         when(trainerService.getTrainerWithId(exceptionalGymLeader.getId())).thenReturn(exceptionalGymLeader);
 
         when(beanMappingService.mapTo(gym, GymDTO.class)).thenReturn(gymDTO);
@@ -213,7 +214,7 @@ public class GymFacadeTest {
     }
 
     @Test
-    public void createGymTest() throws EntityIsUsedException {
+    public void createGymTest() throws EntityIsUsedException, NoSuchEntityException {
         assertThatExceptionOfType(EntityIsUsedException.class)
                 .isThrownBy(() -> gymFacade.createGym(exceptionalGymCreateDTO));
         gymFacade.createGym(gymCreateDTO);
@@ -237,11 +238,11 @@ public class GymFacadeTest {
     }
 
     @Test
-    public void changeGymLeaderTest() throws EntityIsUsedException {
-        changeGymLeaderDTO.setNewGymLeaderID(exceptionalGymLeader.getId());
+    public void changeGymLeaderTest() throws EntityIsUsedException, NoSuchEntityException {
+        changeGymLeaderDTO.setGymLeader(exceptionalGymLeader.getId());
         assertThatExceptionOfType(EntityIsUsedException.class)
                 .isThrownBy(() -> gymFacade.changeGymLeader(changeGymLeaderDTO));
-        changeGymLeaderDTO.setNewGymLeaderID(newGymLeader.getId());
+        changeGymLeaderDTO.setGymLeader(newGymLeader.getId());
         gymFacade.changeGymLeader(changeGymLeaderDTO);
         verify(gymService, atLeastOnce()).changeGymLeader(gym, newGymLeader);
     }

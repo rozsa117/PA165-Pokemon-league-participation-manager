@@ -75,7 +75,7 @@ public interface BadgeFacade {
      * @throws InsufficientRightsException in case requesting trainer is not the leader of the gym that gave the badge.
      * @throws NoSuchEntityException when requested badge doesn't exist.
      */
-    void wonBadge(BadgeStatusChangeDTO badge)
+    void winBadge(BadgeStatusChangeDTO badge)
             throws InsufficientRightsException, NoSuchEntityException, InvalidChallengeStatusChangeException;
 
     /**

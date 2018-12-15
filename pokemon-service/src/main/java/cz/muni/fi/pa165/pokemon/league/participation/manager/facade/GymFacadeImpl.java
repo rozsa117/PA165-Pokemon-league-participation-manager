@@ -42,8 +42,13 @@ public class GymFacadeImpl implements GymFacade {
     private BeanMappingService beanMappingService;
     
     @Override
-    public Long createGym(GymCreateDTO gym) throws EntityIsUsedException {
+    public Long createGym(GymCreateDTO gym) throws EntityIsUsedException, NoSuchEntityException {
+        Trainer leader = trainerService.getTrainerWithId(gym.getGymLeaderID());
+        if (leader == null) {
+            throw new NoSuchEntityException("The selected trainer doesn't exist");
+        }
         Gym gymEntity = beanMappingService.mapTo(gym, Gym.class);
+        gymEntity.setGymLeader(leader);
         gymService.createGym(gymEntity);
         return gymEntity.getId();
     }
@@ -60,9 +65,16 @@ public class GymFacadeImpl implements GymFacade {
     }
 
     @Override
-    public void changeGymLeader(ChangeGymLeaderDTO gym) throws EntityIsUsedException {
-        gymService.changeGymLeader(beanMappingService.mapTo(findGymById(gym.getGymID()), Gym.class),
-                trainerService.getTrainerWithId(gym.getNewGymLeaderID()));
+    public void changeGymLeader(ChangeGymLeaderDTO gym) throws EntityIsUsedException, NoSuchEntityException {
+        Gym gymEntity = gymService.findGymById(gym.getId());
+        Trainer trainer = trainerService.getTrainerWithId(gym.getGymLeader());
+        if (gymEntity == null) {
+            throw new NoSuchEntityException("No gym of such ID exists");
+        }
+        if (trainer == null) {
+            throw new NoSuchEntityException("No trainer of such ID exists");
+        }
+        gymService.changeGymLeader(gymEntity, trainer);
     }
 
     @Override

@@ -39,7 +39,7 @@ public class AdminPokemonSpeciesController {
     private final static Logger LOGGER = LoggerFactory.getLogger(AdminPokemonSpeciesController.class);
     
     @Inject
-    PokemonSpeciesFacade pokemonSpeciesFacade;
+    private PokemonSpeciesFacade pokemonSpeciesFacade;
     
     /**
      * Get controller for changing type of pokemon species.
@@ -79,7 +79,6 @@ public class AdminPokemonSpeciesController {
         @PathVariable long id) {
 
         LOGGER.debug("mvc POST changeTyping({})", pokemonSpeciesToUpdate);
-        pokemonSpeciesToUpdate.setId(id);
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
@@ -142,7 +141,6 @@ public class AdminPokemonSpeciesController {
         @PathVariable long id) {
         
         LOGGER.debug("mvc POST changePreevolution({})", id);
-        pokemonSpeciesToUpdate.setId(id);
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {

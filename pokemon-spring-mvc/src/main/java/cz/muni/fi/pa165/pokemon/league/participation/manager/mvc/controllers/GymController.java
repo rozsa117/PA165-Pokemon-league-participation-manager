@@ -10,7 +10,6 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEn
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.BadgeFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.GymFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.TrainerFacade;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.security.TrainerIdContainingUser;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.security.TrainerIdUserDetails;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class GymController {
     public String list(Model model, Authentication authentication) {
         List<GymAndBadgeDTO> gymsAndBadges;
         try {
-            gymsAndBadges = gymFacade.getAllGymsAndBadgesOfTrainer(((TrainerIdContainingUser) authentication.getPrincipal()).getTrainerId());
+            gymsAndBadges = gymFacade.getAllGymsAndBadgesOfTrainer(((TrainerIdUserDetails) authentication.getPrincipal()).getTrainerId());
         } catch (NoSuchEntityException ex) {
             LOGGER.warn("Trainer got deleted in the meantime");
             gymsAndBadges = gymFacade.getAllGyms().stream()
@@ -68,12 +67,12 @@ public class GymController {
     }
 
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
-    public String detail(@PathVariable long id, Model model, RedirectAttributes ra, Authentication authentication) {
+    public String detail(@PathVariable long id, Model model, RedirectAttributes ra, Authentication authentication, UriComponentsBuilder uriComponentsBuilder) {
         GymDTO gym = gymFacade.findGymById(id);
         if (gym == null) {
             ra.addAttribute("alert_danger",
                     MessageFormat.format(I18n.getStringFromTextsBundle("entity.does.not.exist"), I18n.getStringFromTextsBundle("gym"), id));
-            return "gym/list";
+            return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
         }
         BadgeDTO badge = getBadgesOfCallingUser(authentication).stream()
                 .filter(b -> b.getGym().getId().equals(gym.getId()))
@@ -97,7 +96,7 @@ public class GymController {
                     MessageFormat.format(I18n.getStringFromTextsBundle("entity.does.not.exists"), I18n.getStringFromTextsBundle("gym"), id));
             return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
         }
-        Long userId = ((TrainerIdContainingUser) authentication.getPrincipal()).getTrainerId();
+        Long userId = ((TrainerIdUserDetails) authentication.getPrincipal()).getTrainerId();
         if (!gym.getGymLeader().getId().equals(userId)) {
             redirectAttributes.addFlashAttribute("alert_warning", I18n.getStringFromTextsBundle("no.rights"));
             return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
@@ -148,7 +147,7 @@ public class GymController {
         if (authentication == null) {
             return badges;
         }
-        Long trainerId = ((TrainerIdContainingUser) authentication.getPrincipal()).getTrainerId();
+        Long trainerId = ((TrainerIdUserDetails) authentication.getPrincipal()).getTrainerId();
         try {
             badges = badgeFacade.findBadgesOfTrainer(trainerId);
         } catch (NoSuchEntityException ex) {

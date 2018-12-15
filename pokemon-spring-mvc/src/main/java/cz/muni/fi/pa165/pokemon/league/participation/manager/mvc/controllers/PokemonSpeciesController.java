@@ -27,7 +27,7 @@ public class PokemonSpeciesController {
     private final static Logger LOGGER = LoggerFactory.getLogger(AdminPokemonSpeciesController.class);
     
     @Inject
-    PokemonSpeciesFacade pokemonSpeciesFacade;
+    private PokemonSpeciesFacade pokemonSpeciesFacade;
     
     /**
      * Controller method for list all pokemon species.
