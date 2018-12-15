@@ -113,7 +113,7 @@ public class AdminTrainerController {
      * @param id of the trainer
      * @return JSP page
      */
-    @RequestMapping(value = "/setAdmin/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/unsetAdmin/{id}", method = RequestMethod.POST)
     public String unsetAdmin(@PathVariable long id,
                         RedirectAttributes redirectAttributes,
                         UriComponentsBuilder uriComponentsBuilder) {

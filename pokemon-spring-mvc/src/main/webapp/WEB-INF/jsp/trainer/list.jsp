@@ -34,18 +34,21 @@
                 <td><c:out value="${trainer.surname}"/></td>
                 <td><my:localDate date="${trainer.born}" pattern="dd-MM-yyyy"/></td>
                 <td><c:out value="${trainer.admin}"/></td>
-                <td>
-                    <my:extraTag href="/trainer/rename/${trainer.id}" class='btn btn-primary'>
-                        <span class="glyphicon glyphicon-edit"></span>
-                        <fmt:message key="trainer.rename"/>
-                    </my:extraTag>
-                </td>
-                <td>
-                    <my:extraTag href="/trainer/changePassword/${trainer.id}" class='btn btn-primary'>
-                        <span class="glyphicon glyphicon-edit"></span>
-                        <fmt:message key="trainer.changePassword"/>
-                    </my:extraTag>
-                </td>
+                <c:set var="userId"><security:authentication property="principal.trainerId"/></c:set>
+                <c:if test="${trainer.id==userId}">
+                    <td>
+                        <my:extraTag href="/trainer/rename/${trainer.id}" class='btn btn-primary'>
+                            <span class="glyphicon glyphicon-edit"></span>
+                            <fmt:message key="trainer.rename"/>
+                        </my:extraTag>
+                    </td>
+                    <td>
+                        <my:extraTag href="/trainer/changePassword/${trainer.id}" class='btn btn-primary'>
+                            <span class="glyphicon glyphicon-edit"></span>
+                            <fmt:message key="trainer.changePassword"/>
+                        </my:extraTag>
+                    </td>
+                </c:if>
                 <security:authorize access="hasRole('ADMIN')">
                 <td>
                     <c:choose>
@@ -68,10 +71,12 @@
         </c:forEach>
         </tbody>
     </table>
-    <my:extraTag href="/trainer/new" class="btn btn-default">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            <fmt:message key="trainer.create.new"/>
-    </my:extraTag>
+    <security:authorize access="hasRole('ADMIN')">
+        <my:extraTag href="/admin/trainer/new" class="btn btn-default">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                <fmt:message key="trainer.create.new"/>
+        </my:extraTag>
+    </security:authorize>
 
 </jsp:attribute>
 </my:pagetemplate>
