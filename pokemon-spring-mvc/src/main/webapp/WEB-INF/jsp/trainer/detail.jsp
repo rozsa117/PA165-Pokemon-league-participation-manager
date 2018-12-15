@@ -36,6 +36,10 @@
             <th><fmt:message key="trainer.admin"/></th>
             <td><c:out value="${trainer.admin}"/></td>
         </tr>
+        <tr>
+            <th><fmt:message key="trainer.pokemons"/></th>
+            <td><c:out value="${pokemons}"/></td>
+        </tr>
         </tbody>
     </table>
     <my:extraTag href="/trainer/list" class="btn btn-default">

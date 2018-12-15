@@ -9,15 +9,17 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.NestedServletException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintDeclarationException;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 /**
@@ -59,7 +61,7 @@ public class AdminTrainerController {
                          RedirectAttributes redirectAttributes,
                          UriComponentsBuilder uriComponentsBuilder) {
         LOGGER.debug("mvc POST create()");
-        //formBean.setBorn(LocalDate.parse(date.toString(), DateTimeFormatter.ofPattern("mm/dd/yyyy")));
+        //formBean.setBorn(LocalDate.parse(date));
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
@@ -91,7 +93,7 @@ public class AdminTrainerController {
      * @param id of the trainer
      * @return JSP page
      */
-    @RequestMapping(value = "/setAdmin/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/setAdmin/{id}", method = RequestMethod.GET)
     public String setAdmin(@PathVariable long id,
                            RedirectAttributes redirectAttributes,
                            UriComponentsBuilder uriComponentsBuilder) {
@@ -113,7 +115,7 @@ public class AdminTrainerController {
      * @param id of the trainer
      * @return JSP page
      */
-    @RequestMapping(value = "/unsetAdmin/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/unsetAdmin/{id}", method = RequestMethod.GET)
     public String unsetAdmin(@PathVariable long id,
                         RedirectAttributes redirectAttributes,
                         UriComponentsBuilder uriComponentsBuilder) {

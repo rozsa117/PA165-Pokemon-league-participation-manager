@@ -34,22 +34,7 @@
                 <td><c:out value="${trainer.surname}"/></td>
                 <td><my:localDate date="${trainer.born}" pattern="dd-MM-yyyy"/></td>
                 <td><c:out value="${trainer.admin}"/></td>
-                <c:set var="userId"><security:authentication property="principal.trainerId"/></c:set>
-                <c:if test="${trainer.id==userId}">
-                    <td>
-                        <my:extraTag href="/trainer/rename/${trainer.id}" class='btn btn-primary'>
-                            <span class="glyphicon glyphicon-edit"></span>
-                            <fmt:message key="trainer.rename"/>
-                        </my:extraTag>
-                    </td>
-                    <td>
-                        <my:extraTag href="/trainer/changePassword/${trainer.id}" class='btn btn-primary'>
-                            <span class="glyphicon glyphicon-edit"></span>
-                            <fmt:message key="trainer.changePassword"/>
-                        </my:extraTag>
-                    </td>
-                </c:if>
-                <security:authorize access="hasRole('ADMIN')">
+                <c:set var="userId"><security:authentication property="principal.trainerId"/></c:set>                <security:authorize access="hasRole('ADMIN')">
                 <td>
                     <c:choose>
                         <c:when test="${trainer.admin}">
@@ -67,6 +52,20 @@
                     </c:choose>
                 </td>
                 </security:authorize>
+                <c:if test="${trainer.id==userId}">
+                    <td>
+                        <my:extraTag href="/trainer/rename/${trainer.id}" class='btn btn-primary'>
+                            <span class="glyphicon glyphicon-edit"></span>
+                            <fmt:message key="trainer.rename"/>
+                        </my:extraTag>
+                    </td>
+                    <td>
+                        <my:extraTag href="/trainer/changePassword/${trainer.id}" class='btn btn-primary'>
+                            <span class="glyphicon glyphicon-edit"></span>
+                            <fmt:message key="trainer.changePassword"/>
+                        </my:extraTag>
+                    </td>
+                </c:if>
             </tr>
         </c:forEach>
         </tbody>

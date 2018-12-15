@@ -1,10 +1,12 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.controllers;
 
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerChangePasswordDTO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerRenameDTO;
-import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.PokemonFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.TrainerFacade;
+import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -19,10 +21,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -39,6 +40,9 @@ public class TrainerController {
 
     @Inject
     TrainerFacade trainerFacade;
+
+    @Inject
+    PokemonFacade pokemonFacade;
 
     /**
      * Controller method for listing all trainers
@@ -71,6 +75,12 @@ public class TrainerController {
         }
 
         model.addAttribute("trainer", trainerFacade.getTrainerWithId(id));
+        try {
+            model.addAttribute("pokemons", getPokemons(pokemonFacade.getPokemonOfTrainer(id)));
+        } catch (NoSuchEntityException ex) {
+            redirectAttributes.addFlashAttribute("alert_warning", String.format(messages.getString("entity.does.not.exists"), "Trainer", id));
+            return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
+        }
         return "trainer/detail";
     }
 
@@ -189,5 +199,13 @@ public class TrainerController {
         return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
     }
 
+    private List<Pair<String, String>> getPokemons(List<PokemonDTO> pokemons) {
+        List<Pair<String, String>> output = new ArrayList<>();
 
+        for (PokemonDTO pokemon : pokemons) {
+            output.add(new Pair<>(pokemon.getNickname(), pokemon.getSpecies().getSpeciesName()));
+        }
+
+        return output;
+    }
 }

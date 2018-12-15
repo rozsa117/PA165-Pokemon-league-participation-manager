@@ -63,7 +63,7 @@
                 <fmt:message key="trainer.born"/>
             </form:label>
                 <div class="col-sm-10">
-                    <form:input type="date" path="born" class="form-control"/>
+                    <form:input path="born" type="date" class="form-control"/>
                     <form:errors path="born" cssClass="help-block"/>
                 </div>
         </div>
