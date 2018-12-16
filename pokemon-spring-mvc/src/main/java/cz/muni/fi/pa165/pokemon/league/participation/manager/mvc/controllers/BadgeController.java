@@ -29,7 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
- * Gym controller.
+ * Badge controller.
  *
  * @author Tibor Zauko 433531
  */
