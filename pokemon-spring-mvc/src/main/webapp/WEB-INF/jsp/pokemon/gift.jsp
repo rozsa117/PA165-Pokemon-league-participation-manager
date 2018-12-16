@@ -16,7 +16,7 @@
     <jsp:attribute name="body">
         <h1><fmt:message key="pokemon.gift" /> ${pokemon.nickname}</h1>
 
-        <form:form method="post" action="${pageContext.request.contextPath}/pokemon/gift/${pokemonToGift.pokemonId}"
+        <form:form method="post" action="${pageContext.request.contextPath}/pokemon/gift/${pokemonToGift.id}"
                    modelAttribute="pokemonToGift" cssClass="form-horizontal">
 
             <div class="form-group ${giftedTrainerId_error?'has-error':''}">

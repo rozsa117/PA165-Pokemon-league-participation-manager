@@ -16,7 +16,7 @@
     <jsp:attribute name="body">
         <h1><fmt:message key="pokemon.evolve" /> ${pokemon.nickname}</h1>
 
-        <form:form method="post" action="${pageContext.request.contextPath}/pokemon/evolve/${pokemonToEvolve.pokemonId}"
+        <form:form method="post" action="${pageContext.request.contextPath}/pokemon/evolve/${pokemonToEvolve.id}"
                    modelAttribute="pokemonToEvolve" cssClass="form-horizontal">
 
             <div class="form-group ${newSpeciesId_error?'has-error':''}">

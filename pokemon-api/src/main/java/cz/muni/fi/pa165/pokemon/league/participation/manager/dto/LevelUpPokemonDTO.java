@@ -12,7 +12,8 @@ import javax.validation.constraints.NotNull;
  */
 public class LevelUpPokemonDTO {
 
-    private Long pokemonId;
+    @NotNull
+    private Long id;
 
     private Long requestingTrainerId;
 
@@ -20,12 +21,12 @@ public class LevelUpPokemonDTO {
     @Max(100)
     private int newLevel;
 
-    public Long getPokemonId() {
-        return pokemonId;
+    public Long getId() {
+        return id;
     }
 
-    public void setPokemonId(Long pokemonId) {
-        this.pokemonId = pokemonId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getRequestingTrainerId() {
@@ -47,7 +48,7 @@ public class LevelUpPokemonDTO {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 41 * hash + Objects.hashCode(this.pokemonId);
+        hash = 41 * hash + Objects.hashCode(this.id);
         hash = 41 * hash + Objects.hashCode(this.requestingTrainerId);
         hash = 41 * hash + this.newLevel;
         return hash;
@@ -68,7 +69,7 @@ public class LevelUpPokemonDTO {
         if (this.newLevel != other.newLevel) {
             return false;
         }
-        if (!Objects.equals(this.pokemonId, other.pokemonId)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return Objects.equals(this.requestingTrainerId, other.requestingTrainerId);
@@ -76,7 +77,7 @@ public class LevelUpPokemonDTO {
 
     @Override
     public String toString() {
-        return "LevelUpPokemonDTO{" + "pokemonId=" + pokemonId + ", trainersId=" + requestingTrainerId + ", newLevel=" + newLevel + '}';
+        return "LevelUpPokemonDTO{" + "id=" + id + ", requestingTrainersId=" + requestingTrainerId + ", newLevel=" + newLevel + '}';
     }
 
 }

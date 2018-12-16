@@ -74,7 +74,7 @@ public class EvolvePokemonDTO {
 
     @Override
     public String toString() {
-        return "EvolvePokemonDTO{" + "pokemonId=" + id + ", newSpeciesId=" + newSpeciesId + ", trainersId=" + requestingTrainerId + '}';
+        return "EvolvePokemonDTO{" + "id=" + id + ", newSpeciesId=" + newSpeciesId + ", requestingTrainerId=" + requestingTrainerId + '}';
     }
 
 }

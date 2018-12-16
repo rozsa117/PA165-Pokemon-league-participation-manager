@@ -16,7 +16,7 @@
     <jsp:attribute name="body">
         <h1><fmt:message key="pokemon.level.up" /> ${pokemon.nickname}</h1>
 
-        <form:form method="post" action="${pageContext.request.contextPath}/pokemon/levelup/${pokemonToLevelUp.pokemonId}"
+        <form:form method="post" action="${pageContext.request.contextPath}/pokemon/levelup/${pokemonToLevelUp.id}"
                    modelAttribute="pokemonToLevelUp" cssClass="form-horizontal">
             <div class="form-group ${newLevel_error?'has-error':''}">
                 <form:label path="newLevel" cssClass="col-sm-2 control-label">

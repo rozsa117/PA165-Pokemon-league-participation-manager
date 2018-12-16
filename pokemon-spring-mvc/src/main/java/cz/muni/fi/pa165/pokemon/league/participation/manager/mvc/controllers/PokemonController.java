@@ -127,7 +127,7 @@ public class PokemonController {
         model.addAttribute("pokemon", pokemon);
         
         EvolvePokemonDTO pokemonToEvolve = new EvolvePokemonDTO();
-        pokemonToEvolve.setPokemonId(id);
+        pokemonToEvolve.setId(id);
         
         model.addAttribute("pokemonToEvolve", pokemonToEvolve);
 
@@ -152,7 +152,7 @@ public class PokemonController {
             @PathVariable long id) {
 
         LOGGER.debug("mvc POST evolve({})", id);
-        pokemon.setPokemonId(id);
+        pokemon.setId(id);
         pokemon.setRequestingTrainerId(getCurrentTrainerId(authentication));
 
         if (bindingResult.hasErrors()) {
@@ -175,7 +175,7 @@ public class PokemonController {
         } catch (InvalidPokemonEvolutionException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("alert_warning", messages.getString("pokemon.invalid.evolution"));
-            return "redirect:" + uriComponentsBuilder.path("/pokemon/evolve/" + pokemon.getPokemonId()).build().encode().toUriString();
+            return "redirect:" + uriComponentsBuilder.path("/pokemon/evolve/" + pokemon.getId()).build().encode().toUriString();
         } catch (InsufficientRightsException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("alert_warning", MessageFormat.format(messages.getString("not.authorized"), messages.getString("pokemon"), id));
@@ -217,7 +217,7 @@ public class PokemonController {
         model.addAttribute("pokemon", pokemon);
 
         GiftPokemonDTO pokemonToGift = new GiftPokemonDTO();
-        pokemonToGift.setPokemonId(pokemon.getId());
+        pokemonToGift.setId(pokemon.getId());
         model.addAttribute("pokemonToGift", pokemonToGift);
 
         List<TrainerDTO> otherTrainers = trainerFacade.getAllTrainers();
@@ -244,7 +244,7 @@ public class PokemonController {
             @PathVariable long id) {
 
         LOGGER.debug("mvc POST gift({})", id);
-        pokemon.setPokemonId(id);
+        pokemon.setId(id);
         pokemon.setRequestingTrainerId(getCurrentTrainerId(authentication));
 
         if (bindingResult.hasErrors()) {
@@ -305,7 +305,7 @@ public class PokemonController {
         model.addAttribute("pokemon", pokemon);
 
         LevelUpPokemonDTO pokemonToLevelUp = new LevelUpPokemonDTO();
-        pokemonToLevelUp.setPokemonId(pokemon.getId());
+        pokemonToLevelUp.setId(pokemon.getId());
         pokemonToLevelUp.setNewLevel(pokemon.getLevel());
         model.addAttribute("pokemonToLevelUp", pokemonToLevelUp);
 
@@ -329,7 +329,7 @@ public class PokemonController {
             @PathVariable long id) {
 
         LOGGER.debug("mvc POST level up({})", id);
-        pokemon.setPokemonId(id);
+        pokemon.setId(id);
         pokemon.setRequestingTrainerId(getCurrentTrainerId(authentication));
 
         if (bindingResult.hasErrors()) {
@@ -356,7 +356,7 @@ public class PokemonController {
         } catch (LevelNotIncreasedException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("alert_warning", messages.getString("pokemon.level.not.increased"));
-            return "redirect:" + uriComponentsBuilder.path("/pokemon/levelup/" + pokemon.getPokemonId())
+            return "redirect:" + uriComponentsBuilder.path("/pokemon/levelup/" + pokemon.getId())
                     .build().encode().toUriString();
         }
         ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
