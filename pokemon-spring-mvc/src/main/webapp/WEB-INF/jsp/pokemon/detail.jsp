@@ -9,6 +9,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="javatime" uri="http://sargue.net/jsptags/time" %>
 <fmt:setBundle basename="Texts"/>
 <fmt:message var="title" key="pokemon"/>
 <my:pagetemplate title="${title}">
@@ -27,8 +28,7 @@
                 <tr>
                     <th><fmt:message key="pokemon.date.time.of.capture"/></th>
                     <td> 
-                        <fmt:parseDate value="${pokemon.dateTimeOfCapture}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
-                        <fmt:formatDate value="${parsedDateTime}" type="both"  dateStyle="MEDIUM" timeStyle="SHORT"/>
+                            <javatime:format value="${pokemon.dateTimeOfCapture}" style="MS"/>
                     </td>
                 </tr>
             </tbody>

@@ -11,6 +11,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="javatime" uri="http://sargue.net/jsptags/time" %>
 <fmt:setLocale value="${pageContext.request.locale}"/>
 <fmt:setBundle basename="Texts"/>
 <fmt:message var="title" key="pokemon"/>
@@ -43,8 +44,7 @@
                         </td>
                         <td><c:out value="${pokemon.level}"/></td>
                         <td>
-                            <fmt:parseDate value="${pokemon.dateTimeOfCapture}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
-                            <fmt:formatDate value="${parsedDateTime}" type="both"  dateStyle="MEDIUM" timeStyle="SHORT"/>
+                            <javatime:format value="${pokemon.dateTimeOfCapture}" style="MS"/>
                         </td>
                         <c:set var="MaxLevel" value="${100}"/>
                         <td>
