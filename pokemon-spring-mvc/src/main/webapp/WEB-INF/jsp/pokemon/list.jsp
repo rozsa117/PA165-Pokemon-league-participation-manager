@@ -52,22 +52,17 @@
                                 <span class="glyphicon glyphicon-edit"></span> 
                                 <fmt:message key="pokemon.evolve"/>
                             </my:extraTag>
-                        </td>
-                        <td>
                             <my:extraTag href="/pokemon/gift/${pokemon.id}" class='btn btn-primary'>
                                 <span class="glyphicon glyphicon-edit"></span> 
                                 <fmt:message key="pokemon.gift"/>
                             </my:extraTag>
-                        </td>
-                        <c:if test="${pokemon.level < MaxLevel}">
-                            <td>
+                            <c:if test="${pokemon.level < MaxLevel}">
                                 <my:extraTag href="/pokemon/levelup/${pokemon.id}" class='btn btn-primary'>
                                     <span class="glyphicon glyphicon-edit"></span> 
                                     <fmt:message key="pokemon.level.up"/>
                                 </my:extraTag>
-                            </td>
-                        </c:if>
-
+                            </c:if>
+                        </td>
                     </tr>
                 </c:forEach>
             </tbody>
