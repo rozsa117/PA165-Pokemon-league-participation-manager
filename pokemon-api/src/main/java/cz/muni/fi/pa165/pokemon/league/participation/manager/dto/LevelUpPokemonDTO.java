@@ -19,7 +19,7 @@ public class LevelUpPokemonDTO {
 
     @Min(1)
     @Max(100)
-    private int newLevel;
+    private int level;
 
     public Long getId() {
         return id;
@@ -37,12 +37,12 @@ public class LevelUpPokemonDTO {
         this.requestingTrainerId = requestingTrainerId;
     }
 
-    public int getNewLevel() {
-        return newLevel;
+    public int getLevel() {
+        return level;
     }
 
-    public void setNewLevel(int newLevel) {
-        this.newLevel = newLevel;
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class LevelUpPokemonDTO {
         int hash = 5;
         hash = 41 * hash + Objects.hashCode(this.id);
         hash = 41 * hash + Objects.hashCode(this.requestingTrainerId);
-        hash = 41 * hash + this.newLevel;
+        hash = 41 * hash + this.level;
         return hash;
     }
 
@@ -66,7 +66,7 @@ public class LevelUpPokemonDTO {
             return false;
         }
         final LevelUpPokemonDTO other = (LevelUpPokemonDTO) obj;
-        if (this.newLevel != other.newLevel) {
+        if (this.level != other.level) {
             return false;
         }
         if (!Objects.equals(this.id, other.id)) {
@@ -77,7 +77,7 @@ public class LevelUpPokemonDTO {
 
     @Override
     public String toString() {
-        return "LevelUpPokemonDTO{" + "id=" + id + ", requestingTrainersId=" + requestingTrainerId + ", newLevel=" + newLevel + '}';
+        return "LevelUpPokemonDTO{" + "id=" + id + ", requestingTrainersId=" + requestingTrainerId + ", level=" + level + '}';
     }
 
 }

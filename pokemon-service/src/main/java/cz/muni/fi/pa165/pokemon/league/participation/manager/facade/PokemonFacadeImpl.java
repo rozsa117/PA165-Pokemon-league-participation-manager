@@ -106,7 +106,7 @@ public class PokemonFacadeImpl implements PokemonFacade {
         Trainer trainer = trainerService.getTrainerWithId(newLevel.getRequestingTrainerId());
         Pokemon pokemon = getNonNullPokemon(newLevel.getId());
         authorizeTrainer(trainer, pokemon);
-        pokemonService.increasePokemonLevel(pokemon, newLevel.getNewLevel());
+        pokemonService.increasePokemonLevel(pokemon, newLevel.getLevel());
     }
 
     @Override
