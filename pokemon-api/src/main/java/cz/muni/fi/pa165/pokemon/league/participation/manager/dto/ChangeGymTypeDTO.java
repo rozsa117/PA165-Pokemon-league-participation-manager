@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.deserializers.PokemonTypeEnumDeserializer;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
 
@@ -14,6 +16,7 @@ public class ChangeGymTypeDTO {
     @NotNull
     private Long id;
     
+    @JsonDeserialize(using = PokemonTypeEnumDeserializer.class)
     private PokemonType type;
 
     private Long trainerId;

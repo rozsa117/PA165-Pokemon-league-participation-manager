@@ -17,13 +17,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -52,10 +56,10 @@ public class PokemonSpeciesController {
         return ex.getBindingResult()
                 .getAllErrors()
                 .stream()
-                .map(e -> I18n.getLocalizedMessageOrReturnKey(e.getDefaultMessage()))
+                .map(PokemonSpeciesController::niceErrorString)
                 .collect(Collectors.toList());
     }
-
+    
     /**
      * With this command curl -X POST -i -H "Content-Type: application/json"
      * --data '{"id":"4","primaryType":"FIRE","secondaryType":"DRAGON"}'
@@ -222,5 +226,17 @@ public class PokemonSpeciesController {
         } catch (Exception ex) {
             throw new ResourceNotFoundException(ex.getMessage(), ex);
         }
+    }
+
+    private static String niceErrorString(ObjectError e) {
+        ResourceBundle messages = ResourceBundle.getBundle("ContributorValidationMessages", LocaleContextHolder.getLocale());
+        if (messages.containsKey(e.getDefaultMessage())) {
+            return messages.getString(e.getDefaultMessage());
+        }
+        if (e instanceof FieldError) {
+            final FieldError fe = (FieldError) e;
+            return fe.getField() + ": " + fe.getDefaultMessage();
+        }
+        return e.getCode() + ": " + e.getDefaultMessage();
     }
 }
