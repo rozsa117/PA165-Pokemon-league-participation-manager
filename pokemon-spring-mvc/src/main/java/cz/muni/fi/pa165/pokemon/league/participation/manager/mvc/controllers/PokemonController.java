@@ -361,17 +361,6 @@ public class PokemonController {
         return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
     }
 
-    /**
-     * Model attribute for all pokemon species.
-     *
-     * @return List of all pokemon species.
-     */
-    @ModelAttribute("allSpecies")
-    public List<PokemonSpeciesDTO> allSpecies() {
-        LOGGER.debug("mvc allSpecies()");
-        return pokemonSpeciesFacade.getAllPokemonSpecies();
-    }
-
     private Long getCurrentTrainerId(Authentication authentication) {
         return ((TrainerIdContainingUser) authentication.getPrincipal()).getTrainerId();
     }
@@ -394,6 +383,8 @@ public class PokemonController {
         pokemon.setLevel(1);
 
         model.addAttribute("pokemonCreate", pokemon);
+        model.addAttribute("allSpecies",
+                pokemonSpeciesFacade.getAllPokemonSpecies());
 
         return "pokemon/create";
     }
@@ -405,7 +396,7 @@ public class PokemonController {
      * @return Path to jsp page.
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String Create(@Valid @ModelAttribute("pokemonCreate") PokemonCreateDTO pokemon,
+    public String create(@Valid @ModelAttribute("pokemonCreate") PokemonCreateDTO pokemon,
             BindingResult bindingResult,
             Model model,
             RedirectAttributes redirectAttributes,
@@ -425,6 +416,8 @@ public class PokemonController {
             bindingResult.getFieldErrors().forEach((fe) -> {
                 model.addAttribute(fe.getField() + "_error", true);
             });
+            model.addAttribute("allSpecies",
+                    pokemonSpeciesFacade.getAllPokemonSpecies());
             return "pokemon/create";
         }
         try {
