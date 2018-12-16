@@ -152,7 +152,7 @@ public class BadgeFacadeTest {
                 .build();
 
         revoke.setBadgeId(badgeDTO.getId());
-        revoke.setTrainerId(gymLeaderDTO.getId());
+        revoke.setRequestingTrainerId(gymLeaderDTO.getId());
     }
     
     @Before
@@ -217,14 +217,14 @@ public class BadgeFacadeTest {
     
     @Test
     public void testWinBadge() throws InsufficientRightsException, InvalidChallengeStatusChangeException {
-        badgeFacade.wonBadge(revoke);
+        badgeFacade.winBadge(revoke);
         verify(badgeService, atLeastOnce()).changeBadgeStatus(badgeEntity, ChallengeStatus.WON);
     }
     
     @Test
     public void testInsufficientRightsException() {
         BadgeStatusChangeDTO exception = revoke;
-        exception.setTrainerId(ashDTO.getId());
+        exception.setRequestingTrainerId(ashDTO.getId());
         assertThatExceptionOfType(InsufficientRightsException.class).isThrownBy(() -> badgeFacade.revokeBadge(exception));
     }
     
@@ -232,7 +232,7 @@ public class BadgeFacadeTest {
     public void testReopenChallenge() throws InsufficientRightsException, NoSuchEntityException, InvalidChallengeStatusChangeException {
         badgeEntity.setStatus(ChallengeStatus.LOST);
         BadgeStatusChangeDTO reopen = revoke;
-        reopen.setTrainerId(ashDTO.getId());
+        reopen.setRequestingTrainerId(ashDTO.getId());
         badgeFacade.reopenChallenge(reopen);
         verify(badgeService, atLeastOnce()).changeBadgeStatus(badgeEntity, ChallengeStatus.WAITING_TO_ACCEPT);
     }

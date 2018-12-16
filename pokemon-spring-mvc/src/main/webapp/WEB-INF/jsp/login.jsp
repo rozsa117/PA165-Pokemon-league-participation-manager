@@ -15,37 +15,37 @@
 <fmt:setBundle basename="Texts"/>
 <fmt:message var="title" key="gym"/>
 <my:pagetemplate title="${title}">
-<jsp:attribute name="body">
+    <jsp:attribute name="body">
 
-    <c:if test="${param.error ne null}">
-        <div class="alert alert-warning" role="alert"><f:message key="user.password.incorrect"/></div>
-    </c:if>
-    <c:if test="${param.logout ne null}">
-        <div class="alert alert-info" role="alert"><f:message key="logout.success"/></div>
-    </c:if>
-    <center>
-        <h1><f:message key="login"/></h1>
-        <form name='f' action="login" method='POST'>
-            <table>
-                <tr>
-                    <td><f:message key="user.name"/>:</td>
-                    <td><input type='text' name='username' value=''></td>
-                </tr>
-                <tr>
-                    <td><f:message key="password"/>:</td>
-                    <td><input type='password' name='password' /></td>
-                </tr>
-                <tr>
-                    <td>
-                        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
-                            <span class="glyphicon glyphicon-ok"></span> 
-                            <f:message key="login"/>
-                        </button>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </center>
+        <c:if test="${param.error ne null}">
+            <div class="alert alert-warning" role="alert"><f:message key="user.password.incorrect"/></div>
+        </c:if>
+        <c:if test="${param.logout ne null}">
+            <div class="alert alert-info" role="alert"><f:message key="logout.success"/></div>
+        </c:if>
+        <center>
+            <h1><f:message key="login"/></h1>
+            <form name='f' action="login" method='POST'>
+                <table>
+                    <tr>
+                        <td><f:message key="user.name"/>:</td>
+                        <td><input type='text' name='username' value=''></td>
+                    </tr>
+                    <tr>
+                        <td><f:message key="password"/>:</td>
+                        <td><input type='password' name='password' /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
+                                <span class="glyphicon glyphicon-ok"></span> 
+                                <f:message key="login"/>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </center>
 
-</jsp:attribute>
+    </jsp:attribute>
 </my:pagetemplate>

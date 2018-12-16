@@ -1,6 +1,6 @@
 <%--
-    Document   : Jsp page for change preevolution of pokemon species.
-    Author     : Tamás Rózsa 445653
+    Document   : Jsp page for changing leader of a gym.
+    Author     : Tibor Zauko 433531
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="utf-8" trimDirectiveWhitespaces="false"
@@ -11,26 +11,25 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <fmt:setBundle basename="Texts"/>
-<fmt:message var="title" key="pokemon.species.singular"/>
+<fmt:message var="title" key="gym"/>
 <my:pagetemplate title="${title}">
     <jsp:attribute name="body">
-        <h1><fmt:message key="pokemon.species.change.preevolution"/></h1>
+        <h1><fmt:message key="gym.edit.admin"/></h1>
 
-        <form:form method="post" action="${pageContext.request.contextPath}/admin/pokemonSpecies/changePreevolution/${pokemonSpeciesToUpdate.id}"
-                   modelAttribute="pokemonSpeciesToUpdate" cssClass="form-horizontal">
+        <form:form method="post" action="${pageContext.request.contextPath}/admin/gym/changeLeader/${gymToUpdate.id}"
+                   modelAttribute="gymToUpdate" cssClass="form-horizontal">
 
             <div class="form-group">
-                <form:label path="evolvesFrom" cssClass="col-sm-2 control-label">
-                    <fmt:message key="pokemon.species.evolves.from"/>
+                <form:label path="type" cssClass="col-sm-2 control-label">
+                    <fmt:message key="gym.leader"/>
                 </form:label>
                 <div class="col-sm-10">
-                    <form:select path="evolvesFrom" cssClass="form-control">
-                        <c:forEach items="${allSpecies}" var="species">
-                            <form:option value="${species.id}"><c:out value="${species.speciesName}"/></form:option>
+                    <form:select path="gymLeader" cssClass="form-control">
+                        <c:forEach items="${possibleTrainers}" var="trainer">
+                            <form:option value="${trainer.id}"><c:out value="${trainer.name} ${trainer.surname}"/></form:option>
                         </c:forEach>
-                        <form:option value="${species.id}"><c:out value="${none}"/></form:option>
                     </form:select>
-                    <form:errors path="evolvesFrom" cssClass="error"/>
+                    <form:errors path="gymLeader" cssClass="error"/>
                 </div>
             </div>
 

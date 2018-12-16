@@ -256,6 +256,8 @@ public class GymServiceTest {
 
         assertThat(gymPraha.getGymLeader())
                 .isEqualTo(otherTrainer);
+        assertThat(gymPraha.getType())
+                .isNull();
         verify(gymDAO, times(1)).updateGym(gymPraha);
     }
 

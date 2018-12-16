@@ -9,7 +9,7 @@
 
 <!DOCTYPE html>
 <html lang="${pageContext.request.locale}">
-<head>
+<h:head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"  crossorigin="anonymous">
     <jsp:invoke fragment="head"/>
-</head>
+</h:head>
 <body>
     <div class="container">
         <nav class="navbar navbar-default">
@@ -38,10 +38,15 @@
                         <li><a href="/pa165"><f:message key="home"/></a></li>
                         <li><a href="/pa165/pokemonSpecies/list"><f:message key="pokemon.species"/></a></li>
                         <li><a href="/pa165/pokemon"><f:message key="pokemon"/></a></li>
-                        <li><a href="/pa165/gym"><f:message key="gym"/></a></li>
-                        <li><a href="/pa165/trainer"><f:message key="trainer"/></a></li>
-                        <li><a href="/pa165/badge"><f:message key="badge"/></a></li>
+                        <li><a href="/pa165/gym/list"><f:message key="gyms"/></a></li>
+                        <li><a href="/pa165/trainer"><f:message key="trainers"/></a></li>
+                        <li><a href="/pa165/badge/list"><f:message key="badges"/></a></li>
+                        <security:authorize access="!isAuthenticated()">
+                            <li><a href="/pa165/login"><f:message key="login"/></a></li>
+                        </security:authorize>
                         <security:authorize access="isAuthenticated()">
+                            <c:set var="userId"><security:authentication property="principal.trainerId"/></c:set>
+                            <li><a href="/pa165/trainer/detail/${userId}"><f:message key="about.me"/></a></li>
                             <li><a href="/pa165/logout"><f:message key="log.out"/></a></li>
                         </security:authorize>
                     </ul>
