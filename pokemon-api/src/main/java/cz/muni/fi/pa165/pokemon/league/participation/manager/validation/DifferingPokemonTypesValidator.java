@@ -24,10 +24,8 @@ public class DifferingPokemonTypesValidator implements ConstraintValidator<Diffe
 
     @Override
     public boolean isValid(Object annotatedObject, ConstraintValidatorContext context) {
-        String[] members = annotation.members();
-
         if (log.isDebugEnabled()) {
-            log.debug("Members to be validated: {}", Arrays.toString(members));
+            log.debug("Members to be validated: {}, {}", annotation.primaryTypeMember(), annotation.secondaryTypeMember());
         }
 
         PokemonType prim = null, sec = null;

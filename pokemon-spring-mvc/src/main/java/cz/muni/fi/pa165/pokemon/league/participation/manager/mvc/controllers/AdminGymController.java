@@ -59,7 +59,7 @@ public class AdminGymController {
         LOGGER.debug("mvc GET gym changeLeader({})", id);
         if (gym == null) {
             redirectAttributes.addFlashAttribute("alert_danger",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entity.does.not.exists"), I18n.getStringFromTextsBundle("gym"), id));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exists"), I18n.getLocalizedMessageOrReturnKey("gym"), id));
             return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
         }
         model.addAttribute("gymToUpdate", gym);
@@ -91,7 +91,7 @@ public class AdminGymController {
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
                 LOGGER.trace("ObjectError: {}", ge);
-                model.addAttribute("alert_warning", I18n.getStringFromTextsBundle(ge.getDefaultMessage()));
+                model.addAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey(ge.getDefaultMessage()));
             });
             bindingResult.getFieldErrors().forEach((fe) -> {
                 model.addAttribute(fe.getField() + "_error", true);
@@ -101,15 +101,15 @@ public class AdminGymController {
         try {
             gymFacade.changeGymLeader(gymToUpdate);
         } catch (EntityIsUsedException ex) {
-            model.addAttribute("alert_warning", I18n.getStringFromTextsBundle("gym.leader.used.elsewhere"));
+            model.addAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("gym.leader.used.elsewhere"));
             return "admin/gym/changeLeader";
         } catch (NoSuchEntityException ex) {
             redirectAttributes.addFlashAttribute("alert_danger",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entities.do.not.exists"), I18n.getStringFromTextsBundle("gym.or.trainer")));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entities.do.not.exists"), I18n.getLocalizedMessageOrReturnKey("gym.or.trainer")));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         }
         redirectAttributes.addFlashAttribute("alert_success",
-                MessageFormat.format(I18n.getStringFromTextsBundle("entity.successfully.updated"), I18n.getStringFromTextsBundle("gym")));
+                MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.successfully.updated"), I18n.getLocalizedMessageOrReturnKey("gym")));
         return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
     }
 
@@ -145,7 +145,7 @@ public class AdminGymController {
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
                 LOGGER.trace("ObjectError: {}", ge);
-                model.addAttribute("alert_warning", I18n.getStringFromTextsBundle(ge.getDefaultMessage()));
+                model.addAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey(ge.getDefaultMessage()));
             });
             bindingResult.getFieldErrors().stream().map((fe) -> {
                 model.addAttribute(fe.getField() + "_error", true);
@@ -160,15 +160,15 @@ public class AdminGymController {
         try {
             id = gymFacade.createGym(formBean);
         } catch (EntityIsUsedException ex) {
-            redirectAttributes.addFlashAttribute("alert_warning", I18n.getStringFromTextsBundle("gym.leader.used.elsewhere"));
+            redirectAttributes.addFlashAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("gym.leader.used.elsewhere"));
             return "redirect:" + uriComponentsBuilder.path("/admin/pokemonSpecies/create").build().encode().toUriString();
         } catch (NoSuchEntityException ex) {
             redirectAttributes.addFlashAttribute("alert_warning",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entity.does.not.exists"), I18n.getStringFromTextsBundle("trainer"), formBean.getGymLeaderID()));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exists"), I18n.getLocalizedMessageOrReturnKey("trainer"), formBean.getGymLeaderID()));
             return "redirect:" + uriComponentsBuilder.path("/admin/pokemonSpecies/create").build().encode().toUriString();
         }
         redirectAttributes.addFlashAttribute("alert_success",
-                MessageFormat.format(I18n.getStringFromTextsBundle("entity.created.successfully"), I18n.getStringFromTextsBundle("gym"), id));
+                MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.created.successfully"), I18n.getLocalizedMessageOrReturnKey("gym"), id));
         return "redirect:" + uriComponentsBuilder.path("/gym/list").toUriString();
     }
 

@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.deserializers.PokemonTypeEnumDeserializer;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -19,8 +21,10 @@ public class PokemonSpeciesCreateDTO {
     private String speciesName;
 
     @NotNull
+    @JsonDeserialize(using = PokemonTypeEnumDeserializer.class)
     private PokemonType primaryType;
 
+    @JsonDeserialize(using = PokemonTypeEnumDeserializer.class)
     private PokemonType secondaryType;
 
     private Long evolvesFromId;

@@ -82,9 +82,8 @@ public class AdminPokemonSpeciesController {
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
-                ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
                 LOGGER.trace("ObjectError: {}", ge);
-                model.addAttribute("alert_warning", messages.getString(ge.getDefaultMessage()));
+                model.addAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey(ge.getDefaultMessage()));
             });
             bindingResult.getFieldErrors().forEach((fe) -> {
                 model.addAttribute(fe.getField() + "_error", true);
@@ -145,9 +144,8 @@ public class AdminPokemonSpeciesController {
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
-                ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
                 LOGGER.trace("ObjectError: {}", ge);
-                model.addAttribute("alert_warning", messages.getString(ge.getDefaultMessage()));
+                model.addAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey(ge.getDefaultMessage()));
             });
             bindingResult.getFieldErrors().forEach((fe) -> {
                 model.addAttribute(fe.getField() + "_error", true);
@@ -206,9 +204,8 @@ public class AdminPokemonSpeciesController {
         LOGGER.debug("mvc GET create()");
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
-                ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
                 LOGGER.trace("ObjectError: {}", ge);
-                model.addAttribute("alert_warning", messages.getString(ge.getDefaultMessage()));
+                model.addAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey(ge.getDefaultMessage()));
             });
             bindingResult.getFieldErrors().stream().map((fe) -> {
                 model.addAttribute(fe.getField() + "_error", true);
