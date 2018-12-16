@@ -17,8 +17,8 @@
 <my:pagetemplate title="${title}">
     <jsp:attribute name="body">
         <h1><fmt:message key="pokemon.list.title">
-                <fmt:param value="${principal.name}"/>
-                <fmt:param value="${principal.surname}"/>
+                <fmt:param value="${currentTrainer.name}"/>
+                <fmt:param value="${currentTrainer.surname}"/>
             </fmt:message>
         </h1>
         <table class="table">

@@ -59,8 +59,8 @@ public class PokemonController {
     @RequestMapping("/list")
     public String list(Model model, Authentication authentication) {
         List<PokemonDTO> pokemons = null;
-        TrainerDTO principal = trainerFacade.getTrainerWithId(getCurrentTrainerId(authentication));
-        model.addAttribute("principal", principal);
+        TrainerDTO currentTrainer = trainerFacade.getTrainerWithId(getCurrentTrainerId(authentication));
+        model.addAttribute("currentTrainer", currentTrainer);
         try {
             pokemons = pokemonFacade.getPokemonOfTrainer(getCurrentTrainerId(authentication));
         } catch (NoSuchEntityException ex) {
@@ -72,7 +72,7 @@ public class PokemonController {
     }
 
     @RequestMapping("/detail/{id}")
-    public String detail(@PathVariable long id, Model model, RedirectAttributes ra, Principal principal) {
+    public String detail(@PathVariable long id, Model model, RedirectAttributes ra) {
         PokemonDTO pokemon = pokemonFacade.findPokemonById(id);
         if (pokemon == null) {
             ra.addAttribute("alert_warning", MessageFormat.format(I18n.getStringFromTextsBundle("entity.does.not.exist"), I18n.getStringFromTextsBundle("gym"), id));
