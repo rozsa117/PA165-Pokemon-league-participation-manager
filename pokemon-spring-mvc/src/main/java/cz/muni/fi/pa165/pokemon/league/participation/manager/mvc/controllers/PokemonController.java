@@ -152,7 +152,6 @@ public class PokemonController {
             @PathVariable long id) {
 
         LOGGER.debug("mvc POST evolve({})", id);
-        pokemon.setId(id);
         pokemon.setRequestingTrainerId(getCurrentTrainerId(authentication));
 
         if (bindingResult.hasErrors()) {
@@ -244,7 +243,6 @@ public class PokemonController {
             @PathVariable long id) {
 
         LOGGER.debug("mvc POST gift({})", id);
-        pokemon.setId(id);
         pokemon.setRequestingTrainerId(getCurrentTrainerId(authentication));
 
         if (bindingResult.hasErrors()) {
@@ -329,7 +327,6 @@ public class PokemonController {
             @PathVariable long id) {
 
         LOGGER.debug("mvc POST level up({})", id);
-        pokemon.setId(id);
         pokemon.setRequestingTrainerId(getCurrentTrainerId(authentication));
 
         if (bindingResult.hasErrors()) {
