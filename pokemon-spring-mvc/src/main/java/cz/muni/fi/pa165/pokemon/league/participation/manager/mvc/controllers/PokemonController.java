@@ -125,10 +125,10 @@ public class PokemonController {
         model.addAttribute("speciesEvolveTo", speciesEvolveTo);
 
         model.addAttribute("pokemon", pokemon);
-        
+
         EvolvePokemonDTO pokemonToEvolve = new EvolvePokemonDTO();
         pokemonToEvolve.setId(id);
-        
+
         model.addAttribute("pokemonToEvolve", pokemonToEvolve);
 
         return "pokemon/evolve";
@@ -391,7 +391,6 @@ public class PokemonController {
         LOGGER.debug("mvc GET create");
 
         PokemonCreateDTO pokemon = new PokemonCreateDTO();
-        pokemon.setCreatingTrainerId(getCurrentTrainerId(authentication));
         pokemon.setLevel(1);
 
         model.addAttribute("pokemonCreate", pokemon);
@@ -410,10 +409,12 @@ public class PokemonController {
             BindingResult bindingResult,
             Model model,
             RedirectAttributes redirectAttributes,
-            UriComponentsBuilder uriComponentsBuilder) {
+            UriComponentsBuilder uriComponentsBuilder,
+            Authentication authentication) {
 
         LOGGER.debug("mvc POST create");
         Long id = null;
+        pokemon.setCreatingTrainerId(getCurrentTrainerId(authentication));
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {

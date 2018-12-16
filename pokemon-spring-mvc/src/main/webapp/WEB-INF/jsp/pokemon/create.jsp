@@ -53,8 +53,6 @@
                 </div>
             </div>
 
-            <form:input path="creatingTrainerId" type="hidden" />
-
             <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
                 <span class="glyphicon glyphicon-edit"></span> 
                 <fmt:message key="confirm"/>
