@@ -274,7 +274,7 @@ public class PokemonFacadeTest {
             throws LevelNotIncreasedException, InsufficientRightsException, NoSuchEntityException {
         LevelUpPokemonDTO levelUp = new LevelUpPokemonDTO();
         levelUp.setNewLevel(30);
-        levelUp.setPokemonId(pikachuDTO.getId());
+        levelUp.setId(pikachuDTO.getId());
         levelUp.setRequestingTrainerId(ashDTO.getId());
         pokemonFacade.levelUpPokemon(levelUp);
         verify(pokemonService, atLeastOnce()).increasePokemonLevel(pikachuEntity, levelUp.getNewLevel());
@@ -285,7 +285,7 @@ public class PokemonFacadeTest {
             throws InvalidPokemonEvolutionException, InsufficientRightsException, NoSuchEntityException {
         EvolvePokemonDTO evolve = new EvolvePokemonDTO();
         evolve.setNewSpeciesId(raichuSpeciesEntity.getId());
-        evolve.setPokemonId(pikachuDTO.getId());
+        evolve.setId(pikachuDTO.getId());
         evolve.setRequestingTrainerId(ashDTO.getId());
         pokemonFacade.evolvePokemon(evolve);
         verify(pokemonService, atLeastOnce()).evolvePokemon(pikachuEntity, raichuSpeciesEntity);
@@ -295,7 +295,7 @@ public class PokemonFacadeTest {
     public void testGiftPokemon() throws InsufficientRightsException, NoSuchEntityException {
         GiftPokemonDTO gift = new GiftPokemonDTO();
         gift.setGiftedTrainerId(ashDTO.getId());
-        gift.setPokemonId(raichuEntity.getId());
+        gift.setId(raichuEntity.getId());
         gift.setRequestingTrainerId(brockDTO.getId());
         pokemonFacade.giftPokemon(gift);
         verify(pokemonService, atLeastOnce()).giftPokemon(raichuEntity, ashEntity);

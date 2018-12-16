@@ -24,7 +24,6 @@ public class PokemonCreateDTO {
     @Max(100)
     private int level;
 
-    @NotNull
     private Long creatingTrainerId;
 
     public String getNickname() {

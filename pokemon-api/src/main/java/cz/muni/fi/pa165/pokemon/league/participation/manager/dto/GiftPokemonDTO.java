@@ -11,20 +11,19 @@ import javax.validation.constraints.NotNull;
 public class GiftPokemonDTO {
     
     @NotNull
-    private Long pokemonId;
+    private Long id;
     
-    @NotNull
     private Long requestingTrainerId;
     
     @NotNull
     private Long giftedTrainerId;
 
-    public Long getPokemonId() {
-        return pokemonId;
+    public Long getId() {
+        return id;
     }
 
-    public void setPokemonId(Long pokemonId) {
-        this.pokemonId = pokemonId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getRequestingTrainerId() {
@@ -46,7 +45,7 @@ public class GiftPokemonDTO {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 19 * hash + Objects.hashCode(this.pokemonId);
+        hash = 19 * hash + Objects.hashCode(this.id);
         hash = 19 * hash + Objects.hashCode(this.requestingTrainerId);
         hash = 19 * hash + Objects.hashCode(this.giftedTrainerId);
         return hash;
@@ -64,7 +63,7 @@ public class GiftPokemonDTO {
             return false;
         }
         final GiftPokemonDTO other = (GiftPokemonDTO) obj;
-        if (!Objects.equals(this.pokemonId, other.pokemonId)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Objects.equals(this.requestingTrainerId, other.requestingTrainerId)) {
@@ -75,7 +74,7 @@ public class GiftPokemonDTO {
 
     @Override
     public String toString() {
-        return "GiftPokemonDTO{" + "pokemonId=" + pokemonId + ", giftingTrainerId=" + requestingTrainerId + ", giftedTrainerId=" + giftedTrainerId + '}';
+        return "GiftPokemonDTO{" + "id=" + id + ", requestingTrainerId=" + requestingTrainerId + ", giftedTrainerId=" + giftedTrainerId + '}';
     }
 
 }
