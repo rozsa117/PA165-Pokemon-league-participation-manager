@@ -5,7 +5,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 /**
- * User extension implementing remaining methods mandated by TrainerIdUserDetails
+ * User extension implementing remaining methods mandated by
+ * TrainerIdUserDetails
  *
  * @author Tibor Zauko 433531
  */
@@ -25,6 +26,7 @@ public class TrainerIdContainingUser extends User implements TrainerIdUserDetail
         super(username, password, authorities);
         this.trainerId = trainerId;
     }
+
     /**
      * Construct a new User instance.
      *
@@ -45,10 +47,10 @@ public class TrainerIdContainingUser extends User implements TrainerIdUserDetail
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
         this.trainerId = trainerId;
     }
-    
+
     @Override
     public Long getTrainerId() {
         return trainerId;
     }
-    
+
 }

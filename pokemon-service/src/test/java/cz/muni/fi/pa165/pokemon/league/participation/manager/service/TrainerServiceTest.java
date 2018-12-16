@@ -134,6 +134,10 @@ public class TrainerServiceTest {
         when(trainerDao.getAdminCount()).thenReturn(1L);
         doThrow(PE).when(trainerDao).updateTrainer(exceptionalTrainer);
         doThrow(PE).when(trainerDao).deleteTrainer(exceptionalTrainer);
+        when(trainerDao.findTrainerByUsername(trainer.getUserName()))
+                .thenReturn(trainer);
+        doThrow(PE).when(trainerDao).findTrainerByUsername(exceptionalTrainer.getUserName());
+        
     }
 
     @After
@@ -298,6 +302,18 @@ public class TrainerServiceTest {
         String newPasswd = "new" + PASSWD;
         assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> trainerService.changePassword(exceptionalTrainer, PASSWD, newPasswd));
+    }
+
+    @Test
+    public void testFindTrainerWithUsername() {
+            assertThat(trainerService.findTrainerByUsername(trainer.getUserName()))
+                    .isEqualTo(trainer);
+    }
+    
+    @Test
+    public void testFindTainerWithUsernameWithDAOThrownException() {
+        assertThatExceptionOfType(DataAccessException.class)
+                .isThrownBy(() -> trainerService.findTrainerByUsername(exceptionalTrainer.getUserName()));
     }
 
 }

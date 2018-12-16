@@ -1,19 +1,25 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.facade;
 
+import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.BadgeBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.GymBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.builders.TrainerBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.*;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.builders.BadgeDTOBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.builders.GymDTOBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.builders.TrainerDTOBuilder;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.GymService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.BeanMappingService;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.utils.GymAndBadge;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -68,12 +74,20 @@ public class GymFacadeTest {
     private Trainer gymLeader;
     private Trainer newGymLeader;
     private Trainer exceptionalGymLeader;
+    private Trainer trainer;
+    private Badge badge;
+    private GymAndBadge gymAndBadge;
+
     private GymDTO gymDTO;
     private GymDTO newGymDTO;
     private TrainerDTO gymLeaderDTO;
     private TrainerDTO newGymLeaderDTO;
+    private TrainerDTO trainerDTO;
+    private BadgeDTO badgeDTO;
+    private GymAndBadgeDTO gymAndBadgeDTO;
 
     private List<Gym> getAllGymsList;
+    private List<GymAndBadge> gymAndBadgeList;
 
     @Before
     public void setUp() throws EntityIsUsedException, InsufficientRightsException {
@@ -107,6 +121,16 @@ public class GymFacadeTest {
                 .born(LocalDate.of(2016, 10, 1))
                 .build();
 
+        trainer = new TrainerBuilder()
+                .id(4L)
+                .isAdmin(false)
+                .name("John")
+                .surname("Smith")
+                .userName("johny11")
+                .passwordHash("12345")
+                .born(LocalDate.of(2000, 9, 1))
+                .build();
+
         gym = new GymBuilder()
                 .id(10L)
                 .gymLeader(gymLeader)
@@ -119,6 +143,14 @@ public class GymFacadeTest {
                 .gymLeader(exceptionalGymLeader)
                 .location("Breclav")
                 .type(PokemonType.FAIRY)
+                .build();
+
+        badge = new BadgeBuilder()
+                .id(100L)
+                .date(LocalDate.of(2018, 5, 1))
+                .status(ChallengeStatus.LOST)
+                .gym(gym)
+                .trainer(trainer)
                 .build();
 
         gymCreateDTO = new GymCreateDTO();
@@ -136,13 +168,13 @@ public class GymFacadeTest {
         updateGymLocationDTO.setNewLocation("Praha");
 
         changeGymTypeDTO = new ChangeGymTypeDTO();
-        changeGymTypeDTO.setGymId(gym.getId());
-        changeGymTypeDTO.setNewGymType(PokemonType.DRAGON);
+        changeGymTypeDTO.setId(gym.getId());
+        changeGymTypeDTO.setType(PokemonType.DRAGON);
         changeGymTypeDTO.setTrainerId(gym.getGymLeader().getId());
 
         changeGymLeaderDTO = new ChangeGymLeaderDTO();
-        changeGymLeaderDTO.setGymID(gym.getId());
-        changeGymLeaderDTO.setNewGymLeaderID(newGymLeader.getId());
+        changeGymLeaderDTO.setId(gym.getId());
+        changeGymLeaderDTO.setGymLeader(newGymLeader.getId());
 
         gymLeaderDTO = new TrainerDTOBuilder()
                 .id(gymLeader.getId())
@@ -152,7 +184,7 @@ public class GymFacadeTest {
                 .surname(gymLeader.getSurname())
                 .userName(gymLeader.getUserName())
                 .build();
-        
+
         newGymLeaderDTO = new TrainerDTOBuilder()
                 .id(newGymLeader.getId())
                 .userName(newGymLeader.getUserName())
@@ -160,6 +192,15 @@ public class GymFacadeTest {
                 .name(newGymLeader.getName())
                 .born(newGymLeader.getBorn())
                 .admin(newGymLeader.isAdmin())
+                .build();
+
+        trainerDTO = new TrainerDTOBuilder()
+                .id(trainer.getId())
+                .userName(trainer.getUserName())
+                .surname(trainer.getSurname())
+                .name(trainer.getName())
+                .born(trainer.getBorn())
+                .admin(trainer.isAdmin())
                 .build();
 
         gymDTO = new GymDTOBuilder()
@@ -176,6 +217,21 @@ public class GymFacadeTest {
                 .location(newGym.getLocation())
                 .build();
 
+        badgeDTO = new BadgeDTOBuilder()
+                .id(badge.getId())
+                .date(badge.getDate())
+                .status(ChallengeStatus.LOST)
+                .gym(gymDTO)
+                .trainer(trainerDTO)
+                .build();
+
+        gymAndBadge = new GymAndBadge(gym, badge);
+        gymAndBadgeList = Arrays.asList(gymAndBadge);
+
+        gymAndBadgeDTO = new GymAndBadgeDTO();
+        gymAndBadgeDTO.setBadge(badgeDTO);
+        gymAndBadgeDTO.setGym(gymDTO);
+
         getAllGymsList = Arrays.asList(gym, newGym);
 
         when(gymService.getAllGyms()).thenReturn(getAllGymsList);
@@ -189,14 +245,16 @@ public class GymFacadeTest {
         when(gymService.findGymsByType(newGym.getType())).thenReturn(Collections.singletonList(newGym));
         doThrow(new EntityIsUsedException("Entity is in use")).when(gymService).createGym(gym);
         doThrow(new InsufficientRightsException("This trainer has no rights to change type"))
-                .when(gymService).changeGymType(gym, newGym.getGymLeader(), changeGymTypeDTO.getNewGymType());
+                .when(gymService).changeGymType(gym, newGym.getGymLeader(), changeGymTypeDTO.getType());
         doThrow(new EntityIsUsedException("This trainer is leader of another gym"))
                 .when(gymService).changeGymLeader(gym, exceptionalGymLeader);
         doThrow(new EntityIsUsedException("Badge for this gym exist"))
                 .when(gymService).removeGym(newGym);
         when(trainerService.getTrainerWithId(changeGymTypeDTO.getTrainerId())).thenReturn(gymLeader);
-        when(trainerService.getTrainerWithId(changeGymLeaderDTO.getNewGymLeaderID())).thenReturn(newGymLeader);
+        when(trainerService.getTrainerWithId(changeGymLeaderDTO.getGymLeader())).thenReturn(newGymLeader);
         when(trainerService.getTrainerWithId(exceptionalGymLeader.getId())).thenReturn(exceptionalGymLeader);
+        when(trainerService.getTrainerWithId(trainer.getId())).thenReturn(trainer);
+        when(gymService.getAllGymsAndBadgesOfTrainer(trainer)).thenReturn(gymAndBadgeList);
 
         when(beanMappingService.mapTo(gym, GymDTO.class)).thenReturn(gymDTO);
         when(beanMappingService.mapTo(gymDTO, Gym.class)).thenReturn(gym);
@@ -210,10 +268,12 @@ public class GymFacadeTest {
                 .thenReturn(Collections.singletonList(gymDTO));
         when(beanMappingService.mapTo(gymCreateDTO, Gym.class)).thenReturn(newGym);
         when(beanMappingService.mapTo(exceptionalGymCreateDTO, Gym.class)).thenReturn(gym);
+        when(beanMappingService.mapTo(gymAndBadgeList, GymAndBadgeDTO.class))
+                .thenReturn(Arrays.asList(gymAndBadgeDTO));
     }
 
     @Test
-    public void createGymTest() throws EntityIsUsedException {
+    public void createGymTest() throws EntityIsUsedException, NoSuchEntityException {
         assertThatExceptionOfType(EntityIsUsedException.class)
                 .isThrownBy(() -> gymFacade.createGym(exceptionalGymCreateDTO));
         gymFacade.createGym(gymCreateDTO);
@@ -233,15 +293,15 @@ public class GymFacadeTest {
                 .isThrownBy(() -> gymFacade.changeGymType(changeGymTypeDTO));
         changeGymTypeDTO.setTrainerId(gym.getGymLeader().getId());
         gymFacade.changeGymType(changeGymTypeDTO);
-        verify(gymService, atLeastOnce()).changeGymType(gym, gym.getGymLeader(), changeGymTypeDTO.getNewGymType());
+        verify(gymService, atLeastOnce()).changeGymType(gym, gym.getGymLeader(), changeGymTypeDTO.getType());
     }
 
     @Test
-    public void changeGymLeaderTest() throws EntityIsUsedException {
-        changeGymLeaderDTO.setNewGymLeaderID(exceptionalGymLeader.getId());
+    public void changeGymLeaderTest() throws EntityIsUsedException, NoSuchEntityException {
+        changeGymLeaderDTO.setGymLeader(exceptionalGymLeader.getId());
         assertThatExceptionOfType(EntityIsUsedException.class)
                 .isThrownBy(() -> gymFacade.changeGymLeader(changeGymLeaderDTO));
-        changeGymLeaderDTO.setNewGymLeaderID(newGymLeader.getId());
+        changeGymLeaderDTO.setGymLeader(newGymLeader.getId());
         gymFacade.changeGymLeader(changeGymLeaderDTO);
         verify(gymService, atLeastOnce()).changeGymLeader(gym, newGymLeader);
     }
@@ -282,5 +342,12 @@ public class GymFacadeTest {
     public void findGymByLeaderTest() {
         assertThat(gymFacade.findGymByLeader(gym.getGymLeader().getId())).isEqualTo(gymDTO);
         verify(gymService, atLeastOnce()).getAllGyms();
+    }
+
+    @Test
+    public void getAllGymsAndBadgesOfTrainerTest() throws Exception {
+        assertThat(gymFacade.getAllGymsAndBadgesOfTrainer(trainerDTO.getId()))
+                .isEqualTo(Arrays.asList(gymAndBadgeDTO));
+        verify(gymService, atLeastOnce()).getAllGymsAndBadgesOfTrainer(trainer);
     }
 }

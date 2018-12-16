@@ -27,7 +27,7 @@ public class TrainerFacadeAuthenticationProvider implements AuthenticationProvid
 
     @Inject
     private TrainerFacade trainerFacade;
-    
+
     @Override
     public Authentication authenticate(final Authentication a) throws AuthenticationException {
         final String name = a.getName();
@@ -55,5 +55,5 @@ public class TrainerFacadeAuthenticationProvider implements AuthenticationProvid
     public boolean supports(Class<?> type) {
         return type.equals(UsernamePasswordAuthenticationToken.class);
     }
-    
+
 }

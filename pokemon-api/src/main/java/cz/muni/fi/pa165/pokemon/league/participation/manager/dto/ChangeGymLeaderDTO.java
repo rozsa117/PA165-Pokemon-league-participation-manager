@@ -11,32 +11,32 @@ import javax.validation.constraints.NotNull;
 public class ChangeGymLeaderDTO {
     
     @NotNull
-    private Long gymID;
+    private Long id;
     
     @NotNull
-    private Long newGymLeaderID;
+    private Long gymLeader;
 
-    public Long getGymID() {
-        return gymID;
+    public Long getId() {
+        return id;
     }
 
-    public void setGymID(Long gymID) {
-        this.gymID = gymID;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Long getNewGymLeaderID() {
-        return newGymLeaderID;
+    public Long getGymLeader() {
+        return gymLeader;
     }
 
-    public void setNewGymLeaderID(Long newGymLeaderID) {
-        this.newGymLeaderID = newGymLeaderID;
+    public void setGymLeader(Long gymLeader) {
+        this.gymLeader = gymLeader;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 71 * hash + Objects.hashCode(this.gymID);
-        hash = 71 * hash + Objects.hashCode(this.newGymLeaderID);
+        hash = 71 * hash + Objects.hashCode(this.id);
+        hash = 71 * hash + Objects.hashCode(this.gymLeader);
         return hash;
     }
 
@@ -52,15 +52,15 @@ public class ChangeGymLeaderDTO {
             return false;
         }
         final ChangeGymLeaderDTO other = (ChangeGymLeaderDTO) obj;
-        if (!Objects.equals(this.gymID, other.gymID)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        return Objects.equals(this.newGymLeaderID, other.newGymLeaderID);
+        return Objects.equals(this.gymLeader, other.gymLeader);
     }
 
     @Override
     public String toString() {
-        return "ChangeGymLeaderDTO{" + "gymID=" + gymID + ", newGymLeaderID=" + newGymLeaderID + '}';
+        return "ChangeGymLeaderDTO{" + "gymID=" + id + ", newGymLeaderID=" + gymLeader + '}';
     }
     
 }

@@ -13,9 +13,11 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.EntityIsUsedException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.InsufficientRightsException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.config.ServiceConfiguration;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.utils.GymAndBadge;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,6 +74,12 @@ public class GymServiceTest {
 
     //Trainer without gym
     private Trainer otherTrainer;
+
+    //Badge gymBrno + otherTrainer
+    private Badge badge;
+
+    //Gym and badge gymBrno + otherTrainer
+    private GymAndBadge gymAndBadge;
 
     private final PersistenceException persistenceException = new PersistenceException("throw");
 
@@ -148,6 +156,16 @@ public class GymServiceTest {
                 .type(PokemonType.BUG)
                 .location("Nowhere")
                 .build();
+
+        badge = new BadgeBuilder()
+                .id(1000l)
+                .date(LocalDate.of(2018, 5, 5))
+                .status(ChallengeStatus.LOST)
+                .gym(gymBrno)
+                .trainer(otherTrainer)
+                .build();
+
+        gymAndBadge = new GymAndBadge(gymBrno, badge);
 
         when(gymDAO.findGymById(gymPraha.getId())).thenReturn(gymPraha);
         when(gymDAO.findGymById(gymBrno.getId())).thenReturn(gymBrno);
@@ -238,6 +256,8 @@ public class GymServiceTest {
 
         assertThat(gymPraha.getGymLeader())
                 .isEqualTo(otherTrainer);
+        assertThat(gymPraha.getType())
+                .isNull();
         verify(gymDAO, times(1)).updateGym(gymPraha);
     }
 
@@ -382,4 +402,26 @@ public class GymServiceTest {
                 .as("Testing PokomonType not used on any Gym")
                 .isEmpty();
     }
+
+    @Test
+    public void testGetAllGymsAndBadgesOfTrainer() {
+        List<GymAndBadge> gymAndBadgeList = Arrays.asList(gymAndBadge);
+        when(gymDAO.getAllGymsAndBadgesOfTrainer(otherTrainer))
+                .thenReturn(gymAndBadgeList);
+        
+        assertThat(gymService.getAllGymsAndBadgesOfTrainer(otherTrainer))
+                .containsExactly(gymAndBadge);
+    }
+
+    @Test
+    public void testGetAllGymsAndBadgesOfTrainerWithException() {
+        doThrow(persistenceException).when(gymDAO).getAllGymsAndBadgesOfTrainer(gymLeaderBrno);
+
+        assertThatExceptionOfType(DataAccessException.class
+        )
+                .as("Testing DAO exception")
+                .isThrownBy(() -> gymService
+                .getAllGymsAndBadgesOfTrainer(gymLeaderBrno));
+    }
+
 }
