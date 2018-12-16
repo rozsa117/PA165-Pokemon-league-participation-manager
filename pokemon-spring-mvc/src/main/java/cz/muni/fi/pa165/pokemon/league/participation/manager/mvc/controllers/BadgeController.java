@@ -62,7 +62,7 @@ public class BadgeController {
         } catch (NoSuchEntityException ex) {
             LOGGER.warn("Trainer got deleted in the meantime");
             ra.addAttribute("alert_danger",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entity.does.not.exist"), I18n.getStringFromTextsBundle("trainer"), trainerId));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("trainer"), trainerId));
             return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
         }
         model.addAttribute("trainer", trainer);
@@ -77,7 +77,7 @@ public class BadgeController {
         List<BadgeDTO> gymsChallenges;;
         GymDTO gym = gymFacade.findGymByLeader(((TrainerIdUserDetails) authentication.getPrincipal()).getTrainerId());
         if (gym == null) {
-            ra.addAttribute("alert_warning", I18n.getStringFromTextsBundle("trainer.not.gym.leader"));
+            ra.addAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("trainer.not.gym.leader"));
             return "redirect:" + uriComponentsBuilder.path("/badge/list").build().encode().toUriString();
         }
         Long gymId = gym.getId();
@@ -86,7 +86,7 @@ public class BadgeController {
         } catch (NoSuchEntityException ex) {
             LOGGER.warn("Gym got deleted in the meantime");
             ra.addAttribute("alert_danger",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entity.does.not.exist"), I18n.getStringFromTextsBundle("gym"), gymId));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("gym"), gymId));
             return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
         }
         model.addAttribute("badges", gymsChallenges);
@@ -99,7 +99,7 @@ public class BadgeController {
         BadgeDTO badge = badgeFacade.findBadgeById(id);
         if (badge == null) {
             ra.addAttribute("alert_danger",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entity.does.not.exist"), I18n.getStringFromTextsBundle("badge"), id));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("badge"), id));
             return "redirect:" + uriComponentsBuilder.path("/badge/list").build().encode().toUriString();
         }
         model.addAttribute("badge", badge);
@@ -115,7 +115,7 @@ public class BadgeController {
         BadgeDTO badge = badgeFacade.findBadgeById(id);
         if (badge == null) {
             redirectAttributes.addFlashAttribute("alert_warning",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entity.does.not.exist"), I18n.getStringFromTextsBundle("badge")));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("badge")));
             return "redirect:" + uriComponentsBuilder.path("/badge/challenges").build().encode().toUriString();
         }
         model.addAttribute("subject", badge.getTrainer().getName() + " " + badge.getTrainer().getSurname());
@@ -138,20 +138,20 @@ public class BadgeController {
             badgeFacade.revokeBadge(badge);
         } catch (InsufficientRightsException ex) {
             LOGGER.debug("Insufficient rights", ex);
-            redirectAttributes.addFlashAttribute("alert_warning", I18n.getStringFromTextsBundle("no.rights"));
+            redirectAttributes.addFlashAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("no.rights"));
             return "redirect:" + uriComponentsBuilder.path("/badge/challenges").build().encode().toUriString();
         } catch (NoSuchEntityException ex) {
             LOGGER.debug("No entity", ex);
             redirectAttributes.addFlashAttribute("alert_warning",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entities.do.not.exist"), I18n.getStringFromTextsBundle("badge.or.trainer")));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entities.do.not.exist"), I18n.getLocalizedMessageOrReturnKey("badge.or.trainer")));
             return "redirect:" + uriComponentsBuilder.path("/badge/challenges").build().encode().toUriString();
         } catch (InvalidChallengeStatusChangeException ex) {
             LOGGER.debug("Can't revoke", ex);
-            redirectAttributes.addFlashAttribute("alert_warning", I18n.getStringFromTextsBundle("badge.not.revocable"));
+            redirectAttributes.addFlashAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("badge.not.revocable"));
             return "redirect:" + uriComponentsBuilder.path("/badge/challenges").build().encode().toUriString();
         }
         redirectAttributes.addFlashAttribute("alert_success",
-                MessageFormat.format(I18n.getStringFromTextsBundle("entity.successfully.updated"), I18n.getStringFromTextsBundle("badge")));
+                MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.successfully.updated"), I18n.getLocalizedMessageOrReturnKey("badge")));
         return "redirect:" + uriComponentsBuilder.path("/badge/challenges").build().encode().toUriString();
     }
 
@@ -165,7 +165,7 @@ public class BadgeController {
         BadgeDTO badge = badgeFacade.findBadgeById(id);
         if (badge == null) {
             redirectAttributes.addFlashAttribute("alert_warning",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entity.does.not.exist"), I18n.getStringFromTextsBundle("badge")));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("badge")));
             return "redirect:" + uriComponentsBuilder.path("/badge/challenges").build().encode().toUriString();
         }
         model.addAttribute("subject", badge.getTrainer().getName() + " " + badge.getTrainer().getSurname());
@@ -195,20 +195,20 @@ public class BadgeController {
             }
         } catch (InsufficientRightsException ex) {
             LOGGER.debug("Insufficient rights", ex);
-            redirectAttributes.addFlashAttribute("alert_warning", I18n.getStringFromTextsBundle("no.rights"));
+            redirectAttributes.addFlashAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("no.rights"));
             return "redirect:" + uriComponentsBuilder.path("/badge/list").build().encode().toUriString();
         } catch (NoSuchEntityException ex) {
             LOGGER.debug("No entity", ex);
             redirectAttributes.addFlashAttribute("alert_warning",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entities.do.not.exist"), I18n.getStringFromTextsBundle("badge.or.trainer")));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entities.do.not.exist"), I18n.getLocalizedMessageOrReturnKey("badge.or.trainer")));
             return "redirect:" + uriComponentsBuilder.path("/badge/challenges").build().encode().toUriString();
         } catch (InvalidChallengeStatusChangeException ex) {
             LOGGER.debug("Can't revoke", ex);
-            redirectAttributes.addFlashAttribute("alert_warning", I18n.getStringFromTextsBundle("badge.not.issueable"));
+            redirectAttributes.addFlashAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("badge.not.issueable"));
             return "redirect:" + uriComponentsBuilder.path("/badge/challenges").build().encode().toUriString();
         }
         redirectAttributes.addFlashAttribute("alert_success",
-                MessageFormat.format(I18n.getStringFromTextsBundle("entity.successfully.updated"), I18n.getStringFromTextsBundle("badge")));
+                MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.successfully.updated"), I18n.getLocalizedMessageOrReturnKey("badge")));
         return "redirect:" + uriComponentsBuilder.path("/badge/challenges").build().encode().toUriString();
     }
 
@@ -221,7 +221,7 @@ public class BadgeController {
         BadgeDTO badge = badgeFacade.findBadgeById(id);
         if (badge == null) {
             redirectAttributes.addFlashAttribute("alert_warning",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entity.does.not.exist"), I18n.getStringFromTextsBundle("badge")));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("badge")));
             return "redirect:" + uriComponentsBuilder.path("/badge/challenges").build().encode().toUriString();
         }
         model.addAttribute("subject", badge.getTrainer().getName() + " " + badge.getTrainer().getSurname());
@@ -245,20 +245,20 @@ public class BadgeController {
             badgeFacade.winBadge(badge);
         } catch (InsufficientRightsException ex) {
             LOGGER.debug("Insufficient rights", ex);
-            redirectAttributes.addFlashAttribute("alert_warning", I18n.getStringFromTextsBundle("no.rights"));
+            redirectAttributes.addFlashAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("no.rights"));
             return "redirect:" + uriComponentsBuilder.path("/badge/list").build().encode().toUriString();
         } catch (NoSuchEntityException ex) {
             LOGGER.debug("No entity", ex);
             redirectAttributes.addFlashAttribute("alert_warning",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entities.do.not.exist"), I18n.getStringFromTextsBundle("badge.or.trainer")));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entities.do.not.exist"), I18n.getLocalizedMessageOrReturnKey("badge.or.trainer")));
             return "redirect:" + uriComponentsBuilder.path("/badge/challenges").build().encode().toUriString();
         } catch (InvalidChallengeStatusChangeException ex) {
             LOGGER.debug("Can't revoke", ex);
-            redirectAttributes.addFlashAttribute("alert_warning", I18n.getStringFromTextsBundle("badge.not.revoked"));
+            redirectAttributes.addFlashAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("badge.not.revoked"));
             return "redirect:" + uriComponentsBuilder.path("/badge/challenges").build().encode().toUriString();
         }
         redirectAttributes.addFlashAttribute("alert_success",
-                MessageFormat.format(I18n.getStringFromTextsBundle("entity.successfully.updated"), I18n.getStringFromTextsBundle("badge")));
+                MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.successfully.updated"), I18n.getLocalizedMessageOrReturnKey("badge")));
         return "redirect:" + uriComponentsBuilder.path("/badge/challenges").build().encode().toUriString();
     }
 
@@ -271,7 +271,7 @@ public class BadgeController {
         BadgeDTO badge = badgeFacade.findBadgeById(id);
         if (badge == null) {
             redirectAttributes.addFlashAttribute("alert_warning",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entity.does.not.exist"), I18n.getStringFromTextsBundle("badge")));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("badge")));
             return "redirect:" + uriComponentsBuilder.path("/badge/challenges").build().encode().toUriString();
         }
         model.addAttribute("subject", badge.getGym().getLocation());
@@ -295,20 +295,20 @@ public class BadgeController {
             badgeFacade.reopenChallenge(badge);
         } catch (InsufficientRightsException ex) {
             LOGGER.debug("Insufficient rights", ex);
-            redirectAttributes.addFlashAttribute("alert_warning", I18n.getStringFromTextsBundle("no.rights"));
+            redirectAttributes.addFlashAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("no.rights"));
             return "redirect:" + uriComponentsBuilder.path("/badge/list").build().encode().toUriString();
         } catch (NoSuchEntityException ex) {
             LOGGER.debug("No entity", ex);
             redirectAttributes.addFlashAttribute("alert_warning",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entities.do.not.exist"), I18n.getStringFromTextsBundle("badge.or.trainer")));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entities.do.not.exist"), I18n.getLocalizedMessageOrReturnKey("badge.or.trainer")));
             return "redirect:" + uriComponentsBuilder.path("/badge/list").build().encode().toUriString();
         } catch (InvalidChallengeStatusChangeException ex) {
             LOGGER.debug("Can't revoke", ex);
-            redirectAttributes.addFlashAttribute("alert_warning", I18n.getStringFromTextsBundle("badge.not.lost"));
+            redirectAttributes.addFlashAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("badge.not.lost"));
             return "redirect:" + uriComponentsBuilder.path("/badge/list").build().encode().toUriString();
         }
         redirectAttributes.addFlashAttribute("alert_success",
-                MessageFormat.format(I18n.getStringFromTextsBundle("entity.successfully.updated"), I18n.getStringFromTextsBundle("badge")));
+                MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.successfully.updated"), I18n.getLocalizedMessageOrReturnKey("badge")));
         return "redirect:" + uriComponentsBuilder.path("/badge/list").build().encode().toUriString();
     }
 
@@ -321,7 +321,7 @@ public class BadgeController {
         GymDTO gym = gymFacade.findGymById(id);
         if (gym == null) {
             redirectAttributes.addFlashAttribute("alert_warning",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entity.does.not.exist"), I18n.getStringFromTextsBundle("gym")));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("gym")));
             return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
         }
         model.addAttribute("subject", gym.getLocation());
@@ -348,15 +348,15 @@ public class BadgeController {
         } catch (NoSuchEntityException ex) {
             LOGGER.debug("No entity", ex);
             redirectAttributes.addFlashAttribute("alert_warning",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entities.do.not.exist"), I18n.getStringFromTextsBundle("gym.or.trainer")));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entities.do.not.exist"), I18n.getLocalizedMessageOrReturnKey("gym.or.trainer")));
             return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
         } catch (EntityIsUsedException ex) {
             LOGGER.debug("No entity", ex);
-            redirectAttributes.addFlashAttribute("alert_warning", I18n.getStringFromTextsBundle("badge.trainer.is.gym.leader"));
+            redirectAttributes.addFlashAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("badge.trainer.is.gym.leader"));
             return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
         }
         redirectAttributes.addFlashAttribute("alert_success",
-                MessageFormat.format(I18n.getStringFromTextsBundle("entity.created.successfully"), I18n.getStringFromTextsBundle("badge"), newId));
+                MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.created.successfully"), I18n.getLocalizedMessageOrReturnKey("badge"), newId));
         return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
     }
 
