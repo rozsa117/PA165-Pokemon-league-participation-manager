@@ -71,7 +71,7 @@ public class GymController {
         GymDTO gym = gymFacade.findGymById(id);
         if (gym == null) {
             ra.addAttribute("alert_danger",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entity.does.not.exist"), I18n.getStringFromTextsBundle("gym"), id));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("gym"), id));
             return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
         }
         BadgeDTO badge = getBadgesOfCallingUser(authentication).stream()
@@ -93,12 +93,12 @@ public class GymController {
         GymDTO gym = gymFacade.findGymById(id);
         if (gym == null) {
             redirectAttributes.addFlashAttribute("alert_danger",
-                    MessageFormat.format(I18n.getStringFromTextsBundle("entity.does.not.exists"), I18n.getStringFromTextsBundle("gym"), id));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exists"), I18n.getLocalizedMessageOrReturnKey("gym"), id));
             return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
         }
         Long userId = ((TrainerIdUserDetails) authentication.getPrincipal()).getTrainerId();
         if (!gym.getGymLeader().getId().equals(userId)) {
-            redirectAttributes.addFlashAttribute("alert_warning", I18n.getStringFromTextsBundle("no.rights"));
+            redirectAttributes.addFlashAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("no.rights"));
             return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
         }
         model.addAttribute("gymToUpdate", gym);
@@ -130,11 +130,11 @@ public class GymController {
             gymFacade.changeGymType(gymToUpdate);
         } catch (InsufficientRightsException ex) {
             LOGGER.debug("Insufficient rights", ex);
-            redirectAttributes.addFlashAttribute("alert_warning", I18n.getStringFromTextsBundle("no.rights"));
+            redirectAttributes.addFlashAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("no.rights"));
             return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
         }
         redirectAttributes.addFlashAttribute("alert_success",
-                MessageFormat.format(I18n.getStringFromTextsBundle("entity.successfully.updated"), I18n.getStringFromTextsBundle("gym")));
+                MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.successfully.updated"), I18n.getLocalizedMessageOrReturnKey("gym")));
         return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
     }
 
