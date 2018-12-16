@@ -297,12 +297,8 @@ public class PokemonController {
             redirectAttributes.addFlashAttribute("alert_warning", MessageFormat.format(messages.getString("not.authorized"), messages.getString("pokemon"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
         }
-        model.addAttribute("pokemon", pokemon);
-
-        LevelUpPokemonDTO pokemonToLevelUp = new LevelUpPokemonDTO();
-        pokemonToLevelUp.setId(pokemon.getId());
-        pokemonToLevelUp.setNewLevel(pokemon.getLevel());
-        model.addAttribute("pokemonToLevelUp", pokemonToLevelUp);
+ 
+        model.addAttribute("pokemonToLevelUp", pokemon);
 
         return "pokemon/levelup";
     }

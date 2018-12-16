@@ -14,21 +14,21 @@
 <fmt:message var="title" key="pokemon"/>
 <my:pagetemplate title="${title}">
     <jsp:attribute name="body">
-        <h1><fmt:message key="pokemon.level.up" /> ${pokemon.nickname}</h1>
+        <h1><fmt:message key="pokemon.level.up" /> ${pokemonToLevelUp.nickname}</h1>
 
         <form:form method="post" action="${pageContext.request.contextPath}/pokemon/levelup/${pokemonToLevelUp.id}"
                    modelAttribute="pokemonToLevelUp" cssClass="form-horizontal">
-            <div class="form-group ${newLevel_error?'has-error':''}">
-                <form:label path="newLevel" cssClass="col-sm-2 control-label">
+            <div class="form-group ${level_error?'has-error':''}">
+                <form:label path="level" cssClass="col-sm-2 control-label">
                     <fmt:message key="pokemon.new.level"/>
                 </form:label>
                 <div class="col-sm-1">
-                    <form:input path="newLevel" 
+                    <form:input path="level" 
                                 cssClass="form-control"             
                                 type="number"
-                                min="${pokemonToLevelUp.newLevel}"
+                                min="${pokemonToLevelUp.level}"
                                 max="100"/>
-                    <form:errors path="newLevel" cssClass="error"/>
+                    <form:errors path="level" cssClass="error"/>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary" style="margin-top: 10px;">

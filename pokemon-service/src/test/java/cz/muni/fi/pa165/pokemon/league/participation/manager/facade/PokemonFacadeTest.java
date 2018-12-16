@@ -273,11 +273,11 @@ public class PokemonFacadeTest {
     public void testLevelUpPokemon() 
             throws LevelNotIncreasedException, InsufficientRightsException, NoSuchEntityException {
         LevelUpPokemonDTO levelUp = new LevelUpPokemonDTO();
-        levelUp.setNewLevel(30);
+        levelUp.setLevel(30);
         levelUp.setId(pikachuDTO.getId());
         levelUp.setRequestingTrainerId(ashDTO.getId());
         pokemonFacade.levelUpPokemon(levelUp);
-        verify(pokemonService, atLeastOnce()).increasePokemonLevel(pikachuEntity, levelUp.getNewLevel());
+        verify(pokemonService, atLeastOnce()).increasePokemonLevel(pikachuEntity, levelUp.getLevel());
     }
     
     @Test
