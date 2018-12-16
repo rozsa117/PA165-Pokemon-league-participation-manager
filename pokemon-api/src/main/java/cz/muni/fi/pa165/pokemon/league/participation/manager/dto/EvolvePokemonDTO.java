@@ -10,19 +10,20 @@ import javax.validation.constraints.NotNull;
  */
 public class EvolvePokemonDTO {
 
-    private Long pokemonId;
+    @NotNull
+    private Long id;
 
     @NotNull
     private Long newSpeciesId;
 
     private Long requestingTrainerId;
 
-    public Long getPokemonId() {
-        return pokemonId;
+    public Long getId() {
+        return id;
     }
 
-    public void setPokemonId(Long pokemonId) {
-        this.pokemonId = pokemonId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getNewSpeciesId() {
@@ -44,7 +45,7 @@ public class EvolvePokemonDTO {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 17 * hash + Objects.hashCode(this.pokemonId);
+        hash = 17 * hash + Objects.hashCode(this.id);
         hash = 17 * hash + Objects.hashCode(this.newSpeciesId);
         hash = 17 * hash + Objects.hashCode(this.requestingTrainerId);
         return hash;
@@ -62,7 +63,7 @@ public class EvolvePokemonDTO {
             return false;
         }
         final EvolvePokemonDTO other = (EvolvePokemonDTO) obj;
-        if (!Objects.equals(this.pokemonId, other.pokemonId)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Objects.equals(this.newSpeciesId, other.newSpeciesId)) {
@@ -73,7 +74,7 @@ public class EvolvePokemonDTO {
 
     @Override
     public String toString() {
-        return "EvolvePokemonDTO{" + "pokemonId=" + pokemonId + ", newSpeciesId=" + newSpeciesId + ", trainersId=" + requestingTrainerId + '}';
+        return "EvolvePokemonDTO{" + "pokemonId=" + id + ", newSpeciesId=" + newSpeciesId + ", trainersId=" + requestingTrainerId + '}';
     }
 
 }

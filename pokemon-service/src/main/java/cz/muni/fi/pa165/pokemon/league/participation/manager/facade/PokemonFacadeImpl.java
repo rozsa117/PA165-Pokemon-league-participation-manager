@@ -117,7 +117,7 @@ public class PokemonFacadeImpl implements PokemonFacade {
         if (species == null) {
             throw new NoSuchEntityException("No Pokemon species of id " + chosenEvolution.getNewSpeciesId() + " exists");
         }
-        Pokemon pokemon = getNonNullPokemon(chosenEvolution.getPokemonId());
+        Pokemon pokemon = getNonNullPokemon(chosenEvolution.getId());
         authorizeTrainer(trainer, pokemon);
         pokemonService.evolvePokemon(pokemon, species);
     }

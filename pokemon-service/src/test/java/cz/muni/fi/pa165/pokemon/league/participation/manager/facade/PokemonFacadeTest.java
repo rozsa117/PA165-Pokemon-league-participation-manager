@@ -285,7 +285,7 @@ public class PokemonFacadeTest {
             throws InvalidPokemonEvolutionException, InsufficientRightsException, NoSuchEntityException {
         EvolvePokemonDTO evolve = new EvolvePokemonDTO();
         evolve.setNewSpeciesId(raichuSpeciesEntity.getId());
-        evolve.setPokemonId(pikachuDTO.getId());
+        evolve.setId(pikachuDTO.getId());
         evolve.setRequestingTrainerId(ashDTO.getId());
         pokemonFacade.evolvePokemon(evolve);
         verify(pokemonService, atLeastOnce()).evolvePokemon(pikachuEntity, raichuSpeciesEntity);
