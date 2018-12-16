@@ -111,10 +111,7 @@ public class PokemonController {
             return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
         }
 
-        List<PokemonSpeciesDTO> speciesEvolveTo = pokemonSpeciesFacade.getAllPokemonSpecies();
-        speciesEvolveTo.removeIf(species
-                -> (species.getEvolvesFrom() == null
-                || !species.getEvolvesFrom().getId().equals(pokemon.getSpecies().getId())));
+        List<PokemonSpeciesDTO> speciesEvolveTo = pokemonSpeciesFacade.getAllEvolutionsOfPokemonSpecies(pokemon.getSpecies().getId());
 
         if (speciesEvolveTo.isEmpty()) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
