@@ -3,6 +3,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.controllers;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoAdministratorException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.TrainerFacade;
+import java.text.MessageFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -27,7 +28,6 @@ import java.util.ResourceBundle;
 public class AdminTrainerController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AdminTrainerController.class);
-    ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
 
     @Inject
     TrainerFacade trainerFacade;
@@ -75,11 +75,12 @@ public class AdminTrainerController {
         try {
             id = trainerFacade.createTrainer(formBean);
         } catch (NoAdministratorException ex) {
-            redirectAttributes.addFlashAttribute("alert_warning", messages.getString("trainer.no.administrator"));
+            redirectAttributes.addFlashAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("trainer.no.administrator"));
             return "redirect:" + uriComponentsBuilder.path("/admin/trainer/create").build().encode().toUriString();
         }
 
-        redirectAttributes.addFlashAttribute("alert_success", String.format(messages.getString("trainer.created.successfully"), id));
+        redirectAttributes.addFlashAttribute("alert_success", 
+                MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.created.successfully"), I18n.getLocalizedMessageOrReturnKey("trainer"), id));
         return "redirect:" + uriComponentsBuilder.path("/trainer/list").toUriString();
     }
 
@@ -97,11 +98,12 @@ public class AdminTrainerController {
         try {
             trainerFacade.setAdmin(id, true);
         } catch (NoAdministratorException ex) {
-            redirectAttributes.addFlashAttribute("alert_warning", messages.getString("trainer.no.administrator"));
+            redirectAttributes.addFlashAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("trainer.no.administrator"));
             return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
         }
 
-        redirectAttributes.addFlashAttribute("alert_success", messages.getString("trainer.updated.successfully"));
+        redirectAttributes.addFlashAttribute("alert_success",
+                MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.successfully.updated"), I18n.getLocalizedMessageOrReturnKey("trainer")));
         return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
     }
 
@@ -119,11 +121,12 @@ public class AdminTrainerController {
         try {
             trainerFacade.setAdmin(id, false);
         } catch (NoAdministratorException ex) {
-            redirectAttributes.addFlashAttribute("alert_warning", messages.getString("trainer.no.administrator"));
+            redirectAttributes.addFlashAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("trainer.no.administrator"));
             return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
         }
 
-        redirectAttributes.addFlashAttribute("alert_success", messages.getString("trainer.updated.successfully"));
+        redirectAttributes.addFlashAttribute("alert_success",
+                MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.successfully.updated"), I18n.getLocalizedMessageOrReturnKey("trainer")));
         return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
     }
 }
