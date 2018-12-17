@@ -76,6 +76,11 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
                 .speciesName("Onix")
                 .build();
         
+        PokemonSpecies staryoSpecies = new PokemonSpeciesBuilder()
+                .primaryType(PokemonType.WATER)
+                .speciesName("Staryo")
+                .build();
+        
         PokemonSpecies bulbassaurSpecies = new PokemonSpeciesBuilder()
                 .primaryType(PokemonType.GRASS)
                 .speciesName("Bulbasaur")
@@ -84,6 +89,7 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
         pokemonSpeciesService.createPokemonSpecies(pikachuSpecies);
         pokemonSpeciesService.createPokemonSpecies(raichuSpecies);
         pokemonSpeciesService.createPokemonSpecies(onixSpecies);
+        pokemonSpeciesService.createPokemonSpecies(staryoSpecies);
         pokemonSpeciesService.createPokemonSpecies(bulbassaurSpecies);
         
         Trainer ashTrainer = new TrainerBuilder()
@@ -102,8 +108,17 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
                 .userName("brock")
                 .build();
         
+        Trainer mistyTrainer = new TrainerBuilder()
+                .name("Misty")
+                .surname("Yawa")
+                .born(LocalDate.of(1999, Month.JUNE, 10))
+                .isAdmin(false)
+                .userName("misty")
+                .build();
+        
         trainerService.createTrainer(ashTrainer, "ash123");
         trainerService.createTrainer(brockTrainer, "brock123");
+        trainerService.createTrainer(mistyTrainer, "misty123");
         
         Pokemon pikachuPokemon = new PokemonBuilder()
                 .dateTimeOfCapture(LocalDateTime.of(2017, Month.MARCH, 7, 0, 0))
@@ -129,9 +144,18 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
                 .trainer(brockTrainer)
                 .build();
         
+        Pokemon staryouPokemon = new PokemonBuilder()
+                .dateTimeOfCapture(LocalDateTime.of(2017, Month.OCTOBER, 15, 0, 0))
+                .level(100)
+                .nickname("Staryou")
+                .pokemonSpecies(staryoSpecies)
+                .trainer(mistyTrainer)
+                .build();
+        
         pokemonService.createPokemon(pikachuPokemon);
         pokemonService.createPokemon(raichuPokemon);
         pokemonService.createPokemon(onixPokemon);
+        pokemonService.createPokemon(staryouPokemon);
         
         Gym vermilionGym = new GymBuilder()
                 .gymLeader(ashTrainer)
