@@ -28,3 +28,6 @@ In that case, try adding **-Dsurefire.useSystemClassLoader=false** to the comman
 ```
 mvn clean install -Dsurefire.useSystemClassLoader=false
 ```
+### Running web app and REST servers
+
+Please refer to the [project wiki](https://github.com/rozsa117/PA165-Pokemon-league-participation-manager/wiki), which has dedicated pages for both topics.
