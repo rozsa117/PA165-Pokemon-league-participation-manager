@@ -11,15 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.util.NestedServletException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.inject.Inject;
-import javax.validation.ConstraintDeclarationException;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 /**
@@ -46,7 +41,7 @@ public class AdminTrainerController {
     public String createTrainer(Model model) {
         LOGGER.debug("mvc GET newTrainer()");
         model.addAttribute("trainerCreate", new TrainerCreateDTO());
-        return "admin/trainer/create";
+        return "admin/trainer/new";
     }
 
     /**
@@ -54,13 +49,13 @@ public class AdminTrainerController {
      * @param formBean DTO for creating new trainer
      * @return JSP page
      */
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String create(@Valid @ModelAttribute("trainerCreate") TrainerCreateDTO formBean,
                          BindingResult bindingResult,
                          Model model,
                          RedirectAttributes redirectAttributes,
                          UriComponentsBuilder uriComponentsBuilder) {
-        LOGGER.debug("mvc POST create()");
+        LOGGER.debug("mvc POST new()");
         //formBean.setBorn(LocalDate.parse(date));
 
         if (bindingResult.hasErrors()) {
@@ -72,7 +67,7 @@ public class AdminTrainerController {
                 LOGGER.trace("FieldError: {}", fe);
             });
 
-            return "admin/trainer/create";
+            return "admin/trainer/new";
         }
 
         Long id;

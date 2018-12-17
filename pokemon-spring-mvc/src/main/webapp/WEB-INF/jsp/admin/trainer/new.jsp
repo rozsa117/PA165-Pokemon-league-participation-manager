@@ -15,7 +15,7 @@
 <jsp:attribute name="body">
     <h1><fmt:message key="trainer.create.new"/></h1>
 
-    <form:form method="post" action="${pageContext.request.contextPath}/admin/trainer/create"
+    <form:form method="post" action="${pageContext.request.contextPath}/admin/trainer/new"
                modelAttribute="trainerCreate" cssClass="form-horizontal">
 
         <div class="form-group ${userName_error?'has-error':''}">

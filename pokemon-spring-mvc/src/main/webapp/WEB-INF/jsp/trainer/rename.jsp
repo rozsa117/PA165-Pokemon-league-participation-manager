@@ -15,7 +15,7 @@
 <jsp:attribute name="body">
     <h1><fmt:message key="trainer.rename"/></h1>
 
-    <form:form method="post" action="${pageContext.request.contextPath}/trainer/rename/${trainerToUpdate.trainerId}"
+    <form:form method="post" action="${pageContext.request.contextPath}/trainer/rename/${trainerToUpdate.id}"
                modelAttribute="trainerToUpdate" cssClass="form-horizontal">
         <div class="form-group">
             <form:label path="name" cssClass="col-sm-2 control-label">

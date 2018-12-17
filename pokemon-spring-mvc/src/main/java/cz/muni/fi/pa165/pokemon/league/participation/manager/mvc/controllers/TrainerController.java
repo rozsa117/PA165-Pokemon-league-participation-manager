@@ -76,7 +76,7 @@ public class TrainerController {
 
         model.addAttribute("trainer", trainerFacade.getTrainerWithId(id));
         try {
-            model.addAttribute("pokemons", getPokemons(pokemonFacade.getPokemonOfTrainer(id)));
+            model.addAttribute("pokemons", pokemonFacade.getPokemonOfTrainer(id));
         } catch (NoSuchEntityException ex) {
             redirectAttributes.addFlashAttribute("alert_warning", String.format(messages.getString("entity.does.not.exists"), "Trainer", id));
             return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
@@ -102,9 +102,7 @@ public class TrainerController {
             return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
         }
 
-        TrainerRenameDTO trainerRenameDTO = new TrainerRenameDTO();
-        trainerRenameDTO.setTrainerId(id);
-        model.addAttribute("trainerToUpdate", trainerRenameDTO);
+        model.addAttribute("trainerToUpdate", trainerFacade.getTrainerWithId(id));
         return "trainer/rename";
     }
 

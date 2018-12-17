@@ -36,14 +36,27 @@
             <th><fmt:message key="trainer.admin"/></th>
             <td><c:out value="${trainer.admin}"/></td>
         </tr>
-        <tr>
-            <th><fmt:message key="trainer.pokemons"/></th>
-            <td><c:out value="${pokemons}"/></td>
-        </tr>
         </tbody>
-    </table>
-    <my:extraTag href="/trainer/list" class="btn btn-default">
-        <fmt:message key="all.trainers"/>
+        </table>
+        <h3><fmt:message key="trainer.pokemons"/></h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <th><fmt:message key="trainer.pokemons.nickname"/></th>
+                <th><fmt:message key="trainer.pokemons.species"/></th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${pokemons}" var="pokemon">
+            <tr onclick="window.location='/pa165/pokemon/detail/${pokemon.id}'" style="cursor: pointer;">
+                <td><c:out value="${pokemon.nickname}"/></td>
+                <td><c:out value="${pokemon.species.speciesName}"/></td>
+            </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    <my:extraTag href="/badge/list?trainerId=${trainer.id}" class="btn btn-default">
+        <fmt:message key="trainer.badge"/>
     </my:extraTag>
 </jsp:attribute>
 </my:pagetemplate>
