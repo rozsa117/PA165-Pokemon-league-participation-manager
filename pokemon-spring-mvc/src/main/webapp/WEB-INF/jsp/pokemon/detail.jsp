@@ -15,26 +15,28 @@
 <my:pagetemplate title="${title}">
     <jsp:attribute name="body">
         <h1><fmt:message key="pokemon"/> ${pokemon.nickname}</h1>
-        <table class="table">
-            <tbody>
-                <tr>
-                    <th><fmt:message key="pokemon.level"/></th>
-                    <td><c:out value="${pokemon.level}"/></td>
-                </tr>
-                <tr onclick="window.location = '/pa165/pokemonSpecies/detail/${pokemon.species.id}'" style="cursor: pointer;">
-                    <th><fmt:message key="pokemon.species"/></th>
-                    <td><c:out value="${pokemon.species.speciesName}"/></td>
-                </tr>
-                <tr>
-                    <th><fmt:message key="pokemon.date.time.of.capture"/></th>
-                    <td> 
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <th><fmt:message key="pokemon.level"/></th>
+                        <td><c:out value="${pokemon.level}"/></td>
+                    </tr>
+                    <tr onclick="window.location = '/pa165/pokemonSpecies/detail/${pokemon.species.id}'" style="cursor: pointer;">
+                        <th><fmt:message key="pokemon.species"/></th>
+                        <td><c:out value="${pokemon.species.speciesName}"/></td>
+                    </tr>
+                    <tr>
+                        <th><fmt:message key="pokemon.date.time.of.capture"/></th>
+                        <td> 
                             <javatime:format value="${pokemon.dateTimeOfCapture}" style="MS"/>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-                        <my:extraTag href="/pokemon/list" class="btn btn-primary">
-        <fmt:message key="all.my.pokemons"/>
-    </my:extraTag>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <my:extraTag href="/pokemon/list" class="btn btn-primary">
+            <fmt:message key="all.my.pokemons"/>
+        </my:extraTag>
     </jsp:attribute>
 </my:pagetemplate>

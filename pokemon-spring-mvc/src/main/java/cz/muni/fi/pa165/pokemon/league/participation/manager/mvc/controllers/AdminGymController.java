@@ -59,7 +59,7 @@ public class AdminGymController {
         LOGGER.debug("mvc GET gym changeLeader({})", id);
         if (gym == null) {
             redirectAttributes.addFlashAttribute("alert_danger",
-                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exists"), I18n.getLocalizedMessageOrReturnKey("gym"), id));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("gym"), id));
             return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
         }
         model.addAttribute("gymToUpdate", gym);
@@ -164,7 +164,7 @@ public class AdminGymController {
             return "redirect:" + uriComponentsBuilder.path("/admin/pokemonSpecies/create").build().encode().toUriString();
         } catch (NoSuchEntityException ex) {
             redirectAttributes.addFlashAttribute("alert_warning",
-                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exists"), I18n.getLocalizedMessageOrReturnKey("trainer"), formBean.getGymLeaderID()));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("trainer"), formBean.getGymLeaderID()));
             return "redirect:" + uriComponentsBuilder.path("/admin/pokemonSpecies/create").build().encode().toUriString();
         }
         redirectAttributes.addFlashAttribute("alert_success",

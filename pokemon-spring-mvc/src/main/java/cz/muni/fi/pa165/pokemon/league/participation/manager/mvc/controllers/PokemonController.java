@@ -101,7 +101,7 @@ public class PokemonController {
 
         if (pokemon == null) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
-            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon"), id));
+            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exist"), messages.getString("pokemon"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
         }
 
@@ -166,7 +166,7 @@ public class PokemonController {
             pokemonFacade.evolvePokemon(pokemon);
         } catch (NoSuchEntityException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
-            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon"), id));
+            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exist"), messages.getString("pokemon"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
         } catch (InvalidPokemonEvolutionException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
@@ -201,7 +201,7 @@ public class PokemonController {
 
         if (pokemon == null) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
-            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon"), id));
+            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exist"), messages.getString("pokemon"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
         }
 
@@ -257,7 +257,7 @@ public class PokemonController {
             pokemonFacade.giftPokemon(pokemon);
         } catch (NoSuchEntityException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
-            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon"), id));
+            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exist"), messages.getString("pokemon"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
         } catch (InsufficientRightsException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
@@ -288,7 +288,7 @@ public class PokemonController {
 
         if (pokemon == null) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
-            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon"), id));
+            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exist"), messages.getString("pokemon"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
         }
 
@@ -337,7 +337,7 @@ public class PokemonController {
             pokemonFacade.levelUpPokemon(pokemon);
         } catch (NoSuchEntityException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
-            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon"), id));
+            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exist"), messages.getString("pokemon"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemon/list").build().encode().toUriString();
         } catch (InsufficientRightsException ex) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());

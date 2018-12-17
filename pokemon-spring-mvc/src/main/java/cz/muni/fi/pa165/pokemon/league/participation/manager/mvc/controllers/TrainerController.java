@@ -6,9 +6,9 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerRenameDT
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.PokemonFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.TrainerFacade;
+import java.text.MessageFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,7 +21,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import java.util.ResourceBundle;
 
 /**
  * Controller class for Trainer
@@ -33,7 +32,6 @@ import java.util.ResourceBundle;
 public class TrainerController {
 
     final static Logger log = LoggerFactory.getLogger(TrainerController.class);
-    ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
 
     @Inject
     TrainerFacade trainerFacade;
@@ -68,7 +66,8 @@ public class TrainerController {
         TrainerDTO trainerDTO = trainerFacade.getTrainerWithId(id);
 
         if (trainerDTO == null) {
-            redirectAttributes.addFlashAttribute("alert_danger", String.format(messages.getString("trainer.does.not.exists"), id));
+            redirectAttributes.addFlashAttribute("alert_danger",
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("trainer"), id));
             return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
         } else {
             model.addAttribute("trainer", trainerDTO);
@@ -77,7 +76,8 @@ public class TrainerController {
         try {
             model.addAttribute("pokemons", pokemonFacade.getPokemonOfTrainer(id));
         } catch (NoSuchEntityException ex) {
-            redirectAttributes.addFlashAttribute("alert_warning", String.format(messages.getString("entity.does.not.exists"), "Trainer", id));
+            redirectAttributes.addFlashAttribute("alert_warning",
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("trainer"), id));
             return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
         }
         
@@ -98,7 +98,8 @@ public class TrainerController {
         log.debug("mvc GET rename({})", id);
 
         if (trainerFacade.getTrainerWithId(id) == null) {
-            redirectAttributes.addFlashAttribute("alert_danger", String.format(messages.getString("trainer.does.not.exists"), id));
+            redirectAttributes.addFlashAttribute("alert_danger",
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("trainer"), id));
             return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
         }
 
@@ -126,7 +127,7 @@ public class TrainerController {
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
                 log.trace("ObjectError: {}", ge);
-                model.addAttribute("alert_warning", messages.getString(ge.getDefaultMessage()));
+                model.addAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey(ge.getDefaultMessage()));
             });
 
             bindingResult.getFieldErrors().forEach((fe) -> {
@@ -137,7 +138,8 @@ public class TrainerController {
         }
 
         trainerFacade.renameTrainer(formBean);
-        redirectAttributes.addFlashAttribute("alert_success", messages.getString("trainer.updated.successfully"));
+        redirectAttributes.addFlashAttribute("alert_success",
+                MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.successfully.updated"), I18n.getLocalizedMessageOrReturnKey("trainer")));
         return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
     }
 
@@ -155,7 +157,8 @@ public class TrainerController {
         log.debug("mvc GET changePassword({})", id);
 
         if (trainerFacade.getTrainerWithId(id) == null) {
-            redirectAttributes.addFlashAttribute("alert_danger", String.format(messages.getString("trainer.does.not.exists"), id));
+            redirectAttributes.addFlashAttribute("alert_danger",
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("trainer"), id));
             return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
         }
 
@@ -178,7 +181,7 @@ public class TrainerController {
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
                 log.trace("ObjectError: {}", ge);
-                model.addAttribute("alert_warning", messages.getString(ge.getDefaultMessage()));
+                model.addAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey(ge.getDefaultMessage()));
             });
 
             bindingResult.getFieldErrors().forEach((fe) -> {
@@ -189,11 +192,12 @@ public class TrainerController {
         }
 
         if (!trainerFacade.changePassword(formBean)) {
-            redirectAttributes.addFlashAttribute("alert_warning", messages.getString("trainer.wrong.old.password"));
+            redirectAttributes.addFlashAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey("trainer.wrong.old.password"));
             return "redirect:" + uriComponentsBuilder.path("/trainer/changePassword/" + formBean.getTrainerId()).build().encode().toUriString();
         }
 
-        redirectAttributes.addFlashAttribute("alert_success", messages.getString("trainer.updated.successfully"));
+        redirectAttributes.addFlashAttribute("alert_success",
+                MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.successfully.updated"), I18n.getLocalizedMessageOrReturnKey("trainer")));
         return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
     }
 }

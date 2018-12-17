@@ -56,7 +56,7 @@ public class PokemonSpeciesController {
         LOGGER.debug("mvc detail({})", id);
         if (pokemonSpeciesFacade.findPokemonSpeciesById(id) == null) {
             ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
-            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exists"), messages.getString("pokemon.species.singular"), id));
+            redirectAttributes.addFlashAttribute("alert_danger", MessageFormat.format(messages.getString("entity.does.not.exist"), messages.getString("pokemon.species.singular"), id));
             return "redirect:" + uriComponentsBuilder.path("/pokemonSpecies/list").build().encode().toUriString();
         }
         model.addAttribute("pokemonSpecies", pokemonSpeciesFacade.findPokemonSpeciesById(id));
