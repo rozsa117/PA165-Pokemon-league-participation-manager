@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.controllers;
 
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerChangePasswordDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerRenameDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.PokemonFacade;
@@ -68,19 +69,22 @@ public class TrainerController {
                          RedirectAttributes redirectAttributes,
                          UriComponentsBuilder uriComponentsBuilder) {
         log.debug("mvc detail({})", id);
+        TrainerDTO trainerDTO = trainerFacade.getTrainerWithId(id);
 
-        if (trainerFacade.getTrainerWithId(id) == null) {
+        if (trainerDTO == null) {
             redirectAttributes.addFlashAttribute("alert_danger", String.format(messages.getString("trainer.does.not.exists"), id));
             return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
+        } else {
+            model.addAttribute("trainer", trainerDTO);
         }
 
-        model.addAttribute("trainer", trainerFacade.getTrainerWithId(id));
         try {
             model.addAttribute("pokemons", pokemonFacade.getPokemonOfTrainer(id));
         } catch (NoSuchEntityException ex) {
             redirectAttributes.addFlashAttribute("alert_warning", String.format(messages.getString("entity.does.not.exists"), "Trainer", id));
             return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
         }
+        
         return "trainer/detail";
     }
 

@@ -10,6 +10,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="javatime" uri="http://sargue.net/jsptags/time" %>
 <fmt:setBundle basename="Texts"/>
 <fmt:message var="title" key="trainer.trainers"/>
 <my:pagetemplate title="${title}">
@@ -32,7 +33,7 @@
                 <td><c:out value="${trainer.userName}"/></td>
                 <td><c:out value="${trainer.name}"/></td>
                 <td><c:out value="${trainer.surname}"/></td>
-                <td><my:localDate date="${trainer.born}" pattern="dd-MM-yyyy"/></td>
+                <td><javatime:format value="${trainer.born}" pattern="dd-MM-yyyy"/></td>
                 <td><c:out value="${trainer.admin}"/></td>
                 <c:set var="userId"><security:authentication property="principal.trainerId"/></c:set>                <security:authorize access="hasRole('ADMIN')">
                 <td>
