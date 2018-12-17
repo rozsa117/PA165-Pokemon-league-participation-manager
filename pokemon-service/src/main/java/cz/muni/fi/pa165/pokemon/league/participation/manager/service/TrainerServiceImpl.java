@@ -9,6 +9,7 @@ import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.time.LocalDate;
 import java.util.List;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -65,7 +66,7 @@ public class TrainerServiceImpl implements TrainerService {
     @Override
     public void renameTrainer(Trainer trainer, String newName, String newSurname) {
         trainer.setName(newName);
-        trainer.setName(newSurname);
+        trainer.setSurname(newSurname);
         daoUpdateTrainer(trainer);
     }
 

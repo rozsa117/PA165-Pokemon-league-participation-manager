@@ -1,9 +1,13 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dto;
 
+import org.springframework.data.jpa.repository.Temporal;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import static cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTOConstants.*;
 import java.time.LocalDate;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
 /**
@@ -30,6 +34,8 @@ public class TrainerCreateDTO {
     private String surname;
 
     @NotNull
+    @Past
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate born;
 
     @NotNull
