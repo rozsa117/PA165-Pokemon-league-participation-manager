@@ -31,7 +31,7 @@
         </tr>
         <tr>
             <th><fmt:message key="trainer.born"/></th>
-            <td><javatime:format value="${trainer.born}" pattern="dd-MM-yyyy"/></td>
+            <td><javatime:format value="${trainer.born}" /></td>
         </tr>
         <tr>
             <th><fmt:message key="trainer.admin"/></th>

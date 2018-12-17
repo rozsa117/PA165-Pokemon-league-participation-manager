@@ -33,7 +33,7 @@
                 <td><c:out value="${trainer.userName}"/></td>
                 <td><c:out value="${trainer.name}"/></td>
                 <td><c:out value="${trainer.surname}"/></td>
-                <td><javatime:format value="${trainer.born}" pattern="dd-MM-yyyy"/></td>
+                <td><javatime:format value="${trainer.born}" /></td>
                 <td><c:out value="${trainer.admin}"/></td>
                 <c:set var="userId"><security:authentication property="principal.trainerId"/></c:set>                <security:authorize access="hasRole('ADMIN')">
                 <td>
