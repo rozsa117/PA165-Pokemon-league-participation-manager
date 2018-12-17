@@ -75,7 +75,7 @@ public class PokemonController {
     public String detail(@PathVariable long id, Model model, RedirectAttributes ra) {
         PokemonDTO pokemon = pokemonFacade.findPokemonById(id);
         if (pokemon == null) {
-            ra.addAttribute("alert_warning", MessageFormat.format(I18n.getStringFromTextsBundle("entity.does.not.exist"), I18n.getStringFromTextsBundle("gym"), id));
+            ra.addAttribute("alert_warning", MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("gym"), id));
             return "pokemon/list";
         }
         model.addAttribute("pokemon", pokemon);
