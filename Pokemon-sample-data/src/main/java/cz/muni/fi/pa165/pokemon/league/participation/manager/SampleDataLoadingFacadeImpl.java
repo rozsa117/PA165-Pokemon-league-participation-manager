@@ -76,9 +76,9 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
                 .speciesName("Onix")
                 .build();
         
-        PokemonSpecies staryoSpecies = new PokemonSpeciesBuilder()
+        PokemonSpecies staryuSpecies = new PokemonSpeciesBuilder()
                 .primaryType(PokemonType.WATER)
-                .speciesName("Staryo")
+                .speciesName("Staryu")
                 .build();
         
         PokemonSpecies bulbassaurSpecies = new PokemonSpeciesBuilder()
@@ -89,7 +89,7 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
         pokemonSpeciesService.createPokemonSpecies(pikachuSpecies);
         pokemonSpeciesService.createPokemonSpecies(raichuSpecies);
         pokemonSpeciesService.createPokemonSpecies(onixSpecies);
-        pokemonSpeciesService.createPokemonSpecies(staryoSpecies);
+        pokemonSpeciesService.createPokemonSpecies(staryuSpecies);
         pokemonSpeciesService.createPokemonSpecies(bulbassaurSpecies);
         
         Trainer ashTrainer = new TrainerBuilder()
@@ -144,18 +144,18 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
                 .trainer(brockTrainer)
                 .build();
         
-        Pokemon staryouPokemon = new PokemonBuilder()
+        Pokemon staryuPokemon = new PokemonBuilder()
                 .dateTimeOfCapture(LocalDateTime.of(2017, Month.OCTOBER, 15, 0, 0))
                 .level(100)
-                .nickname("Staryou")
-                .pokemonSpecies(staryoSpecies)
+                .nickname("Staryu")
+                .pokemonSpecies(staryuSpecies)
                 .trainer(mistyTrainer)
                 .build();
         
         pokemonService.createPokemon(pikachuPokemon);
         pokemonService.createPokemon(raichuPokemon);
         pokemonService.createPokemon(onixPokemon);
-        pokemonService.createPokemon(staryouPokemon);
+        pokemonService.createPokemon(staryuPokemon);
         
         Gym vermilionGym = new GymBuilder()
                 .gymLeader(ashTrainer)
