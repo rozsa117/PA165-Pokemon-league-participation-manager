@@ -29,7 +29,7 @@
                 <table>
                     <tr>
                         <td><f:message key="user.name"/>:</td>
-                        <td><input type='text' name='username' value=''></td>
+                        <td><input type='text' name='username' value='' autofocus></td>
                     </tr>
                     <tr>
                         <td><f:message key="password"/>:</td>

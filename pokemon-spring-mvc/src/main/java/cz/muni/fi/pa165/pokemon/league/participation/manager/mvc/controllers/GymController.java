@@ -93,7 +93,7 @@ public class GymController {
         GymDTO gym = gymFacade.findGymById(id);
         if (gym == null) {
             redirectAttributes.addFlashAttribute("alert_danger",
-                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exists"), I18n.getLocalizedMessageOrReturnKey("gym"), id));
+                    MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("gym"), id));
             return "redirect:" + uriComponentsBuilder.path("/gym/list").build().encode().toUriString();
         }
         Long userId = ((TrainerIdUserDetails) authentication.getPrincipal()).getTrainerId();
