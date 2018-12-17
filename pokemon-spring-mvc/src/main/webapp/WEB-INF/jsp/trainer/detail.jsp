@@ -8,6 +8,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="javatime" uri="http://sargue.net/jsptags/time" %>
 <fmt:setBundle basename="Texts"/>
 <fmt:message var="title" key="trainer"/>
 <my:pagetemplate title="${title}">
@@ -30,7 +31,7 @@
         </tr>
         <tr>
             <th><fmt:message key="trainer.born"/></th>
-            <td><my:localDate date="${trainer.born}" pattern="dd-MM-yyyy"/></td>
+            <td><javatime:format value="${trainer.born}" pattern="dd-MM-yyyy"/></td>
         </tr>
         <tr>
             <th><fmt:message key="trainer.admin"/></th>
