@@ -160,6 +160,12 @@ public class TrainerFacadeTest {
         when(mockTrainerService.changePassword(trainer, PASSWD, PASSWD + PASSWD))
                 .thenReturn(true);
 
+        when(mockTrainerService.findTrainerByUsername(trainer.getUserName()))
+                .thenReturn(trainer);
+
+        when(mockTrainerService.findTrainerByUsername(admin.getUserName()))
+                .thenReturn(admin);
+
         when(mockMappingService.mapTo(admin, TrainerDTO.class))
                 .thenReturn(adminDTO);
         when(mockMappingService.mapTo(trainer, TrainerDTO.class))
@@ -241,4 +247,13 @@ public class TrainerFacadeTest {
         verify(mockTrainerService, atLeastOnce()).changePassword(trainer, PASSWD, PASSWD + PASSWD);
     }
 
+    @Test
+    public void testFindTrainerByUsername() {
+        assertThat(trainerFacade.findTrainerByUsername(trainerDTO.getUserName()))
+                .isEqualToComparingFieldByField(trainerDTO);
+        verify(mockTrainerService, atLeastOnce()).findTrainerByUsername(trainerDTO.getUserName());
+        assertThat(trainerFacade.findTrainerByUsername(adminDTO.getUserName()))
+                .isEqualToComparingFieldByField(adminDTO);
+        verify(mockTrainerService, atLeastOnce()).findTrainerByUsername(adminDTO.getUserName());
+    }
 }

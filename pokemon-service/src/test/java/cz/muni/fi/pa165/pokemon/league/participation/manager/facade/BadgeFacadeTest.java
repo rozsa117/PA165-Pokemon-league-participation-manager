@@ -7,12 +7,14 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeCreateDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.BadgeStatusChangeDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.GymDTO;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.builders.BadgeDTOBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.builders.GymDTOBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.builders.TrainerDTOBuilder;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Badge;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Gym;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Pokemon;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.entities.Trainer;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.ChallengeStatus;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
@@ -26,6 +28,8 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.service.GymService;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.service.TrainerService;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Arrays;
+import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import org.junit.Before;
@@ -146,9 +150,9 @@ public class BadgeFacadeTest {
                 .status(ChallengeStatus.LOST)
                 .trainer(ashEntity)
                 .build();
-        
+
         revoke.setBadgeId(badgeDTO.getId());
-        revoke.setTrainerId(gymLeaderDTO.getId());
+        revoke.setRequestingTrainerId(gymLeaderDTO.getId());
     }
     
     @Before
@@ -213,14 +217,14 @@ public class BadgeFacadeTest {
     
     @Test
     public void testWinBadge() throws InsufficientRightsException, InvalidChallengeStatusChangeException {
-        badgeFacade.wonBadge(revoke);
+        badgeFacade.winBadge(revoke);
         verify(badgeService, atLeastOnce()).changeBadgeStatus(badgeEntity, ChallengeStatus.WON);
     }
     
     @Test
     public void testInsufficientRightsException() {
         BadgeStatusChangeDTO exception = revoke;
-        exception.setTrainerId(ashDTO.getId());
+        exception.setRequestingTrainerId(ashDTO.getId());
         assertThatExceptionOfType(InsufficientRightsException.class).isThrownBy(() -> badgeFacade.revokeBadge(exception));
     }
     
@@ -228,7 +232,7 @@ public class BadgeFacadeTest {
     public void testReopenChallenge() throws InsufficientRightsException, NoSuchEntityException, InvalidChallengeStatusChangeException {
         badgeEntity.setStatus(ChallengeStatus.LOST);
         BadgeStatusChangeDTO reopen = revoke;
-        reopen.setTrainerId(ashDTO.getId());
+        reopen.setRequestingTrainerId(ashDTO.getId());
         badgeFacade.reopenChallenge(reopen);
         verify(badgeService, atLeastOnce()).changeBadgeStatus(badgeEntity, ChallengeStatus.WAITING_TO_ACCEPT);
     }
@@ -240,4 +244,29 @@ public class BadgeFacadeTest {
                 .isThrownBy(() -> badgeFacade.reopenChallenge(reopen));
     }
 
+    @Test
+    public void testGetBadgesOfTrainer() throws NoSuchEntityException {
+
+        List<Badge> badgeEntities = Arrays.asList(new Badge[] {badgeEntity});
+        List<BadgeDTO> badgeDTOs = Arrays.asList(new BadgeDTO[] {badgeDTO});
+        when(badgeService.findBadgesOfTrainer(ashEntity)).thenReturn(badgeEntities);
+        when(beanMappingService.mapTo(badgeEntities, BadgeDTO.class)).thenReturn(badgeDTOs);
+        List<BadgeDTO> result = badgeFacade.findBadgesOfTrainer(ashDTO.getId());
+        assertThat(badgeFacade.findBadgesOfTrainer(ashDTO.getId()))
+                .usingFieldByFieldElementComparator().containsOnly(badgeDTO);
+    }
+    
+    @Test
+    public void testGetBadgesOfGym() throws NoSuchEntityException {
+
+        List<Badge> badgeEntities = Arrays.asList(new Badge[] {badgeEntity});
+        List<BadgeDTO> badgeDTOs = Arrays.asList(new BadgeDTO[] {badgeDTO});
+        when(badgeService.findBadgesOfGym(gymEntity)).thenReturn(badgeEntities);
+        when(beanMappingService.mapTo(badgeEntities, BadgeDTO.class)).thenReturn(badgeDTOs);
+        List<BadgeDTO> result = badgeFacade.findBadgesOfGym(gymDTO.getId());
+        assertThat(badgeFacade.findBadgesOfGym(gymDTO.getId()))
+                .usingFieldByFieldElementComparator().containsOnly(badgeDTO);
+    }
+
+    
 }

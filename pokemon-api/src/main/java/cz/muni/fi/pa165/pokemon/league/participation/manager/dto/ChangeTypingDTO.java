@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.deserializers.PokemonTypeEnumDeserializer;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.validation.DifferingPokemonTypes;
@@ -17,8 +19,10 @@ public class ChangeTypingDTO {
     private Long id;
 
     @NotNull
+    @JsonDeserialize(using = PokemonTypeEnumDeserializer.class)
     private PokemonType primaryType;
 
+    @JsonDeserialize(using = PokemonTypeEnumDeserializer.class)
     private PokemonType secondaryType;
 
     public Long getId() {

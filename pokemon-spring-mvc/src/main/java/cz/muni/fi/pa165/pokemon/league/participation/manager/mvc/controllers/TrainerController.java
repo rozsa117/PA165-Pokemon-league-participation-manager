@@ -1,13 +1,11 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.controllers;
 
-import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.PokemonDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerChangePasswordDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.dto.TrainerRenameDTO;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.exceptions.NoSuchEntityException;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.PokemonFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.TrainerFacade;
-import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -23,8 +21,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -199,15 +195,5 @@ public class TrainerController {
 
         redirectAttributes.addFlashAttribute("alert_success", messages.getString("trainer.updated.successfully"));
         return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
-    }
-
-    private List<Pair<String, String>> getPokemons(List<PokemonDTO> pokemons) {
-        List<Pair<String, String>> output = new ArrayList<>();
-
-        for (PokemonDTO pokemon : pokemons) {
-            output.add(new Pair<>(pokemon.getNickname(), pokemon.getSpecies().getSpeciesName()));
-        }
-
-        return output;
     }
 }

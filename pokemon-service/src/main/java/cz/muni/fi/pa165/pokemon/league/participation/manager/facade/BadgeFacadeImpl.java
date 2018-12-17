@@ -83,19 +83,19 @@ public class BadgeFacadeImpl implements BadgeFacade {
     @Override
     public void revokeBadge(@Valid BadgeStatusChangeDTO badge)
             throws InsufficientRightsException, InvalidChallengeStatusChangeException  {
-        updateBadgeStatus(badge.getTrainerId(), badge, ChallengeStatus.REVOKED);
+        updateBadgeStatus(badge.getRequestingTrainerId(), badge, ChallengeStatus.REVOKED);
     }
 
     @Override
     public void loseBadge(@Valid BadgeStatusChangeDTO badge)
             throws InsufficientRightsException, InvalidChallengeStatusChangeException  {
-        updateBadgeStatus(badge.getTrainerId(), badge, ChallengeStatus.LOST);
+        updateBadgeStatus(badge.getRequestingTrainerId(), badge, ChallengeStatus.LOST);
     }
 
     @Override
-    public void wonBadge(BadgeStatusChangeDTO badge)
+    public void winBadge(BadgeStatusChangeDTO badge)
             throws InsufficientRightsException, InvalidChallengeStatusChangeException {
-        updateBadgeStatus(badge.getTrainerId(), badge, ChallengeStatus.WON);
+        updateBadgeStatus(badge.getRequestingTrainerId(), badge, ChallengeStatus.WON);
     }
     
     @Override
@@ -105,8 +105,8 @@ public class BadgeFacadeImpl implements BadgeFacade {
         if (badgeEntity == null) {
             throw new NoSuchEntityException("The requested badge doesn't exist");
         }
-        if (!badgeEntity.getTrainer().getId().equals(badge.getTrainerId())) {
-            throw new InsufficientRightsException("Trainer " + badge.getTrainerId() 
+        if (!badgeEntity.getTrainer().getId().equals(badge.getRequestingTrainerId())) {
+            throw new InsufficientRightsException("Trainer " + badge.getRequestingTrainerId() 
                     + " tried to reopen badge challenge not belonging to him");
         }
 

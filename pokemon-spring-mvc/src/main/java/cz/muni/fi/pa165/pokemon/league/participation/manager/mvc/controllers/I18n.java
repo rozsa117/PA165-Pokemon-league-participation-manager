@@ -14,11 +14,11 @@ public class I18n {
      * Get the string corresponding to given key in spring locale context's locale.
      * 
      * @param key Key whose string should be retrieved.
-     * @return The retrieved string.
+     * @return The retrieved string, if that is null, return the key.
      */
-    public static String getStringFromTextsBundle(String key) {
-        return ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale())
-                .getString(key);
+    public static String getLocalizedMessageOrReturnKey(String key) {
+        ResourceBundle messages = ResourceBundle.getBundle("Texts", LocaleContextHolder.getLocale());
+        return messages.containsKey(key) ? messages.getString(key) : key;
     }
 
 }

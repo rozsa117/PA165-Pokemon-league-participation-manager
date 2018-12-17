@@ -13,21 +13,20 @@ import javax.validation.constraints.NotNull;
 public class LevelUpPokemonDTO {
 
     @NotNull
-    private Long pokemonId;
+    private Long id;
 
-    @NotNull
     private Long requestingTrainerId;
 
     @Min(1)
     @Max(100)
-    private int newLevel;
+    private int level;
 
-    public Long getPokemonId() {
-        return pokemonId;
+    public Long getId() {
+        return id;
     }
 
-    public void setPokemonId(Long pokemonId) {
-        this.pokemonId = pokemonId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getRequestingTrainerId() {
@@ -38,20 +37,20 @@ public class LevelUpPokemonDTO {
         this.requestingTrainerId = requestingTrainerId;
     }
 
-    public int getNewLevel() {
-        return newLevel;
+    public int getLevel() {
+        return level;
     }
 
-    public void setNewLevel(int newLevel) {
-        this.newLevel = newLevel;
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 41 * hash + Objects.hashCode(this.pokemonId);
+        hash = 41 * hash + Objects.hashCode(this.id);
         hash = 41 * hash + Objects.hashCode(this.requestingTrainerId);
-        hash = 41 * hash + this.newLevel;
+        hash = 41 * hash + this.level;
         return hash;
     }
 
@@ -67,10 +66,10 @@ public class LevelUpPokemonDTO {
             return false;
         }
         final LevelUpPokemonDTO other = (LevelUpPokemonDTO) obj;
-        if (this.newLevel != other.newLevel) {
+        if (this.level != other.level) {
             return false;
         }
-        if (!Objects.equals(this.pokemonId, other.pokemonId)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return Objects.equals(this.requestingTrainerId, other.requestingTrainerId);
@@ -78,7 +77,7 @@ public class LevelUpPokemonDTO {
 
     @Override
     public String toString() {
-        return "LevelUpPokemonDTO{" + "pokemonId=" + pokemonId + ", trainersId=" + requestingTrainerId + ", newLevel=" + newLevel + '}';
+        return "LevelUpPokemonDTO{" + "id=" + id + ", requestingTrainersId=" + requestingTrainerId + ", level=" + level + '}';
     }
 
 }

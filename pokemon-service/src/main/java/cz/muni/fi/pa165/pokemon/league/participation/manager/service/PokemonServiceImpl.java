@@ -35,8 +35,8 @@ public class PokemonServiceImpl implements PokemonService {
 
     @Override
     public void increasePokemonLevel(Pokemon pokemon, int to) throws LevelNotIncreasedException {
-        if (to < pokemon.getLevel()) {
-            throw new LevelNotIncreasedException("The new level is lower than the current level of the Pokemon");
+        if (to <= pokemon.getLevel()) {
+            throw new LevelNotIncreasedException("The new level is lower or equal than the current level of the Pokemon");
         }
         pokemon.setLevel(to);
         daoUpdatePokemon(pokemon);

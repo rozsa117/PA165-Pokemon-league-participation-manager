@@ -1,8 +1,11 @@
 package cz.muni.fi.pa165.pokemon.league.participation.manager.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.PokemonType;
+import cz.muni.fi.pa165.pokemon.league.participation.manager.enums.deserializers.PokemonTypeEnumDeserializer;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * DTO for gym creation requests.
@@ -12,9 +15,10 @@ import javax.validation.constraints.NotNull;
 public class GymCreateDTO {
     
     @NotNull
+    @Size(min = 1, max = 50)
     private String location;
     
-    @NotNull
+    @JsonDeserialize(using = PokemonTypeEnumDeserializer.class)
     private PokemonType type;
 
     @NotNull

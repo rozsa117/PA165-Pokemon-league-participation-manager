@@ -104,9 +104,9 @@ public class PokemonFacadeImpl implements PokemonFacade {
     public void levelUpPokemon(LevelUpPokemonDTO newLevel)
             throws LevelNotIncreasedException, InsufficientRightsException, NoSuchEntityException {
         Trainer trainer = trainerService.getTrainerWithId(newLevel.getRequestingTrainerId());
-        Pokemon pokemon = getNonNullPokemon(newLevel.getPokemonId());
+        Pokemon pokemon = getNonNullPokemon(newLevel.getId());
         authorizeTrainer(trainer, pokemon);
-        pokemonService.increasePokemonLevel(pokemon, newLevel.getNewLevel());
+        pokemonService.increasePokemonLevel(pokemon, newLevel.getLevel());
     }
 
     @Override
@@ -117,7 +117,7 @@ public class PokemonFacadeImpl implements PokemonFacade {
         if (species == null) {
             throw new NoSuchEntityException("No Pokemon species of id " + chosenEvolution.getNewSpeciesId() + " exists");
         }
-        Pokemon pokemon = getNonNullPokemon(chosenEvolution.getPokemonId());
+        Pokemon pokemon = getNonNullPokemon(chosenEvolution.getId());
         authorizeTrainer(trainer, pokemon);
         pokemonService.evolvePokemon(pokemon, species);
     }
@@ -130,7 +130,7 @@ public class PokemonFacadeImpl implements PokemonFacade {
         if (giftedTrainer == null) {
             throw new NoSuchEntityException("No trainer of gifted trainer id " + gift.getGiftedTrainerId() + " exists");
         }
-        Pokemon pokemon = getNonNullPokemon(gift.getPokemonId());
+        Pokemon pokemon = getNonNullPokemon(gift.getId());
         authorizeTrainer(trainer, pokemon);
         pokemonService.giftPokemon(pokemon, giftedTrainer);
     }

@@ -27,8 +27,9 @@ public interface GymFacade {
      * 
      * @param gym DTO of gym to create.
      * @throws EntityIsUsedException in case the gym already exists.
+     * @throws NoSuchEntityException when selected trainer doesn't exist.
      */
-    public Long createGym(@Valid GymCreateDTO gym) throws EntityIsUsedException;
+    public Long createGym(@Valid GymCreateDTO gym) throws EntityIsUsedException, NoSuchEntityException;
     
     /**
      * Updates the location of an existing gym.
@@ -47,9 +48,10 @@ public interface GymFacade {
     /**
      * Changes the leader of an existing gym.
      * @param gym DTO of gym to be updated.
-     * @throws EntityIsUsedException when entity is in use
+     * @throws EntityIsUsedException when trainer is leader in another gym.
+     * @throws NoSuchEntityException when given gym or it's selected leader doesn't exist.
      */
-    public void changeGymLeader(@Valid ChangeGymLeaderDTO gym) throws EntityIsUsedException;
+    public void changeGymLeader(@Valid ChangeGymLeaderDTO gym) throws EntityIsUsedException, NoSuchEntityException;
     
     /**
      * Removes an existing gym.

@@ -7,11 +7,11 @@ import javax.servlet.Filter;
 
 /**
  * Replaces web.xml file.
- * 
+ *
  * @author Tamás Rózsa 445653
  */
-public class StartInitializer extends AbstractAnnotationConfigDispatcherServletInitializer{
-    
+public class StartInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class<?>[]{SpringMvcConfig.class, SecurityConfig.class};

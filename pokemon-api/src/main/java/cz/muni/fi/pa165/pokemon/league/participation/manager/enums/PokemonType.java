@@ -7,23 +7,23 @@ package cz.muni.fi.pa165.pokemon.league.participation.manager.enums;
  */
 public enum PokemonType {
     
-    GRASS,
+    NORMAL,
+    FIGHTING,
+    FLYING,
     POISON,
+    GROUND,
+    ROCK,
+    BUG,
+    GHOST,
+    STEEL,
     FIRE,
     WATER,
-    FLYING,
-    DRAGON,
-    BUG,
+    GRASS,
     ELECTRIC,
-    GROUND,
-    FIGHTING,
     PSYCHIC,
-    ROCK,
-    GHOST,
-    NORMAL,
     ICE,
+    DRAGON,
     DARK,
-    STEEL,
     FAIRY
     
 }
