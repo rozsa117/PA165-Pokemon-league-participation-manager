@@ -15,7 +15,6 @@ import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.PokemonFacad
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.PokemonSpeciesFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.facade.TrainerFacade;
 import cz.muni.fi.pa165.pokemon.league.participation.manager.mvc.security.TrainerIdContainingUser;
-import java.security.Principal;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Objects;

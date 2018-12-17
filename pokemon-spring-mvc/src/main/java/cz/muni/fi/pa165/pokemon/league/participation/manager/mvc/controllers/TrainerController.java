@@ -31,7 +31,7 @@ import javax.validation.Valid;
 @RequestMapping("/trainer")
 public class TrainerController {
 
-    final static Logger log = LoggerFactory.getLogger(TrainerController.class);
+    final static Logger LOGGER = LoggerFactory.getLogger(TrainerController.class);
 
     @Inject
     TrainerFacade trainerFacade;
@@ -46,7 +46,7 @@ public class TrainerController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
-        log.debug("mvc list()");
+        LOGGER.debug("mvc list()");
         model.addAttribute("allTrainers", trainerFacade.getAllTrainers());
         return "trainer/list";
     }
@@ -62,7 +62,7 @@ public class TrainerController {
                          Model model,
                          RedirectAttributes redirectAttributes,
                          UriComponentsBuilder uriComponentsBuilder) {
-        log.debug("mvc detail({})", id);
+        LOGGER.debug("mvc detail({})", id);
         TrainerDTO trainerDTO = trainerFacade.getTrainerWithId(id);
 
         if (trainerDTO == null) {
@@ -95,7 +95,7 @@ public class TrainerController {
                          Model model,
                          RedirectAttributes redirectAttributes,
                          UriComponentsBuilder uriComponentsBuilder) {
-        log.debug("mvc GET rename({})", id);
+        LOGGER.debug("mvc GET rename({})", id);
 
         if (trainerFacade.getTrainerWithId(id) == null) {
             redirectAttributes.addFlashAttribute("alert_danger",
@@ -121,17 +121,17 @@ public class TrainerController {
                          RedirectAttributes redirectAttributes,
                          UriComponentsBuilder uriComponentsBuilder,
                          @PathVariable long id) {
-        log.debug("mvc POST rename({})", id);
+        LOGGER.debug("mvc POST rename({})", id);
         formBean.setTrainerId(id);
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
-                log.trace("ObjectError: {}", ge);
+                LOGGER.trace("ObjectError: {}", ge);
                 model.addAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey(ge.getDefaultMessage()));
             });
 
             bindingResult.getFieldErrors().forEach((fe) -> {
-                log.trace(fe.getField() + "_error", true);
+                LOGGER.trace(fe.getField() + "_error", true);
             });
 
             return "trainer/rename";
@@ -154,7 +154,7 @@ public class TrainerController {
                                  Model model,
                                  RedirectAttributes redirectAttributes,
                                  UriComponentsBuilder uriComponentsBuilder) {
-        log.debug("mvc GET changePassword({})", id);
+        LOGGER.debug("mvc GET changePassword({})", id);
 
         if (trainerFacade.getTrainerWithId(id) == null) {
             redirectAttributes.addFlashAttribute("alert_danger",
@@ -175,17 +175,17 @@ public class TrainerController {
                                  RedirectAttributes redirectAttributes,
                                  UriComponentsBuilder uriComponentsBuilder,
                                  @PathVariable long id) {
-        log.debug("mvc POST changePassword({})", id);
+        LOGGER.debug("mvc POST changePassword({})", id);
         formBean.setTrainerId(id);
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
-                log.trace("ObjectError: {}", ge);
+                LOGGER.trace("ObjectError: {}", ge);
                 model.addAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey(ge.getDefaultMessage()));
             });
 
             bindingResult.getFieldErrors().forEach((fe) -> {
-                log.trace(fe.getField() + "_error", true);
+                LOGGER.trace(fe.getField() + "_error", true);
             });
 
             return "trainer/changePassword";
