@@ -12,7 +12,7 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="javatime" uri="http://sargue.net/jsptags/time" %>
 <fmt:setBundle basename="Texts"/>
-<fmt:message var="title" key="ttrainers"/>
+<fmt:message var="title" key="trainers"/>
 <my:pagetemplate title="${title}">
     <jsp:attribute name="body">
         <h1><fmt:message key="trainer"/> ${trainer.userName}</h1>
@@ -35,9 +35,19 @@
                             <td><c:out value="${trainer.name}"/></td>
                             <td><c:out value="${trainer.surname}"/></td>
                             <td><javatime:format value="${trainer.born}" /></td>
-                            <td><c:out value="${trainer.admin}"/></td>
-                            <c:set var="userId"><security:authentication property="principal.trainerId"/></c:set>                <security:authorize access="hasRole('ADMIN')">
-                                <td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${trainer.admin}">
+                                        <fmt:message key="trainer.admin.true"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <fmt:message key="trainer.admin.false"/>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <c:set var="userId"><security:authentication property="principal.trainerId"/></c:set>
+                                <security:authorize access="hasRole('ADMIN')">
                                     <c:choose>
                                         <c:when test="${trainer.admin}">
                                             <my:extraTag href="/admin/trainer/unsetAdmin/${trainer.id}" class='btn btn-primary'>
@@ -52,22 +62,18 @@
                                             </my:extraTag>
                                         </c:otherwise>
                                     </c:choose>
-                                </td>
-                            </security:authorize>
-                            <c:if test="${trainer.id==userId}">
-                                <td>
+                                </security:authorize>
+                                <c:if test="${trainer.id==userId}">
                                     <my:extraTag href="/trainer/rename/${trainer.id}" class='btn btn-primary'>
                                         <span class="glyphicon glyphicon-edit"></span>
                                         <fmt:message key="trainer.rename"/>
                                     </my:extraTag>
-                                </td>
-                                <td>
                                     <my:extraTag href="/trainer/changePassword/${trainer.id}" class='btn btn-primary'>
                                         <span class="glyphicon glyphicon-edit"></span>
                                         <fmt:message key="trainer.changePassword"/>
                                     </my:extraTag>
-                                </td>
-                            </c:if>
+                                </c:if>
+                            </td>
                         </tr>
                     </c:forEach>
                 </tbody>
