@@ -21,7 +21,7 @@ public interface TrainerService {
      * @return new trainer id
      * @throws NoAdministratorException when there is not a single administrator
      */
-    public Trainer createTrainer(Trainer trainer, String password) throws NoAdministratorException;
+    Trainer createTrainer(Trainer trainer, String password) throws NoAdministratorException;
 
     /**
      * Renames trainer
@@ -30,14 +30,14 @@ public interface TrainerService {
      * @param newName New name
      * @param newSurname New Surname
      */
-    public void renameTrainer(Trainer trainer, String newName, String newSurname);
+    void renameTrainer(Trainer trainer, String newName, String newSurname);
 
     /**
      * Get list of all trainers
      * 
      * @return list of all trainers
      */
-    public List<Trainer> getAllTrainers();
+    List<Trainer> getAllTrainers();
 
     /**
      * Find trainer by Id.
@@ -45,7 +45,7 @@ public interface TrainerService {
      * @param id The id of the trainer to find.
      * @return The found trainer.
      */
-    public Trainer getTrainerWithId(Long id);
+    Trainer getTrainerWithId(Long id);
 
     /**
      * Autenticate trainer with password
@@ -54,7 +54,7 @@ public interface TrainerService {
      * @param password Unencrypted password
      * @return true only if password matches stored hash
      */
-    public boolean authenticate(Trainer trainer, String password);
+    boolean authenticate(Trainer trainer, String password);
 
     /**
      * Is Gym Leader?
@@ -62,7 +62,7 @@ public interface TrainerService {
      * @param trainer Trainer
      * @return true only if the Trainer is a Gym Leader
      */
-    public boolean isGymLeader(Trainer trainer);
+    boolean isGymLeader(Trainer trainer);
     
     /**
      * Set admin flag
@@ -72,7 +72,7 @@ public interface TrainerService {
      * @throws NoAdministratorException when there is not a single admin after the
      * modification
      */
-    public void setAdmin(Trainer trainer, boolean admin) throws NoAdministratorException;
+    void setAdmin(Trainer trainer, boolean admin) throws NoAdministratorException;
     
     /**
      * Change trainer password
@@ -83,7 +83,7 @@ public interface TrainerService {
      * @return true if password was successfully updated, false if authentication
      * of old password failed
      */
-    public boolean changePassword(Trainer trainer, String oldPassword, String newPassword);
+    boolean changePassword(Trainer trainer, String oldPassword, String newPassword);
 
     /**
      * Find trainer with given username
@@ -91,6 +91,6 @@ public interface TrainerService {
      * @param username the username for which the trainer shall be found.
      * @return Found trainer, null if no such trainer exists.
      */
-    public Trainer findTrainerByUsername(String username);
+    Trainer findTrainerByUsername(String username);
 
 }

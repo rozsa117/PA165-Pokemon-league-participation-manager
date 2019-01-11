@@ -17,7 +17,7 @@ public interface BeanMappingService {
      * 
      * @return mapper 
      */
-    public Mapper getMapper(); 
+    Mapper getMapper(); 
 
     /**
      * Maps one object to the requested one.
@@ -27,7 +27,7 @@ public interface BeanMappingService {
      * @param mapToClass Class to map to.
      * @return The mapped class.
      */
-    public  <T> T mapTo(Object obj, Class<T> mapToClass);
+    <T> T mapTo(Object obj, Class<T> mapToClass);
     
     /**
      * Maps a list of objects to requested type.
@@ -37,5 +37,5 @@ public interface BeanMappingService {
      * @param mapToClass Class to map to.
      * @return Lost of mapped classes.
      */
-    public  <T> List<T> mapTo(Collection<?> objects, Class<T> mapToClass);
+    <T> List<T> mapTo(Collection<?> objects, Class<T> mapToClass);
 }
