@@ -34,9 +34,8 @@ public class Gym {
     @Column(nullable = false, unique = true)
     private String location;
 
-    @NotNull
     @Enumerated
-    @Column(nullable = false)
+    @Column(nullable = true)
     private PokemonType type;
 
     @NotNull

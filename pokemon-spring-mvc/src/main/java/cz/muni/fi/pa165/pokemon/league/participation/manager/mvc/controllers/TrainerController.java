@@ -80,7 +80,7 @@ public class TrainerController {
                     MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.does.not.exist"), I18n.getLocalizedMessageOrReturnKey("trainer"), id));
             return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
         }
-        
+
         return "trainer/detail";
     }
 
@@ -95,7 +95,7 @@ public class TrainerController {
                          Model model,
                          RedirectAttributes redirectAttributes,
                          UriComponentsBuilder uriComponentsBuilder) {
-        LOGGER.debug("mvc GET rename({})", id);
+        LOGGER.trace("mvc GET rename({})", id);
 
         if (trainerFacade.getTrainerWithId(id) == null) {
             redirectAttributes.addFlashAttribute("alert_danger",
@@ -121,8 +121,8 @@ public class TrainerController {
                          RedirectAttributes redirectAttributes,
                          UriComponentsBuilder uriComponentsBuilder,
                          @PathVariable long id) {
-        LOGGER.debug("mvc POST rename({})", id);
-        formBean.setTrainerId(id);
+        LOGGER.trace("mvc POST rename({})", id);
+        formBean.setId(id);
 
         if (bindingResult.hasErrors()) {
             bindingResult.getGlobalErrors().forEach((ge) -> {
@@ -130,10 +130,12 @@ public class TrainerController {
                 model.addAttribute("alert_warning", I18n.getLocalizedMessageOrReturnKey(ge.getDefaultMessage()));
             });
 
-            bindingResult.getFieldErrors().forEach((fe) -> {
+            bindingResult.getFieldErrors().stream().map((fe) -> {
+                model.addAttribute(fe.getField() + "_error", true);
+                return fe;
+            }).forEachOrdered((fe) -> {
                 LOGGER.trace(fe.getField() + "_error", true);
             });
-
             return "trainer/rename";
         }
 

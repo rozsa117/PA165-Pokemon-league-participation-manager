@@ -30,7 +30,7 @@ public class AdminTrainerController {
     private final static Logger LOGGER = LoggerFactory.getLogger(AdminTrainerController.class);
 
     @Inject
-    TrainerFacade trainerFacade;
+    private TrainerFacade trainerFacade;
 
     /**
      * Get Controller for creating new Trainer
@@ -104,6 +104,7 @@ public class AdminTrainerController {
 
         redirectAttributes.addFlashAttribute("alert_success",
                 MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.successfully.updated"), I18n.getLocalizedMessageOrReturnKey("trainer")));
+        redirectAttributes.addFlashAttribute("alert_info", I18n.getLocalizedMessageOrReturnKey("applies.after.next.login"));
         return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
     }
 
@@ -127,6 +128,7 @@ public class AdminTrainerController {
 
         redirectAttributes.addFlashAttribute("alert_success",
                 MessageFormat.format(I18n.getLocalizedMessageOrReturnKey("entity.successfully.updated"), I18n.getLocalizedMessageOrReturnKey("trainer")));
+        redirectAttributes.addFlashAttribute("alert_info", I18n.getLocalizedMessageOrReturnKey("applies.after.next.login"));
         return "redirect:" + uriComponentsBuilder.path("/trainer/list").build().encode().toUriString();
     }
 }
