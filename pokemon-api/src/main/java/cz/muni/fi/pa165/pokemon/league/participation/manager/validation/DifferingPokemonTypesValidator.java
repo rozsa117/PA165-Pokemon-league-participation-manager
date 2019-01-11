@@ -5,15 +5,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.Objects;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+/**
+ * Implementation of validator for DifferingPokemonTypes annotation.
+ * 
+ * @author Tibor Zauko 433531
+ */
 public class DifferingPokemonTypesValidator implements ConstraintValidator<DifferingPokemonTypes, Object> {
 
-    final static Logger log = LoggerFactory.getLogger(DifferingPokemonTypesValidator.class);
+    final static Logger LOGGER = LoggerFactory.getLogger(DifferingPokemonTypesValidator.class);
 
     private DifferingPokemonTypes annotation;
 
@@ -24,8 +28,8 @@ public class DifferingPokemonTypesValidator implements ConstraintValidator<Diffe
 
     @Override
     public boolean isValid(Object annotatedObject, ConstraintValidatorContext context) {
-        if (log.isDebugEnabled()) {
-            log.debug("Members to be validated: {}, {}", annotation.primaryTypeMember(), annotation.secondaryTypeMember());
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Members to be validated: {}, {}", annotation.primaryTypeMember(), annotation.secondaryTypeMember());
         }
 
         PokemonType prim = null, sec = null;
@@ -37,7 +41,7 @@ public class DifferingPokemonTypesValidator implements ConstraintValidator<Diffe
             if (PokemonType.class.isAssignableFrom(fPrim.getType())) {
                 prim = (PokemonType) fPrim.get(annotatedObject);
             } else {
-                log.debug("{} member is not a PokemonType or its subclass", annotation.primaryTypeMember());
+                LOGGER.debug("{} member is not a PokemonType or its subclass", annotation.primaryTypeMember());
                 throw new RuntimeException("Error while obtaining member "+ annotation.primaryTypeMember() + ": member is not of type PokemonType or its subclass");
             }
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
@@ -49,7 +53,7 @@ public class DifferingPokemonTypesValidator implements ConstraintValidator<Diffe
             if (PokemonType.class.isAssignableFrom(fSec.getType())) {
                 sec = (PokemonType) fSec.get(annotatedObject);
             } else {
-                log.debug("{} member is not a PokemonType or its subclass", annotation.secondaryTypeMember());
+                LOGGER.debug("{} member is not a PokemonType or its subclass", annotation.secondaryTypeMember());
                 throw new RuntimeException("Error while obtaining member "+ annotation.secondaryTypeMember() + ": member is not of type PokemonType or its subclass");
             }
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {

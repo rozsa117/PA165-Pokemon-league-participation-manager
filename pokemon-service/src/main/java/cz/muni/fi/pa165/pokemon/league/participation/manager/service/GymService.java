@@ -23,7 +23,7 @@ public interface GymService {
      * another Gym
      * @throws IllegalArgumentException in case the gym already exists.
      */
-    public void createGym(Gym gym) throws EntityIsUsedException;
+    void createGym(Gym gym) throws EntityIsUsedException;
 
     /**
      * Updates the location of an existing gym.
@@ -31,7 +31,7 @@ public interface GymService {
      * @param gym Gym to be updated.
      * @param newLocation new location of the gym.
      */
-    public void updateGymLocation(Gym gym, String newLocation);
+    void updateGymLocation(Gym gym, String newLocation);
 
     /**
      * Changes the type of an existing gym.
@@ -42,7 +42,7 @@ public interface GymService {
      * @throws InsufficientRightsException when other trainer than Gym Leader tries
      * to change Gym Type
      */
-    public void changeGymType(Gym gym, Trainer trainer, PokemonType newType)
+    void changeGymType(Gym gym, Trainer trainer, PokemonType newType)
             throws InsufficientRightsException;
 
     /**
@@ -53,7 +53,7 @@ public interface GymService {
      * @throws EntityIsUsedException when the newGymLeader is a GymLeader of
      * another Gym already
      */
-    public void changeGymLeader(Gym gym, Trainer newGymLeader) throws EntityIsUsedException;
+    void changeGymLeader(Gym gym, Trainer newGymLeader) throws EntityIsUsedException;
 
     /**
      * Removes an existing gym.
@@ -61,7 +61,7 @@ public interface GymService {
      * @param gym Gym to be removed.
      * @throws EntityIsUsedException when there is a badge for this Gym
      */
-    public void removeGym(Gym gym) throws EntityIsUsedException;
+    void removeGym(Gym gym) throws EntityIsUsedException;
 
     /**
      * Finds the gym with given id.
@@ -69,14 +69,14 @@ public interface GymService {
      * @param id Id of the gym.
      * @return Gym with the given id, null in case such gym does not exists.
      */
-    public Gym findGymById(Long id);
+    Gym findGymById(Long id);
 
     /**
      * Returns a list of all gyms.
      *
      * @return List of all gyms.
      */
-    public List<Gym> getAllGyms();
+    List<Gym> getAllGyms();
 
     /**
      * Gets the leader of the gym.
@@ -84,7 +84,7 @@ public interface GymService {
      * @param gym Gym to find the leader.
      * @return The leader of the gym.
      */
-    public Trainer getGymLeader(Gym gym);
+    Trainer getGymLeader(Gym gym);
 
     /**
      * Returns a list of all gyms with given type.
@@ -92,7 +92,7 @@ public interface GymService {
      * @param type The type of gym.
      * @return List of all gyms with given type.
      */
-    public List<Gym> findGymsByType(PokemonType type);
+    List<Gym> findGymsByType(PokemonType type);
 
     /**
      * Returns gym with the given leader.
@@ -100,7 +100,7 @@ public interface GymService {
      * @param trainer The leader of the gym.
      * @return The gym with the given trainer, null in case no such gym exists.
      */
-    public Gym findGymByLeader(Trainer trainer);
+    Gym findGymByLeader(Trainer trainer);
 
     /**
      * Returns a list containing all gyms, and where applicable a badge of the trainer from that gym.

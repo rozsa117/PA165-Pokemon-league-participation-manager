@@ -73,5 +73,5 @@ public interface PokemonService {
      * @param trainer Trainer to find pokemon of.
      * @return The list of all pokemon of trainer.
      */
-    public List<Pokemon> getPokemonOfTrainer(Trainer trainer);
+    List<Pokemon> getPokemonOfTrainer(Trainer trainer);
 }
