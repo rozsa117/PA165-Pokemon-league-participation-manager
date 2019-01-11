@@ -58,57 +58,126 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
     @Override
     public void loadData() throws EvolutionChainTooLongException, NoAdministratorException, EntityIsUsedException {
         log.debug("Loading sample data");
+        PokemonSpeciesBuilder familyBuilder = new PokemonSpeciesBuilder();
+        PokemonSpecies bulbasaur = familyBuilder
+                .primaryType(PokemonType.GRASS)
+                .secondaryType(PokemonType.POISON)
+                .speciesName("Bulbasaur")
+                .build();
+        PokemonSpecies ivysaur = familyBuilder
+                .speciesName("Ivysaur")
+                .evolvesFrom(bulbasaur)
+                .build();
+        PokemonSpecies venusaur = familyBuilder
+                .speciesName("Venusaur")
+                .evolvesFrom(ivysaur)
+                .build();
         
-        PokemonSpecies pikachuSpecies = new PokemonSpeciesBuilder()
+        familyBuilder = new PokemonSpeciesBuilder();
+        PokemonSpecies charmander = familyBuilder
+                .primaryType(PokemonType.FIRE)
+                .speciesName("Charmander")
+                .build();
+        PokemonSpecies charmeleon = familyBuilder
+                .speciesName("Charmeleon")
+                .evolvesFrom(charmander)
+                .build();
+        PokemonSpecies charizard = familyBuilder
+                .secondaryType(PokemonType.FLYING)
+                .speciesName("Charizard")
+                .evolvesFrom(charmeleon)
+                .build();
+        
+        familyBuilder = new PokemonSpeciesBuilder();
+        PokemonSpecies squirtle = familyBuilder
+                .primaryType(PokemonType.WATER)
+                .speciesName("Squirtle")
+                .build();
+        PokemonSpecies wartortle = familyBuilder
+                .speciesName("Wartortle")
+                .evolvesFrom(squirtle)
+                .build();
+        PokemonSpecies blastoise = familyBuilder
+                .speciesName("Blastoise")
+                .evolvesFrom(wartortle)
+                .build();
+        
+        PokemonSpecies pikachu = new PokemonSpeciesBuilder()
                 .primaryType(PokemonType.ELECTRIC)
                 .speciesName("Pikachu")
                 .build();
         
-        PokemonSpecies raichuSpecies = new PokemonSpeciesBuilder()
+        PokemonSpecies raichu = new PokemonSpeciesBuilder()
                 .primaryType(PokemonType.ELECTRIC)
                 .speciesName("Raichu")
-                .evolvesFrom(pikachuSpecies)
+                .evolvesFrom(pikachu)
                 .build();
         
-        PokemonSpecies onixSpecies = new PokemonSpeciesBuilder()
+        PokemonSpecies onix = new PokemonSpeciesBuilder()
                 .primaryType(PokemonType.GROUND)
                 .secondaryType(PokemonType.ROCK)
                 .speciesName("Onix")
                 .build();
         
-        PokemonSpecies staryuSpecies = new PokemonSpeciesBuilder()
+        PokemonSpecies staryu = new PokemonSpeciesBuilder()
                 .primaryType(PokemonType.WATER)
                 .speciesName("Staryu")
                 .build();
         
-        PokemonSpecies bulbassaurSpecies = new PokemonSpeciesBuilder()
-                .primaryType(PokemonType.GRASS)
-                .speciesName("Bulbasaur")
+        PokemonSpecies wingull = new PokemonSpeciesBuilder()
+                .primaryType(PokemonType.WATER)
+                .secondaryType(PokemonType.FLYING)
+                .speciesName("Wingull")
                 .build();
         
-        pokemonSpeciesService.createPokemonSpecies(pikachuSpecies);
-        pokemonSpeciesService.createPokemonSpecies(raichuSpecies);
-        pokemonSpeciesService.createPokemonSpecies(onixSpecies);
-        pokemonSpeciesService.createPokemonSpecies(staryuSpecies);
-        pokemonSpeciesService.createPokemonSpecies(bulbassaurSpecies);
+        pokemonSpeciesService.createPokemonSpecies(bulbasaur);
+        pokemonSpeciesService.createPokemonSpecies(ivysaur);
+        pokemonSpeciesService.createPokemonSpecies(venusaur);
+        pokemonSpeciesService.createPokemonSpecies(charmander);
+        pokemonSpeciesService.createPokemonSpecies(charmeleon);
+        pokemonSpeciesService.createPokemonSpecies(charizard);
+        pokemonSpeciesService.createPokemonSpecies(squirtle);
+        pokemonSpeciesService.createPokemonSpecies(wartortle);
+        pokemonSpeciesService.createPokemonSpecies(blastoise);
+        pokemonSpeciesService.createPokemonSpecies(pikachu);
+        pokemonSpeciesService.createPokemonSpecies(raichu);
+        pokemonSpeciesService.createPokemonSpecies(onix);
+        pokemonSpeciesService.createPokemonSpecies(staryu);
+        pokemonSpeciesService.createPokemonSpecies(wingull);
         
-        Trainer ashTrainer = new TrainerBuilder()
+        Trainer mrGoodshow = new TrainerBuilder()
+                .name("John")
+                .surname("Goodshow")
+                .born(LocalDate.of(1937, Month.MARCH, 5))
+                .isAdmin(true)
+                .userName("admin1")
+                .build();
+        
+        Trainer ash = new TrainerBuilder()
                 .name("Ash")
                 .surname("Ketchum")
                 .born(LocalDate.of(1998, Month.JANUARY, 11))
-                .isAdmin(true)
+                .isAdmin(false)
                 .userName("ash")
                 .build();
         
-        Trainer brockTrainer = new TrainerBuilder()
+        Trainer mrBriney = new TrainerBuilder()
+                .name("Quentin")
+                .surname("Briney")
+                .born(LocalDate.of(1967, Month.SEPTEMBER, 23))
+                .isAdmin(false)
+                .userName("briney")
+                .build();
+
+        Trainer brock = new TrainerBuilder()
                 .name("Brock")
-                .surname("Sleepyeye")
+                .surname("Takeshi")
                 .born(LocalDate.of(1999, Month.NOVEMBER, 27))
                 .isAdmin(false)
                 .userName("brock")
                 .build();
         
-        Trainer mistyTrainer = new TrainerBuilder()
+        Trainer misty = new TrainerBuilder()
                 .name("Misty")
                 .surname("Yawa")
                 .born(LocalDate.of(1999, Month.JUNE, 10))
@@ -116,40 +185,49 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
                 .userName("misty")
                 .build();
         
-        trainerService.createTrainer(ashTrainer, "ash123");
-        trainerService.createTrainer(brockTrainer, "brock123");
-        trainerService.createTrainer(mistyTrainer, "misty123");
+        trainerService.createTrainer(mrGoodshow, "admin1123");
+        trainerService.createTrainer(ash, "ash123");
+        trainerService.createTrainer(brock, "brock123");
+        trainerService.createTrainer(misty, "misty123");
         
         Pokemon pikachuPokemon = new PokemonBuilder()
                 .dateTimeOfCapture(LocalDateTime.of(2017, Month.MARCH, 7, 0, 0))
-                .level(50)
-                .nickname("Pika")
-                .pokemonSpecies(pikachuSpecies)
-                .trainer(ashTrainer)
+                .level(20)
+                .nickname("Pikachu")
+                .pokemonSpecies(pikachu)
+                .trainer(ash)
                 .build();
         
         Pokemon raichuPokemon = new PokemonBuilder()
                 .dateTimeOfCapture(LocalDateTime.of(2018, Month.APRIL, 8, 0, 0))
-                .level(100)
-                .nickname("Raichu")
-                .pokemonSpecies(raichuSpecies)
-                .trainer(ashTrainer)
+                .level(18)
+                .nickname("Bulbasaur")
+                .pokemonSpecies(bulbasaur)
+                .trainer(ash)
                 .build();
         
         Pokemon onixPokemon = new PokemonBuilder()
                 .dateTimeOfCapture(LocalDateTime.of(2016, Month.JULY, 20, 0, 0))
-                .level(75)
+                .level(50)
                 .nickname("Onix")
-                .pokemonSpecies(onixSpecies)
-                .trainer(brockTrainer)
+                .pokemonSpecies(onix)
+                .trainer(brock)
                 .build();
         
         Pokemon staryuPokemon = new PokemonBuilder()
                 .dateTimeOfCapture(LocalDateTime.of(2017, Month.OCTOBER, 15, 0, 0))
-                .level(100)
+                .level(45)
                 .nickname("Staryu")
-                .pokemonSpecies(staryuSpecies)
-                .trainer(mistyTrainer)
+                .pokemonSpecies(staryu)
+                .trainer(misty)
+                .build();
+        
+        Pokemon wingullPokemon = new PokemonBuilder()
+                .dateTimeOfCapture(LocalDateTime.of(2001, Month.OCTOBER, 15, 0, 0))
+                .level(24)
+                .nickname("Peeko")
+                .pokemonSpecies(wingull)
+                .trainer(mrBriney)
                 .build();
         
         pokemonService.createPokemon(pikachuPokemon);
@@ -157,25 +235,25 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
         pokemonService.createPokemon(onixPokemon);
         pokemonService.createPokemon(staryuPokemon);
         
-        Gym vermilionGym = new GymBuilder()
-                .gymLeader(ashTrainer)
-                .location("Vermilion")
-                .type(PokemonType.ELECTRIC)
+        Gym ceruleanGym = new GymBuilder()
+                .gymLeader(misty)
+                .location("Cerulean")
+                .type(PokemonType.WATER)
                 .build();
         
         Gym pewterGym = new GymBuilder()
-                .gymLeader(brockTrainer)
+                .gymLeader(brock)
                 .location("Pewter")
-                .type(PokemonType.GROUND)
+                .type(PokemonType.ROCK)
                 .build();
         
-        gymService.createGym(vermilionGym);
         gymService.createGym(pewterGym);
+        gymService.createGym(ceruleanGym);
         
         Badge badge = new BadgeBuilder()
                 .date(LocalDate.of(2018, Month.OCTOBER, 17))
                 .gym(pewterGym)
-                .trainer(ashTrainer)
+                .trainer(ash)
                 .status(ChallengeStatus.WON)
                 .build();
         

@@ -48,6 +48,7 @@
                 <fmt:message key="badge.rechallenge"/>
             </my:extraTag>
         </c:if>
+        <c:set var="userId"><security:authentication property="principal.trainerId"/></c:set>
         <c:if test="${gym.gymLeader.id eq userId}">
             <c:if test="${badge.status eq 'WAITING_TO_ACCEPT'}">
                 <my:extraTag href="/badge/takeChallenge/${badge.id}?challengeWon=true" class='btn btn-primary'>
