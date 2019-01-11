@@ -184,4 +184,16 @@ public class PokemonSpeciesServiceTest {
         assertThat(pokemonSpeciesService.getAllPokemonSpecies())
                 .containsOnly(pokemonSpeciesPichu, pokemonSpeciesPikachu, pokemonSpeciesRaichu);
     }
+    
+    @Test
+    public void getAllEvolutionsOfPokemonSpeciesTest() {
+        assertThat(pokemonSpeciesService.getAllEvolutionsOfPokemonSpecies(pokemonSpeciesPichu))
+                .isNotNull()
+                .containsExactly(pokemonSpeciesPikachu);
+        assertThat(pokemonSpeciesService.getAllEvolutionsOfPokemonSpecies(pokemonSpeciesRaichu))
+                .isNotNull()
+                .isEmpty();
+        assertThatExceptionOfType(DataAccessException.class)
+                .isThrownBy(() -> pokemonSpeciesService.getAllEvolutionsOfPokemonSpecies(exceptionalPokemonSpecies));
+    }
 }
