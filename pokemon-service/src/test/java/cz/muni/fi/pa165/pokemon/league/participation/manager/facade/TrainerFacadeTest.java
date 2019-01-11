@@ -89,7 +89,7 @@ public class TrainerFacadeTest {
         trainerRenameDTO = new TrainerRenameDTO();
         trainerRenameDTO.setName("Hash");
         trainerRenameDTO.setSurname("Ketchum");
-        trainerRenameDTO.setTrainerId(TRAINER_ID);
+        trainerRenameDTO.setId(TRAINER_ID);
 
         trainerAuthenticateDTO = new TrainerAuthenticateDTO();
         trainerAuthenticateDTO.setPassword(PASSWD);

@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
  */
 public class TrainerRenameDTO {
 
-    private Long trainerId;
+    private Long id;
 
     @NotNull
     @Size(min = NAME_MIN_LENGTH, max = NAME_MAX_LENGTH)
@@ -22,12 +22,12 @@ public class TrainerRenameDTO {
     @Size(min = SURNAME_MIN_LENGTH, max = SURNAME_MAX_LENGTH)
     private String surname;
 
-    public Long getTrainerId() {
-        return trainerId;
+    public Long getId() {
+        return id;
     }
 
-    public void setTrainerId(Long trainerId) {
-        this.trainerId = trainerId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -48,13 +48,13 @@ public class TrainerRenameDTO {
 
     @Override
     public String toString() {
-        return "TrainerRenameDTO{" + "trainerId=" + trainerId + ", name=" + name + ", surname=" + surname + '}';
+        return "TrainerRenameDTO{" + "trainerId=" + id + ", name=" + name + ", surname=" + surname + '}';
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 37 * hash + Objects.hashCode(this.trainerId);
+        hash = 37 * hash + Objects.hashCode(this.id);
         hash = 37 * hash + Objects.hashCode(this.name);
         hash = 37 * hash + Objects.hashCode(this.surname);
         return hash;
@@ -78,7 +78,7 @@ public class TrainerRenameDTO {
         if (!Objects.equals(this.surname, other.surname)) {
             return false;
         }
-        if (!Objects.equals(this.trainerId, other.trainerId)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;

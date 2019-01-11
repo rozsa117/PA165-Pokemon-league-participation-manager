@@ -68,7 +68,7 @@ public class TrainerFacadeImpl implements TrainerFacade {
 
     @Override
     public void renameTrainer(TrainerRenameDTO trainerRename) {
-        Trainer trainerEntity = trainerService.getTrainerWithId(trainerRename.getTrainerId());
+        Trainer trainerEntity = trainerService.getTrainerWithId(trainerRename.getId());
         trainerService.renameTrainer(trainerEntity, trainerRename.getName(), trainerRename.getSurname());
     }
 

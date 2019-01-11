@@ -35,7 +35,6 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="/pa165"><f:message key="home"/></a></li>
                         <li><a href="/pa165/pokemonSpecies/list"><f:message key="pokemon.species"/></a></li>
                         <li><a href="/pa165/pokemon/list"><f:message key="pokemon"/></a></li>
                         <li><a href="/pa165/gym/list"><f:message key="gyms"/></a></li>
@@ -60,14 +59,14 @@
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <c:out value="${alert_danger}"/></div>
     </c:if>
-    <c:if test="${not empty alert_info}">
-        <div class="alert alert-info" role="alert"><c:out value="${alert_info}"/></div>
+    <c:if test="${not empty alert_warning}">
+        <div class="alert alert-warning" role="alert"><c:out value="${alert_warning}"/></div>
     </c:if>
     <c:if test="${not empty alert_success}">
         <div class="alert alert-success" role="alert"><c:out value="${alert_success}"/></div>
     </c:if>
-    <c:if test="${not empty alert_warning}">
-        <div class="alert alert-warning" role="alert"><c:out value="${alert_warning}"/></div>
+    <c:if test="${not empty alert_info}">
+        <div class="alert alert-info" role="alert"><c:out value="${alert_info}"/></div>
     </c:if>
 
         <jsp:invoke fragment="body"/>
